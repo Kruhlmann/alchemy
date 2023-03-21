@@ -5,16 +5,6 @@ import { NewlineEscapedString } from "./newline_escaped_string";
 import { Symbol } from "./symbol";
 import { TasmSource } from "./tasm_source";
 
-export interface CharacterLexerAction {
-    char_ptr: number;
-    signal: CharacterLexerSignal;
-}
-
-export enum CharacterLexerSignal {
-    Continue,
-    Break,
-}
-
 // eslint-disable-next-line quotes
 const DOUBLE_QUOTE = `"`;
 
@@ -27,7 +17,7 @@ export class TasmLexer implements Lexer<TasmSource, Instruction[]> {
         const line = new NewlineEscapedString(unescaped_line);
 
         while (char_ptr < line.length) {
-            if (buffer.toString().length === 0) {
+            if (buffer.empty()) {
                 if (line[char_ptr].trim().length === 0) {
                     char_ptr += 1;
                     continue;
@@ -78,7 +68,7 @@ export class TasmLexer implements Lexer<TasmSource, Instruction[]> {
             char_ptr += 1;
         }
 
-        if (buffer.toString().length > 0) {
+        if (!buffer.empty()) {
             symbols.push(new Symbol(buffer));
         }
 

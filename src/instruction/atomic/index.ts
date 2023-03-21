@@ -1,7 +1,10 @@
 export * from "./add";
 export * from "./and";
+export * from "./else";
+export * from "./endif";
 export * from "./equality";
 export * from "./greater_than";
+export * from "./if";
 export * from "./left_shift";
 export * from "./less_than";
 export * from "./or";
@@ -11,3 +14,4 @@ export * from "./put";
 export * from "./right_shift";
 export * from "./subtract";
 export * from "./syscall3";
+export * from "./unless";

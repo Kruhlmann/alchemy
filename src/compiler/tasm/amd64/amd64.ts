@@ -1,3 +1,4 @@
+import { CrossReferencer } from "../../../cross_referencer";
 import { Instruction } from "../../../instruction";
 import { Lexer, TasmSource } from "../../../lexer";
 import { CompilationResult } from "../../result";
@@ -42,12 +43,20 @@ call print
 add  rsp, 40
 ret`;
 
-    public constructor(protected lexer: Lexer<TasmSource, Instruction[]>) {}
+    public constructor(
+        protected lexer: Lexer<TasmSource, Instruction[]>,
+        protected cross_referencer: CrossReferencer,
+    ) {}
 
     public compile(source: TasmSource): CompilationResult<Instruction[], string> {
         const instructions = this.lexer.lex(source);
-        const instructions_source = instructions.map((instruction, index) => instruction.to_asm(index)).join("\n");
-        const literals_source = instructions.map((instruction, index) => instruction.literal(index)).filter(Boolean);
+        const cross_referenced_instructions = this.cross_referencer.cross_reference_instructions(instructions);
+        const instructions_source = cross_referenced_instructions
+            .map((instruction, index) => instruction.to_asm(index))
+            .join("\n");
+        const literals_source = cross_referenced_instructions
+            .map((instruction, index) => instruction.literal(index))
+            .filter(Boolean);
         const source_code = `${Amd64TasmCompiler.ASM_HEADER}
 _start:
 ${instructions_source}
@@ -59,7 +68,7 @@ ${literals_source}
 segment .bss
 mem: resb 640000`;
         return {
-            source: instructions,
+            source: cross_referenced_instructions,
             output: source_code,
         };
     }

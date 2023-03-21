@@ -2,6 +2,7 @@ import {
     AddInstruction,
     BitwiseAndInstruction,
     BitwiseOrInstruction,
+    EndIfInstruction,
     EqualityInstruction,
     GreaterThanInstruction,
     Instruction,
@@ -11,6 +12,9 @@ import {
     RightBinaryShiftInstruction,
     SubtractInstruction,
     Syscall3Instruction,
+    UnreferencedElseInstruction,
+    UnreferencedIfInstruction,
+    UnreferencedUnlessInstruction,
 } from "../instruction";
 
 export class InstructionLookupTable {
@@ -24,6 +28,10 @@ export class InstructionLookupTable {
         "&": BitwiseAndInstruction,
         "<<": LeftBinaryShiftInstruction,
         ">>": RightBinaryShiftInstruction,
+        if: UnreferencedIfInstruction,
+        unless: UnreferencedUnlessInstruction,
+        endif: EndIfInstruction,
+        else: UnreferencedElseInstruction,
         put: PutInstruction,
         syscall3: Syscall3Instruction,
     };

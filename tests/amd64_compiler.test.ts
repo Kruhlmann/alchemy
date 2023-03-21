@@ -1,15 +1,17 @@
 import { BinaryRuntime } from "../src";
 import { Amd64TasmCompiler, NasmCompiler } from "../src/compiler";
+import { CrossReferencer } from "../src/cross_referencer";
 import { TasmLexer, TasmReferenceModel } from "../src/lexer";
 import { TasmTestProgram } from "./utils";
 
-const test_cases = ["arithmetic", "stdout", "bitwise"];
+const test_cases = ["arithmetic", "stdout", "bitwise", "conditional"];
 
 describe("Amd64Compiler", () => {
     test.each(test_cases)("compiles and executes program %p", (program_name: string) => {
         const program = new TasmTestProgram(program_name);
         const lexer = new TasmLexer();
-        const tasm_compiler = new Amd64TasmCompiler(lexer);
+        const cross_referencer = new CrossReferencer();
+        const tasm_compiler = new Amd64TasmCompiler(lexer, cross_referencer);
         const nasm_compiler = new NasmCompiler();
         const compilation_result = tasm_compiler.compile(program.tasm_source);
         const refmodel = new TasmReferenceModel(compilation_result.source);
