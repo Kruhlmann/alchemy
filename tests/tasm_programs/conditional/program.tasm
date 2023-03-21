@@ -1,4 +1,4 @@
-1 if 1 put endif
-0 if 2 put endif
-1 unless 3 put endif
-0 unless 4 put endif
+1 if 1 put else 11 put endif
+0 if 2 put else 22 put endif
+1 unless 3 put else 33 put endif
+0 unless 4 put else 44 put endif

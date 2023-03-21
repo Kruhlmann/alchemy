@@ -9,4 +9,8 @@ export abstract class Instruction {
     public toString(): string {
         return this.constructor.name;
     }
+
+    public reference_to(_reference_index: number): Instruction {
+        throw new Error(`Can't reference ${this.constructor.name}`);
+    }
 }

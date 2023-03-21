@@ -20,16 +20,18 @@ export class CrossReferencer {
             } else if (current_instruction instanceof UnreferencedUnlessInstruction) {
                 reference_stack.push(instruction_index);
             } else if (current_instruction instanceof UnreferencedElseInstruction) {
-                // const previous_reference_index = reference_stack.pop();
-                // if (previous_reference_index === undefined) {
-                //     throw new Error("Reference stack empty");
-                // }
-                // if (!(instructions_clone[previous_reference_index] instanceof UnreferencedInstruction)) {
-                //     throw new TypeError("Unexpected");
-                // }
-                // instructions_clone[previous_reference_index] = new IfInstruction(instruction_index + 1);
-                // instructions_clone[instruction_index] = new UnreferencedElseInstruction();
-                // reference_stack.push(instruction_index);
+                const previous_reference_index = reference_stack.pop();
+                if (previous_reference_index === undefined) {
+                    throw new Error("Reference stack empty");
+                }
+                if (!(instructions_clone[previous_reference_index] instanceof UnreferencedInstruction)) {
+                    throw new TypeError("Unexpected");
+                }
+                instructions_clone[previous_reference_index] = instructions_clone[
+                    previous_reference_index
+                ].reference_to(instruction_index + 1);
+                instructions_clone[instruction_index] = new UnreferencedElseInstruction();
+                reference_stack.push(instruction_index);
             } else if (current_instruction instanceof EndIfInstruction) {
                 const previous_reference_index = reference_stack.pop();
                 if (previous_reference_index === undefined) {
@@ -42,11 +44,8 @@ export class CrossReferencer {
                         ].toString()}`,
                     );
                 }
-                const unreferenced_instruction = instructions_clone[
-                    previous_reference_index
-                ] as UnreferencedInstruction;
-                const referenced_instruction = unreferenced_instruction.reference_to(instruction_index);
-                instructions_clone[previous_reference_index] = referenced_instruction;
+                instructions_clone[previous_reference_index] =
+                    instructions_clone[previous_reference_index].reference_to(instruction_index);
             }
         }
         if (reference_stack.length > 0) {
