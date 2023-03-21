@@ -1,2 +1,4 @@
-export * from "./amd64";
 export * from "./compiler";
+export * from "./nasm";
+export * from "./result";
+export * from "./tasm";

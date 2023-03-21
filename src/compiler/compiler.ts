@@ -1,5 +1,5 @@
-import { TasmInstruction } from "../instruction";
+import { CompilationResult } from "./result";
 
-export interface TasmCompiler<BinaryType> {
-    compile(instructions: Array<TasmInstruction>): BinaryType;
+export interface Compiler<InputType, SourceType, OutputType> {
+    compile(instructions: InputType): CompilationResult<SourceType, OutputType>;
 }
