@@ -3,7 +3,7 @@ import fs from "node:fs";
 import { Amd64TasmCompiler, BinaryRuntime, CrossReferencer, NasmCompiler, TasmLexer, TasmReferenceModel } from "../src";
 import { TasmTestProgram } from "./utils";
 
-const test_cases = ["arithmetic", "stdout", "bitwise", "conditional"];
+const test_cases = ["arithmetic", "stdout", "bitwise", "conditional", "while"];
 
 describe("Amd64Compiler", () => {
     test.each(test_cases)("compiles and executes program %p", (program_name: string) => {

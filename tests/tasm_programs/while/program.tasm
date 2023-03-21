@@ -1,0 +1,5 @@
+10 while clone 0 > do
+  clone put
+  --
+wend
+11 put

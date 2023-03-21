@@ -11,6 +11,8 @@ import {
     Instruction,
     LeftBinaryShiftInstruction,
     LessThanInstruction,
+    LoadMemoryInstruction,
+    PushMemoryPointerInstruction,
     PutInstruction,
     RightBinaryShiftInstruction,
     SubtractInstruction,
@@ -21,6 +23,7 @@ import {
     UnreferencedUnlessInstruction,
     UnreferencedWendInstruction,
     WhileInstruction,
+    WriteMemoryInstruction,
 } from "../instruction";
 
 export class InstructionLookupTable {
@@ -37,6 +40,9 @@ export class InstructionLookupTable {
         "--": DecrementInstruction,
         "++": IncrementInstruction,
         clone: CloneInstruction,
+        write: WriteMemoryInstruction,
+        load: LoadMemoryInstruction,
+        mem: PushMemoryPointerInstruction,
         do: UnreferencedDoInstruction,
         if: UnreferencedIfInstruction,
         unless: UnreferencedUnlessInstruction,

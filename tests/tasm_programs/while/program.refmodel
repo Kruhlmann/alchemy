@@ -1,0 +1,12 @@
+PushIntInstruction<10>
+WhileInstruction
+CloneInstruction
+PushIntInstruction<0>
+GreaterThanInstruction
+DoInstruction<10>
+CloneInstruction
+PutInstruction
+DecrementInstruction
+WendInstruction<1>
+PushIntInstruction<11>
+PutInstruction

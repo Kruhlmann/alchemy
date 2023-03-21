@@ -22,3 +22,9 @@ PushIntInstruction<10>
 PushIntInstruction<12>
 LessThanInstruction
 PutInstruction
+PushIntInstruction<40>
+IncrementInstruction
+PutInstruction
+PushIntInstruction<40>
+DecrementInstruction
+PutInstruction

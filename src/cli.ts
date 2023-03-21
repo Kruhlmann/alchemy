@@ -3,6 +3,7 @@ import fs from "node:fs";
 import { Amd64TasmCompiler, NasmCompiler } from "./compiler";
 import { CrossReferencer } from "./cross_referencer";
 import { TasmLexer } from "./lexer";
+import { Logger } from "./logger";
 
 export class TasmCompilerCli {
     public compile(source_file: string | undefined, output_file: string) {
@@ -22,10 +23,10 @@ export class TasmCompilerCli {
             asm_source: compilation_result.output,
             output_file,
         });
-        console.log(`Compiled to file ${nasm_result.output}`);
+        Logger.info(`Compiled to file ${nasm_result.output}`);
     }
 
     protected usage(): void {
-        console.log("Usage: tasmc <tasm_file> <binary_file>");
+        Logger.info("Usage: tasmc <tasm_file> <binary_file>");
     }
 }

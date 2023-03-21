@@ -8,4 +8,8 @@ export abstract class ArgumentInstruction<ArgumentType> extends Instruction {
     public toString(): string {
         return `${this.constructor.name}<${this.argument}>`;
     }
+
+    public read_argument(): ArgumentType {
+        return this.argument;
+    }
 }
