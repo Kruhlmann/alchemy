@@ -5,6 +5,11 @@
   "engines": {
     "node": ">=14"
   },
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+      "url": "https://github.com/Kruhlmann/classicdb_bot/issues"
+  },
+  "homepage": "https://github.com/Kruhlmann/classicdb_bot#readme",
   "bin": {
     "tasmc": "./bin/tasmc"
   },
@@ -13,7 +18,6 @@
   ],
   "keywords": [],
   "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@types/jest": "^29.2.3",
