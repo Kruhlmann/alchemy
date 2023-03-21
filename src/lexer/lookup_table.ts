@@ -1,8 +1,9 @@
-import { AddInstruction, Instruction, PutInstruction } from "../instruction";
+import { AddInstruction, Instruction, PutInstruction, SubtractInstruction } from "../instruction";
 
 export class InstructionLookupTable {
     protected static instructions_by_symbol: Record<string, new () => Instruction> = {
         "+": AddInstruction,
+        "-": SubtractInstruction,
         put: PutInstruction,
     };
 

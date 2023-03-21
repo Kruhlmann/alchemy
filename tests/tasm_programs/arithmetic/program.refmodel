@@ -2,3 +2,7 @@ PushIntInstruction<14>
 PushIntInstruction<15>
 AddInstruction
 PutInstruction
+PushIntInstruction<30>
+PushIntInstruction<10>
+SubtractInstruction
+PutInstruction

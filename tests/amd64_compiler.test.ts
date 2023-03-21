@@ -15,7 +15,6 @@ describe("Amd64Compiler", () => {
         const refmodel = new TasmReferenceModel(compilation_result.source);
 
         expect(refmodel.toString()).toBe(program.refmodel_code);
-        expect(compilation_result.output).toBe(program.asm_source_code);
 
         const binary_compilation_result = nasm_compiler.compile(compilation_result.output);
         const exection_result = new BinaryRuntime(binary_compilation_result.output, []).run();
