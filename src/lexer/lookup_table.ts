@@ -1,10 +1,14 @@
 import {
     AddInstruction,
+    BitwiseAndInstruction,
+    BitwiseOrInstruction,
     EqualityInstruction,
     GreaterThanInstruction,
     Instruction,
+    LeftBinaryShiftInstruction,
     LessThanInstruction,
     PutInstruction,
+    RightBinaryShiftInstruction,
     SubtractInstruction,
     Syscall3Instruction,
 } from "../instruction";
@@ -16,6 +20,10 @@ export class InstructionLookupTable {
         ">": GreaterThanInstruction,
         "<": LessThanInstruction,
         "=": EqualityInstruction,
+        "|": BitwiseOrInstruction,
+        "&": BitwiseAndInstruction,
+        "<<": LeftBinaryShiftInstruction,
+        ">>": RightBinaryShiftInstruction,
         put: PutInstruction,
         syscall3: Syscall3Instruction,
     };

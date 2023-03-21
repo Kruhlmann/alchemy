@@ -19,4 +19,11 @@ clean: ## Clean source directory.
 node_modules: $(PKG_LOCKFILE)
 	$(PKG_MANAGER) install
 
+tests/tasm_programs/%:
+	mkdir -p $@
+	printf '0' >$@/program.exitcode
+	printf '1 put' >$@/program.tasm
+	printf 'PushIntInstruction<1>\nPutInstruction' >$@/program.refmodel
+	printf '1' >$@/program.stdout
+
 .PHONY: clean run
