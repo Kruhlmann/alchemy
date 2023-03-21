@@ -36,9 +36,9 @@ export class LineBuffer {
     }
 
     public dup(): LineBuffer {
-        const symbolBuffer = new LineBuffer();
-        symbolBuffer.set_col(this.column);
-        symbolBuffer.set_buffer_content(this.buffer);
-        return symbolBuffer;
+        const line_buffer = new LineBuffer();
+        line_buffer.set_col(this.column);
+        line_buffer.set_buffer_content(this.buffer);
+        return line_buffer;
     }
 }

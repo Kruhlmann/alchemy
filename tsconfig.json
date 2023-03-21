@@ -18,7 +18,7 @@
         "moduleResolution": "node",
         "experimentalDecorators": true,
         "allowJs": true,
-        "target": "es6"
+        "target": "esnext"
     },
     "include": [
         "src/**/*.ts"

@@ -47,7 +47,8 @@ ret`;
 
     public compile(source: TasmSource): CompilationResult<Instruction[], string> {
         const instructions = this.lexer.lex(source);
-        const instructions_source = instructions.map((instruction) => instruction.to_asm()).join("\n");
+        const instructions_source = instructions.map((instruction, index) => instruction.to_asm(index)).join("\n");
+        const literals_source = instructions.map((instruction, index) => instruction.literal(index)).filter(Boolean);
         const source_code = `${Amd64TasmCompiler.ASM_HEADER}
 _start:
 ${instructions_source}
@@ -55,6 +56,7 @@ mov rax, 60
 mov rdi, 0
 syscall
 segment .data
+${literals_source}
 segment .bss
 mem: resb 640000`;
         return {
