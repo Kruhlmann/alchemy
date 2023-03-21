@@ -12,10 +12,10 @@ jobs:
       matrix:
         node-version: [14.x, 16.x]
     steps:
-    - name: Install make
+    - name: Install make nasm binutils
       run: |
         sudo apt-get update
-        sudo apt-get install -y make
+        sudo apt-get install -y make nasm binutils
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2

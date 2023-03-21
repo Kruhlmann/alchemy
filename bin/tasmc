@@ -1,0 +1,6 @@
+#!/usr/bin/env node
+
+const { TasmCompilerCli } = require("../dist/cli.js");
+
+const compiler = new TasmCompilerCli();
+compiler.compile(process.argv[2]);

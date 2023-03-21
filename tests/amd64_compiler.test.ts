@@ -1,7 +1,4 @@
-import { BinaryRuntime } from "../src";
-import { Amd64TasmCompiler, NasmCompiler } from "../src/compiler";
-import { CrossReferencer } from "../src/cross_referencer";
-import { TasmLexer, TasmReferenceModel } from "../src/lexer";
+import { Amd64TasmCompiler, BinaryRuntime, CrossReferencer, NasmCompiler, TasmLexer, TasmReferenceModel } from "../src";
 import { TasmTestProgram } from "./utils";
 
 const test_cases = ["arithmetic", "stdout", "bitwise", "conditional"];
