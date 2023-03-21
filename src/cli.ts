@@ -5,7 +5,7 @@ import { CrossReferencer } from "./cross_referencer";
 import { TasmLexer } from "./lexer";
 
 export class TasmCompilerCli {
-    public compile(file_path: string): void {
+    public compile(file_path: string) {
         const source = fs.readFileSync(file_path).toString();
         const lexer = new TasmLexer();
         const cross_referencer = new CrossReferencer();

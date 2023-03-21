@@ -5,6 +5,9 @@
   "engines": {
     "node": ">=14"
   },
+  "bin": {
+    "tasmc": "./bin/tasmc"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
