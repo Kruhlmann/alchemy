@@ -22,6 +22,10 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'pnpm'
+    - name: Install dependencies
+      run: |
+        npm install -g pnpm
+        make node_modules
     - name: Lint
       run: |
         make lint
