@@ -2,9 +2,12 @@ import {
     AddInstruction,
     BitwiseAndInstruction,
     BitwiseOrInstruction,
+    CloneInstruction,
+    DecrementInstruction,
     EndIfInstruction,
     EqualityInstruction,
     GreaterThanInstruction,
+    IncrementInstruction,
     Instruction,
     LeftBinaryShiftInstruction,
     LessThanInstruction,
@@ -12,9 +15,12 @@ import {
     RightBinaryShiftInstruction,
     SubtractInstruction,
     Syscall3Instruction,
+    UnreferencedDoInstruction,
     UnreferencedElseInstruction,
     UnreferencedIfInstruction,
     UnreferencedUnlessInstruction,
+    UnreferencedWendInstruction,
+    WhileInstruction,
 } from "../instruction";
 
 export class InstructionLookupTable {
@@ -28,12 +34,18 @@ export class InstructionLookupTable {
         "&": BitwiseAndInstruction,
         "<<": LeftBinaryShiftInstruction,
         ">>": RightBinaryShiftInstruction,
+        "--": DecrementInstruction,
+        "++": IncrementInstruction,
+        clone: CloneInstruction,
+        do: UnreferencedDoInstruction,
         if: UnreferencedIfInstruction,
         unless: UnreferencedUnlessInstruction,
         endif: EndIfInstruction,
         else: UnreferencedElseInstruction,
         put: PutInstruction,
         syscall3: Syscall3Instruction,
+        while: WhileInstruction,
+        wend: UnreferencedWendInstruction,
     };
 
     public static lookup(instruction_name: string): Instruction | undefined {

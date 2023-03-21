@@ -10,7 +10,7 @@ export abstract class Instruction {
         return this.constructor.name;
     }
 
-    public reference_to(_reference_index: number): Instruction {
-        throw new Error(`Can't reference ${this.constructor.name}`);
+    public reference_to(reference_index: number): Instruction {
+        throw new Error(`Can't reference ${this.constructor.name} @ position ${reference_index}`);
     }
 }
