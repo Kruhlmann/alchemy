@@ -1,0 +1,30 @@
+{
+  "name": "tasm-vscode-syntax",
+  "displayName": "TASM VSCode Syntax",
+  "description": "Syntax highlighting for Tasm",
+  "version": "0.0.1",
+  "publisher": "Andreas Krühlmann",
+  "engines": {
+    "vscode": "^1.63.0"
+  },
+  "categories": [
+    "Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "tasm",
+        "aliases": ["TASM", "tasm"],
+        "extensions": [".tasm"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "tasm",
+        "scopeName": "source.tasm",
+        "path": "./tasm.tmLanguage.json"
+      }
+    ]
+  }
+}

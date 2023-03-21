@@ -1,0 +1,39 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.schema.json",
+  "name": "MyCustomLanguage",
+  "patterns": [
+    {
+      "include": "#expression"
+    }
+  ],
+  "repository": {
+    "expression": {
+      "patterns": [
+        {
+          "name": "constant.numeric.integer.tasm",
+          "match": "\\b\\d+\\b"
+        },
+        {
+          "name": "string.quoted.double.mycl",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.tasm",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "keyword.control.tasm",
+          "match": "\\b(if|unless|endif|else|put|syscall3)\\b"
+        },
+        {
+          "name": "keyword.operator.tasm",
+          "match": "(\\+|-|>|<|=|\\||&|<<|>>)"
+        }
+      ]
+    }
+  },
+  "scopeName": "source.tasm"
+}
