@@ -1,3 +1,6 @@
+publish: build
+	pnpm publish
+
 build: dist/.build
 
 dist/.build: $(TS_SOURCES) node_modules tsconfig.json
