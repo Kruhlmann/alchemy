@@ -19,6 +19,7 @@ export * from "./push_string";
 export * from "./put";
 export * from "./right_shift";
 export * from "./subtract";
+export * from "./syscall1";
 export * from "./syscall3";
 export * from "./unless";
 export * from "./wend";
