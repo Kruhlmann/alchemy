@@ -1,6 +1,6 @@
 {
   "name": "tasmc",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "TASM compiler implementation",
   "engines": {
     "node": ">=14"
@@ -8,6 +8,7 @@
   "bin": {
     "tasmc": "./bin/tasmc"
   },
+  "files": ["dist"],
   "keywords": [],
   "author": "",
   "license": "ISC",
