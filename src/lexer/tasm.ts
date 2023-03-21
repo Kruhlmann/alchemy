@@ -2,8 +2,8 @@ import { Instruction } from "../instruction";
 import { Lexer } from "./lexer";
 import { LineBuffer } from "./line_buffer";
 import { NewlineEscapedString } from "./newline_escaped_string";
-import { TasmSource } from "./source";
 import { Symbol } from "./symbol";
+import { TasmSource } from "./tasm_source";
 
 export interface CharacterLexerAction {
     char_ptr: number;

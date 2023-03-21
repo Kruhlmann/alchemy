@@ -1,6 +1,6 @@
 import fs from "node:fs";
 
-import { TasmSource } from "../../src/lexer/source";
+import { TasmSource } from "../../src/lexer";
 
 export class TasmTestProgram {
     public readonly tasm_source_code: string;

@@ -1,6 +1,5 @@
 import { Instruction } from "../../../instruction";
-import { Lexer } from "../../../lexer";
-import { TasmSource } from "../../../lexer/source";
+import { Lexer, TasmSource } from "../../../lexer";
 import { CompilationResult } from "../../result";
 import { TasmCompiler } from "../tasm";
 
