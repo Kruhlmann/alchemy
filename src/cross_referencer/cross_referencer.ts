@@ -1,6 +1,5 @@
 import {
     EndIfInstruction,
-    IfInstruction,
     Instruction,
     UnreferencedElseInstruction,
     UnreferencedIfInstruction,
