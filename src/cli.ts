@@ -18,7 +18,10 @@ export class TasmCompilerCli {
             text: source,
             context: source_file,
         });
-        const nasm_result = nasm_compiler.compile(compilation_result.output);
+        const nasm_result = nasm_compiler.compile({
+            asm_source: compilation_result.output,
+            output_file,
+        });
         console.log(`Compiled to file ${nasm_result.output}`);
     }
 
