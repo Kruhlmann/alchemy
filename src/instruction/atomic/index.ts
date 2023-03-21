@@ -1,4 +1,7 @@
 export * from "./add";
+export * from "./equality";
+export * from "./greater_than";
+export * from "./less_than";
 export * from "./push_int";
 export * from "./push_string";
 export * from "./put";
