@@ -1,6 +1,6 @@
 build: dist/.build
 
-dist/.build: $(TS_SOURCES) node_modules
+dist/.build: $(TS_SOURCES) node_modules tsconfig.json
 	./node_modules/.bin/tsc
 	touch dist/.build
 

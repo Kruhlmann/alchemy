@@ -11,14 +11,13 @@
         "sourceMap": true,
         "resolveJsonModule": true,
         "lib": [
-            "esnext",
-            "DOM"
+            "ESNext"
         ],
         "outDir": "dist",
         "moduleResolution": "node",
         "experimentalDecorators": true,
         "allowJs": true,
-        "target": "esnext"
+        "target": "ES2018"
     },
     "include": [
         "src/**/*.ts"
