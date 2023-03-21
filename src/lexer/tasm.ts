@@ -1,59 +1,13 @@
-import { Instruction, PushIntInstruction } from "../instruction";
+import { Instruction } from "../instruction";
 import { Lexer } from "./lexer";
 import { LineBuffer } from "./line_buffer";
-import { InstructionLookupTable } from "./lookup_table";
 import { TasmSource } from "./source";
-import { UnknownInstructionError } from "./unknown_instruction_error";
-
-export class Symbol {
-    protected string_representation: string;
-    // protected readonly symbol_resolvers: SymbolResolver[];
-
-    public constructor(buffer: LineBuffer) {
-        this.string_representation = buffer.toString();
-    }
-
-    public as_instruction(): Instruction {
-        // for (const symbol_resolver of this.symbol_resolvers) {
-        //     const instruction = symbol_resolver.resolve(this);
-        //     if (instruction) {
-        //         return instruction;
-        //     }
-        // }
-        const builtin_instruction = InstructionLookupTable.lookup(this.string_representation);
-        if (builtin_instruction) {
-            return builtin_instruction;
-        }
-        if (Number.parseInt(this.string_representation, 10).toString() === this.string_representation) {
-            return new PushIntInstruction(Number.parseInt(this.string_representation, 10));
-        }
-        throw new UnknownInstructionError(this.string_representation);
-    }
-
-    public toString(): string {
-        return this.string_representation;
-    }
-}
+import { Symbol } from "./symbol";
 
 export class TasmLexer implements Lexer<TasmSource, Instruction[]> {
-    // protected instruction_from_symbol(symbol: string, _: unknown, __: unknown): Instruction {
-    //     const builtin_instruction = InstructionLookupTable.lookup(symbol);
-    //     if (builtin_instruction) {
-    //         return builtin_instruction;
-    //     }
-    //     if (Number.parseInt(symbol, 10).toString() === symbol) {
-    //         return new PushIntInstruction(Number.parseInt(symbol, 10));
-    //     }
-    //     // if (symbol_buffer.startsWith('"') && symbol_buffer.endsWith('"')) {
-
-    //     // }
-    //     throw new UnknownInstructionError(symbol);
-    // }
-
     // eslint-disable-next-line complexity
     protected lex_line(line: string, _line_number: number, _context: string): Instruction[] {
         let char_ptr = 0;
-        const program: Instruction[] = [];
         const buffer = new LineBuffer();
         const symbols: Symbol[] = [];
 
@@ -115,12 +69,7 @@ export class TasmLexer implements Lexer<TasmSource, Instruction[]> {
             symbols.push(new Symbol(buffer));
         }
 
-        for (const symbol of symbols) {
-            // const instruction = this.instruction_from_symbol(symbol.toString(), context, line_number);
-            program.push(symbol.as_instruction());
-        }
-
-        return program;
+        return symbols.map((symbol) => symbol.as_instruction());
     }
 
     public lex(source: TasmSource): Instruction[] {
