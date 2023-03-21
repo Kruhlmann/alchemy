@@ -15,4 +15,7 @@ export class PushStringInstruction extends ArgumentInstruction<string> {
             .join(", ");
         return `lit_${instruction_index}: db ${byte_hex}`;
     }
+    public toString(): string {
+        return `${this.constructor.name}<"${this.argument}">`;
+    }
 }

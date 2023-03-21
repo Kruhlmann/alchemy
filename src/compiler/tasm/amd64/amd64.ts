@@ -56,7 +56,8 @@ ret`;
             .join("\n");
         const literals_source = cross_referenced_instructions
             .map((instruction, index) => instruction.literal(index))
-            .filter(Boolean);
+            .filter(Boolean)
+            .join("\n");
         const source_code = `${Amd64TasmCompiler.ASM_HEADER}
 _start:
 ${instructions_source}
