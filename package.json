@@ -1,6 +1,6 @@
 {
   "name": "tasmc",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "TASM compiler implementation",
   "engines": {
     "node": ">=14"
