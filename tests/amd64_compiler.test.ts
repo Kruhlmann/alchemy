@@ -15,7 +15,11 @@ describe("Amd64Compiler", () => {
 
         expect(refmodel.toString()).toBe(program.refmodel_code);
 
-        const binary_compilation_result = nasm_compiler.compile(compilation_result.output);
+        const temporary_path = new BinaryRuntime("mktemp", []).run().stdout;
+        const binary_compilation_result = nasm_compiler.compile({
+            asm_source: compilation_result.output,
+            output_file: temporary_path,
+        });
         const exection_result = new BinaryRuntime(binary_compilation_result.output, []).run();
 
         expect(exection_result.exit_code).toBe(program.exit_code);
