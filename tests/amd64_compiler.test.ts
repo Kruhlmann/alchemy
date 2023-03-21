@@ -25,7 +25,6 @@ describe("Amd64Compiler", () => {
         const exection_result = new BinaryRuntime(binary_compilation_result.output, []).run();
 
         fs.unlinkSync(binary_compilation_result.output);
-        fs.unlinkSync(temporary_path);
 
         expect(exection_result.exit_code).toBe(program.exit_code);
         expect(exection_result.stdout).toBe(program.stdout);
