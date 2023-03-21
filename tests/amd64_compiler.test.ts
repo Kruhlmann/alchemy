@@ -1,3 +1,5 @@
+import fs from "node:fs";
+
 import { Amd64TasmCompiler, BinaryRuntime, CrossReferencer, NasmCompiler, TasmLexer, TasmReferenceModel } from "../src";
 import { TasmTestProgram } from "./utils";
 
@@ -21,6 +23,9 @@ describe("Amd64Compiler", () => {
             output_file: temporary_path,
         });
         const exection_result = new BinaryRuntime(binary_compilation_result.output, []).run();
+
+        fs.unlinkSync(binary_compilation_result.output);
+        fs.unlinkSync(temporary_path);
 
         expect(exection_result.exit_code).toBe(program.exit_code);
         expect(exection_result.stdout).toBe(program.stdout);
