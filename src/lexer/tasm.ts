@@ -4,6 +4,9 @@ import { LineBuffer } from "./line_buffer";
 import { TasmSource } from "./source";
 import { Symbol } from "./symbol";
 
+// eslint-disable-next-line quotes
+const DOUBLE_QUOTE = `"`;
+
 export class TasmLexer implements Lexer<TasmSource, Instruction[]> {
     // eslint-disable-next-line complexity
     protected lex_line(line: string, _line_number: number, _context: string): Instruction[] {
@@ -21,12 +24,12 @@ export class TasmLexer implements Lexer<TasmSource, Instruction[]> {
                 }
                 buffer.set_col(char_ptr);
 
-                if (line[char_ptr] === "\"") {
-                    buffer.push("\"");
+                if (line[char_ptr] === DOUBLE_QUOTE) {
+                    buffer.push(DOUBLE_QUOTE);
                     char_ptr += 1;
                     while (char_ptr < line.length) {
-                        if (line[char_ptr] === '"') {
-                            buffer.push("\"");
+                        if (line[char_ptr] === DOUBLE_QUOTE) {
+                            buffer.push(DOUBLE_QUOTE);
                             char_ptr += 1;
                             break;
                         }
