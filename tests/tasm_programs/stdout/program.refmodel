@@ -1,2 +1,4 @@
 PushStringInstruction<Hello, World!>
-PutInstruction
+PushIntInstruction<1>
+PushIntInstruction<1>
+Syscall3Instruction

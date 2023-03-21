@@ -4,12 +4,14 @@ import { UnknownInstructionError } from "../unknown_instruction_error";
 import { BuiltinSymbolResolver } from "./builtin_resolver";
 import { IntegerLiteralSymbolResolver } from "./int_literal_resolver";
 import { SymbolResolver } from "./resolver";
+import { StringLiteralSymbolResolver } from "./string_literal_resolver";
 
 export class Symbol {
     protected string_representation: string;
     protected readonly symbol_resolvers: SymbolResolver[] = [
         new BuiltinSymbolResolver(),
         new IntegerLiteralSymbolResolver(),
+        new StringLiteralSymbolResolver(),
     ];
 
     public constructor(buffer: LineBuffer) {

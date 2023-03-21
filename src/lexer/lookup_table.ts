@@ -1,10 +1,11 @@
-import { AddInstruction, Instruction, PutInstruction, SubtractInstruction } from "../instruction";
+import { AddInstruction, Instruction, PutInstruction, SubtractInstruction, Syscall3Instruction } from "../instruction";
 
 export class InstructionLookupTable {
     protected static instructions_by_symbol: Record<string, new () => Instruction> = {
         "+": AddInstruction,
         "-": SubtractInstruction,
         put: PutInstruction,
+        syscall3: Syscall3Instruction,
     };
 
     public static lookup(instruction_name: string): Instruction | undefined {

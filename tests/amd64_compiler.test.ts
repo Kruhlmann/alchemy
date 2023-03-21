@@ -3,7 +3,7 @@ import { Amd64TasmCompiler, NasmCompiler } from "../src/compiler";
 import { TasmLexer, TasmReferenceModel } from "../src/lexer";
 import { TasmTestProgram } from "./utils";
 
-const test_cases = ["arithmetic"];
+const test_cases = ["arithmetic", "stdout"];
 
 describe("Amd64Compiler", () => {
     test.each(test_cases)("compiles and executes program %p", (program_name: string) => {
