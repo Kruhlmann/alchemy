@@ -2,7 +2,7 @@
 
 Typescript implementation of compiler based on the TASM language specification.
 
-TASM uses [reverse-polish notation](https://en.wikipedia.org/wiki/Reverse_Polish_notation) for its syntax to aid the stack based design. The compiler treats newlines as spaces.
+TASM uses [reverse polish notation](https://en.wikipedia.org/wiki/Reverse_Polish_notation) for its syntax to aid the stack oriented design. The compiler treats newlines as spaces.
 
 # Examples
 
