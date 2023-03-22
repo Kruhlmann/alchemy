@@ -15,7 +15,6 @@ export class NasmCompiler implements Compiler<NasmCompilerParameters, string, st
     public compile(parameters: NasmCompilerParameters): CompilationResult<string, string> {
         const asm_file = `${parameters.output_file}.asm`;
         const object_file = `${parameters.output_file}.o`;
-        Logger.debug(`${parameters.output_file} ${asm_file} ${object_file}`);
         fs.writeFileSync(asm_file, parameters.asm_source);
         const nasm_result = new BinaryRuntime("nasm", ["-felf64", asm_file]).run();
         if (nasm_result.exit_code !== "0") {

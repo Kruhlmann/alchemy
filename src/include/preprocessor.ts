@@ -9,8 +9,8 @@ export class IncludePreprocessor {
     // eslint-disable-next-line complexity
     public resolve_includes(source_code: string): string {
         const included_files: string[] = [];
-        return (
-            source_code
+        while (source_code.split("\n").some((line) => line.startsWith("include "))) {
+            source_code = source_code
                 .split("\n")
                 // eslint-disable-next-line complexity
                 .map((line: string) => {
@@ -64,7 +64,8 @@ export class IncludePreprocessor {
                         return line.startsWith("include") ? "" : line;
                     }
                 })
-                .join("\n")
-        );
+                .join("\n");
+        }
+        return source_code;
     }
 }
