@@ -22,8 +22,8 @@ node_modules: $(PKG_LOCKFILE)
 tests/tasm_programs/%:
 	mkdir -p $@
 	printf '0' >$@/program.exitcode
-	printf '1 put' >$@/program.tasm
-	printf 'PushIntInstruction<1>\nPutInstruction' >$@/program.refmodel
+	printf 'sub main\n  1 put\nmarine' >$@/program.tasm
+	printf 'SubInstruction<main>\nLiteralInstruction<main>\nPushIntInstruction<1>\nPutInstruction\nMarineInstruction' >$@/program.refmodel
 	printf '1' >$@/program.stdout
 
 .PHONY: clean run
