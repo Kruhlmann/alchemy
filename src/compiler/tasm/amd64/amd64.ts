@@ -59,8 +59,9 @@ ret`;
             .filter(Boolean)
             .join("\n");
         const source_code = `${Amd64TasmCompiler.ASM_HEADER}
-_start:
 ${instructions_source}
+_start:
+call usr_main
 mov rax, 60
 mov rdi, 0
 syscall
