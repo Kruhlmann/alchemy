@@ -1,0 +1,6 @@
+1 2 clone put put put
+1 2 3 2clone put put put put put
+1 2 drop put
+1 2 3 swap put put put
+1 2 3 4 rev3 put put put put
+1 2 3 4 5 rev4 put put put put put

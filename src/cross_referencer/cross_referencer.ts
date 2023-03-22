@@ -11,6 +11,8 @@ import {
     WhileInstruction,
 } from "../instruction";
 import { ArgumentInstruction } from "../instruction/argument_instruction";
+import { ReferenceStackEmptyError } from "./reference_stack_empty_error";
+import { ReferenceStackNotEmptyError } from "./reference_stack_not_empty_error";
 import { UnexpectedInstructionError } from "./unexpected_instruction_error";
 
 export class CrossReferencer {
@@ -28,9 +30,7 @@ export class CrossReferencer {
                 refstack.push(curidx);
             } else if (curinst instanceof UnreferencedElseInstruction) {
                 const previdx = refstack.pop();
-                if (previdx === undefined) {
-                    throw new Error("Reference stack empty");
-                }
+                if (previdx === undefined) throw new ReferenceStackEmptyError(UnreferencedElseInstruction);
                 if (!(iclone[previdx] instanceof UnreferencedInstruction)) {
                     throw new UnexpectedInstructionError(
                         iclone[previdx],
@@ -43,18 +43,14 @@ export class CrossReferencer {
                 refstack.push(curidx);
             } else if (curinst instanceof EndIfInstruction) {
                 const previdx = refstack.pop();
-                if (previdx === undefined) {
-                    throw new Error("Reference stack empty");
-                }
+                if (previdx === undefined) throw new ReferenceStackEmptyError(EndIfInstruction);
                 if (!(iclone[previdx] instanceof UnreferencedInstruction)) {
                     throw new UnexpectedInstructionError(iclone[previdx], UnreferencedInstruction, EndIfInstruction);
                 }
                 iclone[previdx] = iclone[previdx].reference_to(curidx);
             } else if (curinst instanceof UnreferencedDoInstruction) {
                 const previdx = refstack.pop();
-                if (previdx === undefined) {
-                    throw new Error("Reference stack empty");
-                }
+                if (previdx === undefined) throw new ReferenceStackEmptyError(UnreferencedDoInstruction);
                 if (!(iclone[previdx] instanceof WhileInstruction)) {
                     throw new UnexpectedInstructionError(iclone[previdx], WhileInstruction, UnreferencedDoInstruction);
                 }
@@ -62,9 +58,7 @@ export class CrossReferencer {
                 refstack.push(curidx);
             } else if (curinst instanceof UnreferencedWendInstruction) {
                 const previdx = refstack.pop();
-                if (previdx === undefined) {
-                    throw new Error("Reference stack empty");
-                }
+                if (previdx === undefined) throw new ReferenceStackEmptyError(UnreferencedWendInstruction);
                 if (!(iclone[previdx] instanceof DoInstruction)) {
                     throw new UnexpectedInstructionError(iclone[previdx], DoInstruction, UnreferencedWendInstruction);
                 }
@@ -75,7 +69,8 @@ export class CrossReferencer {
             }
         }
         if (refstack.length > 0) {
-            throw new Error("Reference stack not empty");
+            const dangling_instructions = refstack.map((reference_index) => iclone[reference_index]);
+            throw new ReferenceStackNotEmptyError(dangling_instructions);
         }
         return iclone;
     }

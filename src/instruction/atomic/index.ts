@@ -20,6 +20,8 @@ export * from "./over";
 export * from "./push_int";
 export * from "./push_string";
 export * from "./put";
+export * from "./rev3";
+export * from "./rev4";
 export * from "./right_shift";
 export * from "./subtract";
 export * from "./swap";

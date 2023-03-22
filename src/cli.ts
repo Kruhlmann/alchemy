@@ -7,6 +7,7 @@ import { Logger } from "./logger";
 
 export class TasmCompilerCli {
     public compile(source_file: string | undefined, output_file: string) {
+        Logger.silent = false;
         if (source_file === undefined || output_file === undefined) {
             return this.usage();
         }

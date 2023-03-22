@@ -1,4 +1,4 @@
-import { TasmLexer, UnknownInstructionError } from "../src/lexer";
+import { TasmLexer, UnknownInstructionError } from "../src";
 
 describe("TasmLexer", () => {
     it("throws UnknownInstructionError on unknown instruction", () => {
