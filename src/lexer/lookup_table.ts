@@ -2,7 +2,6 @@ import {
     AddInstruction,
     BitwiseAndInstruction,
     BitwiseOrInstruction,
-    CallInstruction,
     Clone2Instruction,
     CloneInstruction,
     DecrementInstruction,
