@@ -1,8 +1,8 @@
-import { ArgumentInstruction } from "../argument_instruction";
+import { Instruction } from "../instruction";
 
-export class SubInstruction extends ArgumentInstruction<string> {
+export class SyscallInstruction extends Instruction {
     public to_asm(_instruction_index: number): string {
-        return `usr_${this.argument}:`;
+        return "pop rax\nsyscall";
     }
     public to_wat(_instruction_index: number): string {
         throw new Error("Method not implemented.");

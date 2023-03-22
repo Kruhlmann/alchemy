@@ -1,0 +1,20 @@
+sub brk
+    swap 12 syscall1 sysread swap
+marine
+
+sub panic
+    1 60 syscall1
+marine
+
+sub curheap
+    0 brk swap
+marine
+
+sub malloc_b
+    swap 0 brk swap 0 brk + brk 
+    0 < if
+        "Unable to increase heap memory" 1 1 syscall3
+        panic
+    endif
+    swap
+marine
