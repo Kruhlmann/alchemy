@@ -3,6 +3,7 @@ import { LineBuffer } from "../line_buffer";
 import { UnknownInstructionError } from "../unknown_instruction_error";
 import { BuiltinSymbolResolver } from "./builtin_resolver";
 import { IntegerLiteralSymbolResolver } from "./int_literal_resolver";
+import { LiteralSymbolResolver } from "./literal_resolver";
 import { SymbolResolver } from "./resolver";
 import { StringLiteralSymbolResolver } from "./string_literal_resolver";
 
@@ -12,6 +13,7 @@ export class Symbol {
         new BuiltinSymbolResolver(),
         new IntegerLiteralSymbolResolver(),
         new StringLiteralSymbolResolver(),
+        new LiteralSymbolResolver(),
     ];
 
     public constructor(buffer: LineBuffer) {

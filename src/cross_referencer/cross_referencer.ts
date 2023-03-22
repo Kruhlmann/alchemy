@@ -1,11 +1,15 @@
 import {
+    CallInstruction,
     DoInstruction,
     EndIfInstruction,
     Instruction,
+    LiteralInstruction,
+    SubInstruction,
     UnreferencedDoInstruction,
     UnreferencedElseInstruction,
     UnreferencedIfInstruction,
     UnreferencedInstruction,
+    UnreferencedSubInstruction,
     UnreferencedUnlessInstruction,
     UnreferencedWendInstruction,
     WhileInstruction,
@@ -26,6 +30,8 @@ export class CrossReferencer {
                 refstack.push(curidx);
             } else if (curinst instanceof UnreferencedUnlessInstruction) {
                 refstack.push(curidx);
+            } else if (curinst instanceof UnreferencedSubInstruction) {
+                refstack.push(curidx);
             } else if (curinst instanceof WhileInstruction) {
                 refstack.push(curidx);
             } else if (curinst instanceof UnreferencedElseInstruction) {
@@ -41,6 +47,16 @@ export class CrossReferencer {
                 iclone[previdx] = iclone[previdx].reference_to(curidx + 1);
                 iclone[curidx] = new UnreferencedElseInstruction();
                 refstack.push(curidx);
+            } else if (curinst instanceof LiteralInstruction) {
+                const previdx = refstack.pop();
+                if (previdx === undefined) {
+                    iclone[curidx] = new CallInstruction(curinst.read_argument());
+                } else if (iclone[previdx] instanceof UnreferencedSubInstruction) {
+                    iclone[previdx] = new SubInstruction(curinst.read_argument());
+                } else {
+                    iclone[curidx] = new CallInstruction(curinst.read_argument());
+                    refstack.push(previdx);
+                }
             } else if (curinst instanceof EndIfInstruction) {
                 const previdx = refstack.pop();
                 if (previdx === undefined) throw new ReferenceStackEmptyError(EndIfInstruction);

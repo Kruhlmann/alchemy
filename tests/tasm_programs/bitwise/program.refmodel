@@ -1,3 +1,5 @@
+SubInstruction<main>
+LiteralInstruction<main>
 PushIntInstruction<1>
 PushIntInstruction<3>
 LeftBinaryShiftInstruction
@@ -14,3 +16,4 @@ PushIntInstruction<1>
 PushIntInstruction<2>
 BitwiseAndInstruction
 PutInstruction
+MarineInstruction

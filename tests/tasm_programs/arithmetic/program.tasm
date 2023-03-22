@@ -1,8 +1,10 @@
-1 2 + put
-10 8 - put
-10 10 = put
-10 12 = put
-10 12 > put
-10 12 < put
-40 ++ put
-40 -- put
+sub main
+    1 2 + put
+    10 8 - put
+    10 10 = put
+    10 12 = put
+    10 12 > put
+    10 12 < put
+    40 ++ put
+    40 -- put
+marine
