@@ -1,3 +1,5 @@
+SubInstruction<main>
+LiteralInstruction<main>
 PushMemoryPointerInstruction
 PushIntInstruction<0>
 AddInstruction
@@ -23,3 +25,4 @@ PutInstruction
 PushIntInstruction<80>
 PushIntInstruction<60>
 Syscall1Instruction
+MarineInstruction

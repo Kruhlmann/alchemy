@@ -1,3 +1,5 @@
+SubInstruction<main>
+LiteralInstruction<main>
 PushIntInstruction<1>
 PushIntInstruction<2>
 CloneInstruction
@@ -44,3 +46,4 @@ PutInstruction
 PutInstruction
 PutInstruction
 PutInstruction
+MarineInstruction

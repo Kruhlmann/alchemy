@@ -1,3 +1,5 @@
+SubInstruction<main>
+LiteralInstruction<main>
 PushIntInstruction<1>
 PushIntInstruction<2>
 AddInstruction
@@ -28,3 +30,4 @@ PutInstruction
 PushIntInstruction<40>
 DecrementInstruction
 PutInstruction
+MarineInstruction

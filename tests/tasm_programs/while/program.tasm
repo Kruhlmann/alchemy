@@ -1,5 +1,7 @@
-10 while clone 0 > do
-  clone put
-  --
-wend
-11 put
+sub main
+  10 while clone 0 > do
+    clone put
+    --
+  wend drop
+  11 put
+marine

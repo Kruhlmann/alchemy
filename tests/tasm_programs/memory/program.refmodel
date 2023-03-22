@@ -1,3 +1,5 @@
+SubInstruction<main>
+LiteralInstruction<main>
 PushMemoryPointerInstruction
 PushIntInstruction<0>
 AddInstruction
@@ -40,18 +42,16 @@ WriteMemoryInstruction
 PushMemoryPointerInstruction
 PushIntInstruction<0>
 AddInstruction
-CloneInstruction
 LoadMemoryInstruction
 PutInstruction
 PushMemoryPointerInstruction
 PushIntInstruction<1>
 AddInstruction
-CloneInstruction
 LoadMemoryInstruction
 PutInstruction
 PushMemoryPointerInstruction
 PushIntInstruction<2>
 AddInstruction
-CloneInstruction
 LoadMemoryInstruction
 PutInstruction
+MarineInstruction
