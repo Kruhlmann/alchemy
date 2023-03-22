@@ -2,6 +2,7 @@ import fs from "node:fs";
 
 import { Amd64TasmCompiler, NasmCompiler } from "./compiler";
 import { CrossReferencer } from "./cross_referencer";
+import { IncludePreprocessor } from "./include";
 import { TasmLexer } from "./lexer";
 import { Logger } from "./logger";
 
@@ -11,7 +12,8 @@ export class TasmCompilerCli {
         if (source_file === undefined || output_file === undefined) {
             return this.usage();
         }
-        const source = fs.readFileSync(source_file).toString();
+        const raw_source = fs.readFileSync(source_file).toString();
+        const source = new IncludePreprocessor([process.cwd()]).resolve_includes(raw_source);
         const lexer = new TasmLexer();
         const cross_referencer = new CrossReferencer();
         const tasm_compiler = new Amd64TasmCompiler(lexer, cross_referencer);

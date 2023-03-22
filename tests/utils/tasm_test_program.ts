@@ -3,9 +3,9 @@ import fs from "node:fs";
 import { TasmSource } from "../../src/lexer";
 
 export class TasmTestProgram {
-    public readonly tasm_source_code: string;
+    public tasm_source_code: string;
+    public tasm_source: TasmSource;
     public readonly refmodel_code: string;
-    public readonly tasm_source: TasmSource;
     public readonly stdout: string;
     public readonly exit_code: string;
 
@@ -18,5 +18,10 @@ export class TasmTestProgram {
             text: this.tasm_source_code,
             context: `${program_name}.tasm`,
         };
+    }
+
+    public set_source(new_source: string): void {
+        this.tasm_source_code = new_source;
+        this.tasm_source.text = new_source;
     }
 }

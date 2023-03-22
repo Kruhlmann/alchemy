@@ -1,0 +1,5 @@
+include std.math
+
+sub main
+    2 4 mul put
+marine

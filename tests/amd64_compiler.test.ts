@@ -1,13 +1,34 @@
 import fs from "node:fs";
 
-import { Amd64TasmCompiler, BinaryRuntime, CrossReferencer, NasmCompiler, TasmLexer, TasmReferenceModel } from "../src";
+import {
+    Amd64TasmCompiler,
+    BinaryRuntime,
+    CrossReferencer,
+    IncludePreprocessor,
+    NasmCompiler,
+    TasmLexer,
+    TasmReferenceModel,
+} from "../src";
 import { TasmTestProgram } from "./utils";
 
-const test_cases = ["arithmetic", "stdout", "bitwise", "conditional", "while", "memory", "syscall", "turing", "stack"];
+const test_cases = [
+    "arithmetic",
+    "stdout",
+    "bitwise",
+    "conditional",
+    "while",
+    "memory",
+    "syscall",
+    "turing",
+    "stack",
+    "include",
+];
 
 describe("Amd64Compiler", () => {
     test.each(test_cases)("compiles and executes program %p", (program_name: string) => {
         const program = new TasmTestProgram(program_name);
+        const include_preprocessor = new IncludePreprocessor([process.cwd()]);
+        program.set_source(include_preprocessor.resolve_includes(program.tasm_source_code));
         const lexer = new TasmLexer();
         const cross_referencer = new CrossReferencer();
         const tasm_compiler = new Amd64TasmCompiler(lexer, cross_referencer);
