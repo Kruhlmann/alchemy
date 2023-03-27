@@ -1,0 +1,3 @@
+sub panic
+    1 60 syscall1
+marine

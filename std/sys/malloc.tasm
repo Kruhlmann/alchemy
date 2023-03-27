@@ -1,0 +1,14 @@
+include std.sys.panic
+include std.sys.heap
+
+sub malloc_b
+    swap clone curheap swap
+    curheap 1 + + brk 
+    0 < if
+        "Unable to increase heap memory" 1 1 syscall3
+        panic
+    endif
+
+    swap 1 | write
+    drop
+marine
