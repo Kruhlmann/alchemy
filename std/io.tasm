@@ -1,0 +1,17 @@
+include std.str
+
+sub print
+    rev3 swap SYS_ARG_STDOUT SYS_WRITE syscall3
+marine
+
+sub printe
+    rev3 swap SYS_ARG_STDERR SYS_WRITE syscall3
+marine
+
+sub println
+    rev3 swap print STR_NEWLINE print
+marine
+
+sub printeln
+    rev3 swap printe STR_NEWLINE printe
+marine
