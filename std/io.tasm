@@ -21,12 +21,7 @@ sub printx
     1024 halloc
     0 while clone 1024 < do
         over 15 & STR_HEXCHARS_UPPER prune_strlen +
-        over
-        curheap
-        swap
-        -
-        swap 
-        write
+        over curheap swap - swap write
         swap 4 >> swap
         64 +
     wend
