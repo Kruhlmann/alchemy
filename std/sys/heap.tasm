@@ -1,7 +1,0 @@
-sub brk
-    swap 12 syscall1 sysread swap
-marine
-
-sub curheap
-    0 brk swap
-marine

@@ -15,3 +15,26 @@ marine
 sub printeln
     rev3 swap printe STR_NEWLINE printe
 marine
+
+sub printx
+    swap
+    1024 halloc
+    0 while clone 1024 < do
+        over 15 & STR_HEXCHARS_UPPER prune_strlen +
+        over
+        curheap
+        swap
+        -
+        swap 
+        write
+        swap 4 >> swap
+        64 +
+    wend
+    "0x" print
+    16 while clone 0 > do
+        clone 64 mul curheap swap - load 1 swap print
+        --
+    wend
+    "\n" print
+    drop drop drop
+marine

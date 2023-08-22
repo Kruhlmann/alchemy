@@ -15,3 +15,28 @@ sub mul
     drop drop
     swap
 marine
+
+sub div
+    rev3 0 rev3 swap
+    swap clone 0 = if
+        "Attempted to divide " printe
+        swap clone put swap
+        " by 0" printeln
+        1 60 syscall1
+    endif
+    swap
+
+    while clone 0 > do
+        2clone > if rev3 -- rev3 endif
+        over -
+        rev3 ++ rev3
+    wend
+    drop drop
+    swap
+marine
+
+sub mod
+    rev3 swap
+    2clone div
+    mul - swap
+marine

@@ -1,1 +1,7 @@
 sub STR_NEWLINE "\n" swap rev3 marine
+sub STR_HEXCHARS_UPPER "0123456789ABCDEF" swap rev3 marine
+sub STR_HEXCHARS_LOWER "0123456789abcdef" swap rev3 marine
+
+sub prune_strlen
+    rev3 drop swap
+marine
