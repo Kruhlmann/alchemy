@@ -30,7 +30,7 @@ export class NasmCompiler implements Compiler<NasmCompilerParameters, string, st
         }
 
         Logger.debug(`Removing ${asm_file}`);
-        fs.unlinkSync(asm_file);
+        // fs.unlinkSync(asm_file);
         Logger.debug(`Removing ${object_file}`);
         fs.unlinkSync(object_file);
 

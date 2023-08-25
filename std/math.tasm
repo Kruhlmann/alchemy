@@ -19,9 +19,6 @@ marine
 sub div
     rev3 0 rev3 swap
     swap clone 0 = if
-        "Attempted to divide " printe
-        swap clone put swap
-        " by 0" printeln
         1 60 syscall1
     endif
     swap

@@ -1,0 +1,2 @@
+sub FD_STDOUT 1 swap marine
+sub FD_STDERR 2 swap marine

@@ -76,6 +76,9 @@ export class TasmLexer implements Lexer<TasmSource, Instruction[]> {
     }
 
     public lex(source: TasmSource): Instruction[] {
-        return source.text.split("\n").flatMap((line, line_number) => this.lex_line(line, line_number, source.context));
+        return source.text
+            .replace(/\[.*?\]/g, '')
+            .split("\n")
+            .flatMap((line, line_number) => this.lex_line(line, line_number, source.context));
     }
 }
