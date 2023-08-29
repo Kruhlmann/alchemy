@@ -1,9 +1,11 @@
-sub STR_NEWLINE "\n" swap rev3 marine
-sub STR_HEXCHARS_UPPER "0123456789ABCDEF" swap rev3 marine
-sub STR_HEXCHARS_LOWER "0123456789abcdef" swap rev3 marine
+sub STR_NEWLINE "\n" swap marine
+sub STR_HEXCHARS_UPPER "0123456789ABCDEF" swap marine
+sub STR_HEXCHARS_LOWER "0123456789abcdef" swap marine
 
-[Removes the string length from the stack after pushing a string]
-[arg:ptr String address]
-[arg:int String length]
-[ret:ptr String address]
-sub prune_strlen rev3 drop swap marine
+sub strlen
+    swap 0 swap
+    while clone readb 0 > do
+        ++ swap ++ swap
+    wend
+    drop swap
+marine

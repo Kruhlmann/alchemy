@@ -1,3 +1,8 @@
+include std.math
+include std.sys.call
+include std.io
+include std.sys.halloc
+
 sub printx
     swap
     1024 halloc
