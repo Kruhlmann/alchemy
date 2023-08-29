@@ -1,5 +1,8 @@
 include std.size
 
+[arg:int part_a]
+[arg:int part_b]
+[ret:int Product]
 sub mul
     over 0 < if 
         rev3 0 rev3
@@ -37,6 +40,9 @@ sub div_i_f
 marine
 
 [Integer modulos]
+[arg:int Dividend]
+[arg:int Divisor]
+[ret:int Remainder]
 sub mod_i
     rev3 swap
     2clone div_i_f
