@@ -10,7 +10,7 @@
     "expression": {
       "patterns": [
         {
-          "name": "constant.numeric.integer.tasm",
+          "name": "constant.numeric.integer.alchemy",
           "match": "\\b\\d+\\b"
         },
         {
@@ -19,21 +19,21 @@
           "end": "\"",
           "patterns": [
             {
-              "name": "constant.character.escape.tasm",
+              "name": "constant.character.escape.alchemy",
               "match": "\\\\."
             }
           ]
         },
         {
-          "name": "keyword.control.tasm",
+          "name": "keyword.control.alchemy",
           "match": "\\b(if|unless|endif|else|put|syscall3)\\b"
         },
         {
-          "name": "keyword.operator.tasm",
+          "name": "keyword.operator.alchemy",
           "match": "(\\+|-|>|<|=|\\||&|<<|>>)"
         }
       ]
     }
   },
-  "scopeName": "source.tasm"
+  "scopeName": "source.alchemy"
 }

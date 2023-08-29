@@ -1,1 +1,1 @@
-export * from "./tasm_test_program";
+export * from "./alchemy_test_program";

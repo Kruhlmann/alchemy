@@ -1,10 +1,10 @@
 import { CrossReferencer } from "../../../cross_referencer";
 import { Instruction } from "../../../instruction";
-import { Lexer, TasmSource } from "../../../lexer";
+import { Lexer, AlchemySource } from "../../../lexer";
 import { CompilationResult } from "../../result";
-import { TasmCompiler } from "../tasm";
+import { AlchemyCompiler } from "../alchemy";
 
-export class Amd64TasmCompiler implements TasmCompiler {
+export class Amd64AlchemyCompiler implements AlchemyCompiler {
     public static ASM_HEADER = `global _start
 segment .text
 print:
@@ -44,11 +44,11 @@ add  rsp, 40
 ret`;
 
     public constructor(
-        protected lexer: Lexer<TasmSource, Instruction[]>,
+        protected lexer: Lexer<AlchemySource, Instruction[]>,
         protected cross_referencer: CrossReferencer,
     ) {}
 
-    public compile(source: TasmSource): CompilationResult<Instruction[], string> {
+    public compile(source: AlchemySource): CompilationResult<Instruction[], string> {
         const instructions = this.lexer.lex(source);
         const cross_referenced_instructions = this.cross_referencer.cross_reference_instructions(instructions);
         const instructions_source = cross_referenced_instructions
@@ -58,7 +58,7 @@ ret`;
             .map((instruction, index) => instruction.literal(index))
             .filter(Boolean)
             .join("\n");
-        const source_code = `${Amd64TasmCompiler.ASM_HEADER}
+        const source_code = `${Amd64AlchemyCompiler.ASM_HEADER}
 ${instructions_source}
 _start:
 call usr_main

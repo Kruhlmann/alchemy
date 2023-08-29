@@ -1,8 +1,8 @@
-# tasmc
+# Alchemy
 
-Typescript implementation of compiler based on the TASM language specification.
+Typescript implementation of compiler based on the Alchemy language specification.
 
-TASM uses [reverse polish notation](https://en.wikipedia.org/wiki/Reverse_Polish_notation) for its syntax to aid the stack oriented design. The compiler treats newlines as spaces.
+Alchemy uses [reverse polish notation](https://en.wikipedia.org/wiki/Reverse_Polish_notation) for its syntax to aid the stack oriented design. The compiler treats newlines as spaces.
 
 # Examples
 

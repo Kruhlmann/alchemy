@@ -26,7 +26,7 @@ export class IncludePreprocessor {
                             ) {
                                 const files = fs
                                     .readdirSync(module_path_candidate)
-                                    .filter((file) => file.endsWith(".tasm"));
+                                    .filter((file) => file.endsWith(".alc"));
 
                                 if (files.length === 0) {
                                     throw new ModuleNotFoundError(target_module, this.default_include_paths);
@@ -44,16 +44,16 @@ export class IncludePreprocessor {
                                     })
                                     .join("");
                             } else if (
-                                fs.existsSync(`${module_path_candidate}.tasm`) &&
-                                fs.lstatSync(`${module_path_candidate}.tasm`).isFile()
+                                fs.existsSync(`${module_path_candidate}.alc`) &&
+                                fs.lstatSync(`${module_path_candidate}.alc`).isFile()
                             ) {
-                                if (included_files.includes(`${module_path_candidate}.tasm`)) {
+                                if (included_files.includes(`${module_path_candidate}.alc`)) {
                                     // ignoring file that has already been included
                                     return "";
                                 } else {
-                                    included_files.push(`${module_path_candidate}.tasm`);
+                                    included_files.push(`${module_path_candidate}.alc`);
                                     return this.resolve_includes(
-                                        fs.readFileSync(`${module_path_candidate}.tasm`).toString(),
+                                        fs.readFileSync(`${module_path_candidate}.alc`).toString(),
                                     );
                                 }
                             } else {

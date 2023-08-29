@@ -1,12 +1,12 @@
 import fs from "node:fs";
 
-import { Amd64TasmCompiler, NasmCompiler } from "./compiler";
+import { Amd64AlchemyCompiler, NasmCompiler } from "./compiler";
 import { CrossReferencer } from "./cross_referencer";
 import { IncludePreprocessor } from "./include";
-import { TasmLexer } from "./lexer";
+import { AlchemyLexer } from "./lexer";
 import { Logger } from "./logger";
 
-export class TasmCompilerCli {
+export class AlchemyCompilerCli {
     public compile(source_file: string | undefined, output_file: string) {
         Logger.silent = false;
         if (source_file === undefined || output_file === undefined) {
@@ -14,11 +14,11 @@ export class TasmCompilerCli {
         }
         const raw_source = fs.readFileSync(source_file).toString();
         const source = new IncludePreprocessor([process.cwd()]).resolve_includes(raw_source);
-        const lexer = new TasmLexer();
+        const lexer = new AlchemyLexer();
         const cross_referencer = new CrossReferencer();
-        const tasm_compiler = new Amd64TasmCompiler(lexer, cross_referencer);
+        const alchemy_compiler = new Amd64AlchemyCompiler(lexer, cross_referencer);
         const nasm_compiler = new NasmCompiler();
-        const compilation_result = tasm_compiler.compile({
+        const compilation_result = alchemy_compiler.compile({
             text: source,
             context: source_file,
         });
@@ -30,6 +30,6 @@ export class TasmCompilerCli {
     }
 
     protected usage(): void {
-        Logger.info("Usage: tasmc <tasm_file> <binary_file>");
+        Logger.info("Usage: alchemyc <alchemy_file> <binary_file>");
     }
 }

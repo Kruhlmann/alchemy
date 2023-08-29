@@ -1,15 +1,15 @@
 import fs from "node:fs";
 
 import {
-    Amd64TasmCompiler,
+    Amd64AlchemyCompiler,
     BinaryRuntime,
     CrossReferencer,
     IncludePreprocessor,
     NasmCompiler,
-    TasmLexer,
-    TasmReferenceModel,
+    AlchemyLexer,
+    AlchemyReferenceModel,
 } from "../src";
-import { TasmTestProgram } from "./utils";
+import { AlchemyTestProgram } from "./utils";
 
 const test_cases = [
     "arithmetic",
@@ -26,15 +26,15 @@ const test_cases = [
 
 describe("Amd64Compiler", () => {
     test.each(test_cases)("compiles and executes program %p", (program_name: string) => {
-        const program = new TasmTestProgram(program_name);
+        const program = new AlchemyTestProgram(program_name);
         const include_preprocessor = new IncludePreprocessor([process.cwd()]);
-        program.set_source(include_preprocessor.resolve_includes(program.tasm_source_code));
-        const lexer = new TasmLexer();
+        program.set_source(include_preprocessor.resolve_includes(program.alchemy_source_code));
+        const lexer = new AlchemyLexer();
         const cross_referencer = new CrossReferencer();
-        const tasm_compiler = new Amd64TasmCompiler(lexer, cross_referencer);
+        const alchemy_compiler = new Amd64AlchemyCompiler(lexer, cross_referencer);
         const nasm_compiler = new NasmCompiler();
-        const compilation_result = tasm_compiler.compile(program.tasm_source);
-        const refmodel = new TasmReferenceModel(compilation_result.source);
+        const compilation_result = alchemy_compiler.compile(program.alchemy_source);
+        const refmodel = new AlchemyReferenceModel(compilation_result.source);
 
         expect(refmodel.toString()).toBe(program.refmodel_code);
 

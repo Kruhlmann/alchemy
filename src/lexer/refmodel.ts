@@ -1,6 +1,6 @@
 import { Instruction } from "../instruction";
 
-export class TasmReferenceModel {
+export class AlchemyReferenceModel {
     public constructor(protected instructions: Instruction[]) {}
 
     public toString(): string {

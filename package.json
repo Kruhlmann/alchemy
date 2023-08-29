@@ -1,17 +1,17 @@
 {
-  "name": "tasmc",
+  "name": "Alchemy",
   "version": "1.1.1",
-  "description": "TASM compiler implementation",
+  "description": "Alchemy compiler implementation",
   "engines": {
     "node": ">=14"
   },
   "license": "GPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/Kruhlmann/tasmc/issues"
+    "url": "https://github.com/Kruhlmann/alchemy/issues"
   },
-  "homepage": "https://github.com/Kruhlmann/tasmc#readme",
+  "homepage": "https://github.com/Kruhlmann/alchemy#readme",
   "bin": {
-    "tasmc": "./bin/tasmc"
+    "alchemyc": "./bin/alchemyc"
   },
   "files": [
     "dist"

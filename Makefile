@@ -19,10 +19,10 @@ clean: ## Clean source directory.
 node_modules: $(PKG_LOCKFILE)
 	$(PKG_MANAGER) install
 
-tests/tasm_programs/%:
+tests/alchemy_programs/%:
 	mkdir -p $@
 	printf '0' >$@/program.exitcode
-	printf 'sub main\n  1 put\nmarine' >$@/program.tasm
+	printf 'sub main\n  1 put\nmarine' >$@/program.alc
 	printf 'SubInstruction<main>\nLiteralInstruction<main>\nPushIntInstruction<1>\nPutInstruction\nMarineInstruction' >$@/program.refmodel
 	printf '1' >$@/program.stdout
 

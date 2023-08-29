@@ -1,7 +1,7 @@
 {
-  "name": "tasm-vscode-syntax",
-  "displayName": "TASM VSCode Syntax",
-  "description": "Syntax highlighting for Tasm",
+  "name": "alchemy-vscode-syntax",
+  "displayName": "Alchemy VSCode Syntax",
+  "description": "Syntax highlighting for Alchemy",
   "version": "0.0.1",
   "publisher": "Andreas Krühlmann",
   "engines": {
@@ -13,17 +13,17 @@
   "contributes": {
     "languages": [
       {
-        "id": "tasm",
-        "aliases": ["TASM", "tasm"],
-        "extensions": [".tasm"],
+        "id": "alchemy",
+        "aliases": ["alchemy"],
+        "extensions": [".alc"],
         "configuration": "./language-configuration.json"
       }
     ],
     "grammars": [
       {
-        "language": "tasm",
-        "scopeName": "source.tasm",
-        "path": "./tasm.tmLanguage.json"
+        "language": "alchemy",
+        "scopeName": "source.alc",
+        "path": "./alchemy.tmLanguage.json"
       }
     ]
   }

@@ -3,12 +3,12 @@ import { Lexer } from "./lexer";
 import { LineBuffer } from "./line_buffer";
 import { NewlineEscapedString } from "./newline_escaped_string";
 import { Symbol } from "./symbol";
-import { TasmSource } from "./tasm_source";
+import { AlchemySource } from "./alchemy_source";
 
 // eslint-disable-next-line quotes
 const DOUBLE_QUOTE = `"`;
 
-export class TasmLexer implements Lexer<TasmSource, Instruction[]> {
+export class AlchemyLexer implements Lexer<AlchemySource, Instruction[]> {
     // eslint-disable-next-line complexity
     protected lex_line(unescaped_line: string, _line_number: number, _context: string): Instruction[] {
         let char_ptr = 0;
@@ -75,7 +75,7 @@ export class TasmLexer implements Lexer<TasmSource, Instruction[]> {
         return symbols.map((symbol) => symbol.as_instruction());
     }
 
-    public lex(source: TasmSource): Instruction[] {
+    public lex(source: AlchemySource): Instruction[] {
         return source.text
             .replace(/\[.*?\]/g, '')
             .split("\n")

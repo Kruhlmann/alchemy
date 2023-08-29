@@ -1,0 +1,6 @@
+#!/usr/bin/env node
+
+const { AlchemyCompilerCli } = require("../dist/cli.js");
+
+const compiler = new AlchemyCompilerCli();
+compiler.compile(process.argv[2], process.argv[3]);

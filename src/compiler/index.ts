@@ -1,4 +1,4 @@
 export * from "./compiler";
 export * from "./nasm";
 export * from "./result";
-export * from "./tasm";
+export * from "./alchemy";
