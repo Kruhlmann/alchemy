@@ -7,8 +7,7 @@ export class IncludePreprocessor {
     public constructor(protected default_include_paths: string[]) {}
 
     // eslint-disable-next-line complexity
-    public resolve_includes(source_code: string): string {
-        const included_files: string[] = [];
+    public resolve_includes(source_code: string, included_files: string[] = []): string {
         while (source_code.split("\n").some((line) => line.startsWith("include "))) {
             source_code = source_code
                 .split("\n")
@@ -54,6 +53,7 @@ export class IncludePreprocessor {
                                     included_files.push(`${module_path_candidate}.alc`);
                                     return this.resolve_includes(
                                         fs.readFileSync(`${module_path_candidate}.alc`).toString(),
+                                        included_files,
                                     );
                                 }
                             } else {
