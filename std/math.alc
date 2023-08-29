@@ -1,3 +1,5 @@
+include std.size
+
 sub mul
     over 0 < if 
         rev3 0 rev3
@@ -16,24 +18,27 @@ sub mul
     swap
 marine
 
-sub div
-    rev3 0 rev3 swap
-    swap clone 0 = if
-        1 60 syscall1
-    endif
-    swap
+[Flooring integer division]
+[arg:int Dividend]
+[arg:int Divisor]
+[ret:int Floored result]
+sub div_i_f
+    rev3 
+    1 qwbt peek 0 = if 1 60 syscall1 endif
 
-    while clone 0 > do
-        2clone > if rev3 -- rev3 endif
-        over -
-        rev3 ++ rev3
+    0 rev3 while 2clone > do
+        2clone - 
+        rev3 drop swap
+        2 qwbt peek ++ 2 qwbt poke
+        swap
     wend
-    drop drop
+    = if ++ endif
     swap
 marine
 
-sub mod
+[Integer modulos]
+sub mod_i
     rev3 swap
-    2clone div
+    2clone div_i_f
     mul - swap
 marine

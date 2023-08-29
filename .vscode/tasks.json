@@ -2,9 +2,9 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Compile tasm file",
+      "label": "Compile Alchemy file",
       "type": "shell",
-      "command": "./bin/tasmc ${fileDirname}/${fileBasename} ${fileDirname}/${fileBasenameNoExtension}",
+      "command": "./bin/alchemyc ${fileDirname}/${fileBasename} ${fileDirname}/${fileBasenameNoExtension}",
       "problemMatcher": []
     }
   ]
