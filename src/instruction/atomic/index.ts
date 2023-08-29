@@ -29,6 +29,7 @@ export * from "./read_b";
 export * from "./read_d";
 export * from "./read_q";
 export * from "./read_w";
+export * from "./return";
 export * from "./rev3";
 export * from "./rev4";
 export * from "./right_shift";

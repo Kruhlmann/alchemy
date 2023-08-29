@@ -1,5 +1,6 @@
 include std.size
 
+[Multiplication]
 [arg:int part_a]
 [arg:int part_b]
 [ret:int Product]
