@@ -2,10 +2,37 @@ sub STR_NEWLINE "\n" swap marine
 sub STR_HEXCHARS_UPPER "0123456789ABCDEF" swap marine
 sub STR_HEXCHARS_LOWER "0123456789abcdef" swap marine
 
+[Calculates the length of a string]
+[arg:ptr Address to string]
+[ret:int String length]
 sub strlen
     swap 0 swap
     while clone readb 0 > do
         ++ swap ++ swap
     wend
     drop swap
+marine
+
+[Compares two strings for case sensitive equality]
+[arg:ptr Address to string a]
+[arg:ptr Address to string b]
+[ret:int Equality flag]
+sub strcmp
+    rev3 2clone strlen swap strlen = if else
+        drop drop
+        false swap return
+    endif
+
+    while
+        2clone readb swap readb & 0 >
+    do
+        2clone readb swap readb
+        = if else
+            drop drop
+            false swap return
+        endif
+        ++ swap ++
+    wend
+    drop drop
+    true swap return
 marine
