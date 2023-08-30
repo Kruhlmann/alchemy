@@ -2,10 +2,10 @@ include std.io
 include std.size
 
 sub main
-    4 qwbt while clone peek 0 > do
+    4 size_q while clone peek 0 > do
         clone peek print
         " " print
-        1 qwbt +
+        1 size_q +
     wend
     "" println
     drop

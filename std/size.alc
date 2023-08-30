@@ -2,4 +2,4 @@ include std.math
 
 sub BYTES_IN_QWORD 8 swap marine
 
-sub qwbt swap BYTES_IN_QWORD mul swap marine
+sub size_q swap BYTES_IN_QWORD mul swap marine

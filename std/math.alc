@@ -28,12 +28,12 @@ marine
 [ret:int Floored result]
 sub div_i_f
     rev3 
-    1 qwbt peek 0 = if 1 60 syscall1 endif
+    1 size_q peek 0 = if 1 60 syscall1 endif
 
     0 rev3 while 2clone > do
         2clone - 
         rev3 drop swap
-        2 qwbt peek ++ 2 qwbt poke
+        2 size_q peek ++ 2 size_q poke
         swap
     wend
     = if ++ endif
