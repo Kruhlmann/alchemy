@@ -1,0 +1,12 @@
+include std.io
+include std.size
+
+sub main
+    4 qwbt while clone peek 0 > do
+        clone peek print
+        " " print
+        1 qwbt +
+    wend
+    "" println
+    drop
+marine
