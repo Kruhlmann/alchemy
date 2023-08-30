@@ -8,6 +8,9 @@ export class PushStringInstruction extends ArgumentInstruction<string> {
         throw new Error("Method not implemented.");
     }
     public literal(instruction_index: number): string | undefined {
+        if (this.argument.length === 0) {
+            return `lit_${instruction_index}: db 0x00`;
+        }
         const byte_array = new TextEncoder().encode(this.argument);
         const byte_hex = [...byte_array] // Convert implicityly from Uint8Array to 
                                          // Array<number> as Uint8Array has a non-standard 

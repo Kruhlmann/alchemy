@@ -13,7 +13,7 @@ export class AlchemyCompilerCli {
             return this.usage();
         }
         const raw_source = fs.readFileSync(source_file).toString();
-        const source = new IncludePreprocessor([process.cwd()]).resolve_includes(raw_source);
+        const source = new IncludePreprocessor([process.cwd(), "/usr/share/alchemy"]).resolve_includes(raw_source);
         const lexer = new AlchemyLexer();
         const cross_referencer = new CrossReferencer();
         const alchemy_compiler = new Amd64AlchemyCompiler(lexer, cross_referencer);

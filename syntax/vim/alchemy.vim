@@ -3,8 +3,8 @@ syn region alchemyDocstring start=/\[/ end=/\]/ contains=alchemyDocType,alchemyD
 syn match alchemyDocType /\w\+:\w\+/ contained
 
 syn keyword alchemyKeyword readb readw readd readq swap syscall1 syscall2 syscall3 syscall4 rev3 rev4 clone 2clone over do put peek poke drop
-syn keyword alchemyKeywordBlock sub marine if endif else while do wend 
-syn keyword alchemySpecial return
+syn keyword alchemyKeywordBlock sub marine if endif else while do wend
+syn keyword alchemySpecial return next
 syn match alchemyOperator "[+\-&|><=]"
 syn region alchemyString start='"' end='"'
 syn match alchemyLibrary /\vinclude\s+\S+/

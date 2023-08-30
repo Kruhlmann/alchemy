@@ -20,6 +20,7 @@ export * from "./literal";
 export * from "./load";
 export * from "./marine";
 export * from "./memory";
+export * from "./next";
 export * from "./or";
 export * from "./over";
 export * from "./push_int";
