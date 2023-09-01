@@ -1,3 +1,5 @@
+include std.bool
+
 sub STR_NEWLINE "\n" swap marine
 sub STR_HEXCHARS_UPPER "0123456789ABCDEF" swap marine
 sub STR_HEXCHARS_LOWER "0123456789abcdef" swap marine
@@ -35,4 +37,36 @@ sub strcmp
     wend
     drop drop
     true swap return
+marine
+
+[Destructivly converts an ASCII string pointer to uppercase]
+[arg:ptr String pointer]
+[ret:void]
+sub str_upper
+    swap
+    while true do
+        clone readb 0 = if drop return endif
+        clone readb 96 > if clone readb 123 < if 
+            clone readb 32 -
+            2clone writeb drop
+        endif endif
+        ++
+    wend
+    drop
+marine
+
+[Destructivly converts an ASCII string pointer to lowercase]
+[arg:ptr String pointer]
+[ret:void]
+sub str_lower
+    swap
+    while true do
+        clone readb 0 = if drop return endif
+        clone readb 64 > if clone readb 90 < if 
+            clone readb 32 +
+            2clone writeb drop
+        endif endif
+        ++
+    wend
+    drop
 marine
