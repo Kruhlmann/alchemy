@@ -1,0 +1,55 @@
+include std.io
+include std.str
+include std.bool
+include std.sys.call
+include std.size
+include std.math
+
+sub MEM_HEADER 3735928559 swap marine
+sub MEM_PAGE_SIZE 4096 swap marine
+
+[Returns the top of the allocated heap]
+[ret:ptr Largest available memory address]
+sub memtop
+    0 SYS_BRK syscall1 sysread swap
+marine
+
+[Initializes the memory allocator at brk(0)]
+[This writes MEM_HEADER to the first available memory address]
+[This lets the allocator know where the start of the allocated blocks are]
+[ret:void]
+sub malloc_init
+    1 size_q malloc
+    memtop 1 size_q - MEM_HEADER writeq
+    MEM_PAGE_SIZE malloc
+    memtop MEM_PAGE_SIZE - MEM_PAGE_SIZE writeq
+marine
+
+[Allocates memory on the heap]
+[arg:int Number of bytes to allocate]
+[ret:void]
+sub malloc
+    swap
+    memtop + SYS_BRK syscall1 sysread
+    0 < if
+        "malloc: panic" printeln
+        1 SYS_EXIT syscall1
+    endif
+marine
+
+sub malloc_block_32
+    memtop clone put
+    while clone readq MEM_HEADER != do
+        --
+    wend
+    put
+    memtop MEM_PAGE_SIZE - put
+    memtop MEM_PAGE_SIZE - readq put
+
+marine
+
+[Main entrypoint]
+sub main
+    malloc_init
+    malloc_block_32
+marine
