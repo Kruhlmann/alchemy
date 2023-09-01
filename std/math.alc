@@ -40,11 +40,11 @@ sub div_i_f
     swap
 marine
 
-[Integer modulos]
+[Arithmetic modulos]
 [arg:int Dividend]
 [arg:int Divisor]
 [ret:int Remainder]
-sub mod_i
+sub mod
     rev3 swap
     2clone div_i_f
     mul - swap
