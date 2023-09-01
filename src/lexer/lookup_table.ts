@@ -17,6 +17,7 @@ import {
     LessThanEqualsInstruction,
     LoadMemoryInstruction,
     MarineInstruction,
+    NotEqualityInstruction,
     OverInstruction,
     PeekInstruction,
     PokeInstruction,
@@ -55,6 +56,7 @@ import {
 
 export class InstructionLookupTable {
     protected static instructions_by_symbol: Record<string, new () => Instruction> = {
+        "!=": NotEqualityInstruction,
         "&": BitwiseAndInstruction,
         "+": AddInstruction,
         "++": IncrementInstruction,

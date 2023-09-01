@@ -29,7 +29,7 @@ export class NasmCompiler implements Compiler<NasmCompilerParameters, string, st
             throw new Error(`${this.constructor.name}: ${chmod_result.stderr}`);
         }
 
-        Logger.debug(`Removing ${asm_file}`);
+        // Logger.debug(`Removing ${asm_file}`);
         // fs.unlinkSync(asm_file);
         Logger.debug(`Removing ${object_file}`);
         fs.unlinkSync(object_file);

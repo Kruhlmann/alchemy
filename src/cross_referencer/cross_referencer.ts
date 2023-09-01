@@ -47,20 +47,20 @@ export class CrossReferencer {
                     );
                 }
                 iclone[previdx] = iclone[previdx].reference_to(curidx + 1);
-                Logger.debug(`Linked ${iclone[curidx]} to ${iclone[previdx]}`);
+                // Logger.debug(`Linked ${iclone[curidx]} to ${iclone[previdx]}`);
                 iclone[curidx] = new UnreferencedElseInstruction();
                 refstack.push(curidx);
             } else if (curinst instanceof LiteralInstruction) {
                 const previdx = refstack.pop();
                 if (previdx === undefined) {
                     iclone[curidx] = new CallInstruction(curinst.read_argument());
-                    Logger.debug(`Converted LiteralInstruction<${curinst.read_argument()}> to ${iclone[curidx]}`);
+                    // Logger.debug(`Converted LiteralInstruction<${curinst.read_argument()}> to ${iclone[curidx]}`);
                 } else if (iclone[previdx] instanceof UnreferencedSubInstruction) {
                     iclone[previdx] = new SubInstruction(curinst.read_argument()); 
-                    Logger.debug(`Converted LiteralInstruction<${curinst.read_argument()}> to ${iclone[previdx]}`);
+                    // Logger.debug(`Converted LiteralInstruction<${curinst.read_argument()}> to ${iclone[previdx]}`);
                 } else {
                     iclone[curidx] = new CallInstruction(curinst.read_argument());
-                    Logger.debug(`Converted LiteralInstruction<${curinst.read_argument()}> to ${iclone[curidx]}`);
+                    // Logger.debug(`Converted LiteralInstruction<${curinst.read_argument()}> to ${iclone[curidx]}`);
                     refstack.push(previdx);
                 }
             } else if (curinst instanceof EndIfInstruction) {
@@ -70,7 +70,7 @@ export class CrossReferencer {
                     throw new UnexpectedInstructionError(iclone[previdx], UnreferencedInstruction, EndIfInstruction);
                 }
                 iclone[previdx] = iclone[previdx].reference_to(curidx);
-                Logger.debug(`Linked ${iclone[curidx]} to ${iclone[previdx]}`);
+                // Logger.debug(`Linked ${iclone[curidx]} to ${iclone[previdx]}`);
             } else if (curinst instanceof UnreferencedDoInstruction) {
                 const previdx = refstack.pop();
                 if (previdx === undefined) throw new ReferenceStackEmptyError(UnreferencedDoInstruction);
@@ -78,13 +78,13 @@ export class CrossReferencer {
                     throw new UnexpectedInstructionError(iclone[previdx], WhileInstruction, UnreferencedDoInstruction);
                 }
                 iclone[curidx] = iclone[curidx].reference_to(previdx);
-                Logger.debug(`Linked ${iclone[curidx]} to ${iclone[previdx]}`);
+                // Logger.debug(`Linked ${iclone[curidx]} to ${iclone[previdx]}`);
                 refstack.push(curidx);
             } else if (curinst instanceof UnreferencedNextInstruction) {
                 for (let i = curidx; i > 0; i--) {
                     if (instructions[i] instanceof WhileInstruction) {
                         iclone[curidx] = iclone[curidx].reference_to(i);
-                        Logger.debug(`Linked ${iclone[curidx]} to ${instructions[i]}`);
+                        // Logger.debug(`Linked ${iclone[curidx]} to ${instructions[i]}`);
                         break
                     }
                 }
@@ -100,7 +100,7 @@ export class CrossReferencer {
                 iclone[curidx] = iclone[curidx].reference_to(
                     (iclone[previdx] as ArgumentInstruction<number>).read_argument(),
                 );
-                Logger.debug(`Linked ${iclone[curidx]} to ${iclone[previdx]}`);
+                // Logger.debug(`Linked ${iclone[curidx]} to ${iclone[previdx]}`);
                 iclone[previdx] = iclone[previdx].reference_to(curidx + 1);
             }
         }
