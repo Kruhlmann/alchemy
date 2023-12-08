@@ -70,3 +70,80 @@ sub str_lower
     wend
     drop
 marine
+
+[Prints a numbers as a hex string]
+[arg:int number to print]
+[ret:void]
+sub printx
+    swap
+    clone 2147483647 [32 bit signed max] > if
+        printx_64
+    else
+        clone 65535 [16 bit signed max] > if
+            printx_32
+        else
+            printx_16
+        endif
+    endif
+marine
+
+sub printx_16
+    swap
+    mem 0 + 0 itoc write
+    mem 1 + 120 write
+    mem 2 + over 12 >> 15 & itoc write
+    mem 3 + over 8 >> 15 & itoc write
+    mem 4 + over 4 >> 15 & itoc write
+    mem 5 + over 0 >> 15 & itoc write
+    mem println
+    drop
+marine
+
+sub printx_32
+    swap
+    mem 0 + 0 itoc write
+    mem 1 + 120 write
+    mem 2 + over 28 >> 15 & itoc write
+    mem 3 + over 24 >> 15 & itoc write
+    mem 4 + over 20 >> 15 & itoc write
+    mem 5 + over 16 >> 15 & itoc write
+    mem 6 + over 12 >> 15 & itoc write
+    mem 7 + over 8 >> 15 & itoc write
+    mem 8 + over 4 >> 15 & itoc write
+    mem 9 + over 0 >> 15 & itoc write
+    mem println
+    drop
+marine
+
+sub printx_64
+    swap
+    mem 0 + 0 itoc write
+    mem 1 + 120 write
+    mem 2 + over 60 >> 15 & itoc write
+    mem 3 + over 56 >> 15 & itoc write
+    mem 4 + over 52 >> 15 & itoc write
+    mem 5 + over 48 >> 15 & itoc write
+    mem 6 + over 44 >> 15 & itoc write
+    mem 7 + over 40 >> 15 & itoc write
+    mem 8 + over 36 >> 15 & itoc write
+    mem 9 + over 32 >> 15 & itoc write
+    mem 10 + over 28 >> 15 & itoc write
+    mem 11 + over 24 >> 15 & itoc write
+    mem 12 + over 20 >> 15 & itoc write
+    mem 13 + over 16 >> 15 & itoc write
+    mem 14 + over 12 >> 15 & itoc write
+    mem 15 + over 8 >> 15 & itoc write
+    mem 16 + over 4 >> 15 & itoc write
+    mem 17 + over 0 >> 15 & itoc write
+    mem println
+    drop
+marine
+
+[Converts an integer between 0-15 to the ASCII hex character]
+[arg:int number to convert]
+[ret:int ascii character]
+sub itoc
+    swap clone 10 < if 48 +
+    else 55 + endif swap
+marine
+
