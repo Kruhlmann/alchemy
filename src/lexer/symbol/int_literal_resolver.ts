@@ -1,5 +1,4 @@
 import { Instruction, PushIntInstruction } from "../../instruction";
-import { Logger } from "../../logger";
 import { SymbolResolver } from "./resolver";
 import { Symbol } from "./symbol";
 
@@ -9,6 +8,7 @@ export class IntegerLiteralSymbolResolver implements SymbolResolver {
             const parsed = BigInt(symbol.toString());
             return new PushIntInstruction(parsed);
         } catch {
+            throw new Error(`Invalid integer ${symbol}`);
         }
     }
 }

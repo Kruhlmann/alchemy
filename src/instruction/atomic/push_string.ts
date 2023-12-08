@@ -12,9 +12,9 @@ export class PushStringInstruction extends ArgumentInstruction<string> {
             return `lit_${instruction_index}: db 0x00`;
         }
         const byte_array = new TextEncoder().encode(this.argument);
-        const byte_hex = [...byte_array] // Convert implicityly from Uint8Array to 
-                                         // Array<number> as Uint8Array has a non-standard 
-                                         // .map implementation.
+        const byte_hex = [...byte_array] // Convert implicityly from Uint8Array to
+            // Array<number> as Uint8Array has a non-standard
+            // .map implementation.
             .map((byte) => byte.toString(16))
             .map((byte_string) => `0x${byte_string}`)
             .join(", ");

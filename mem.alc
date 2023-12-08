@@ -1,0 +1,12 @@
+include std.sys.mem
+
+[ret:void]
+sub main
+    mem_init
+    1024 malloc clone printx
+    mem_walk
+    1024 malloc clone printx
+    mem_walk
+    free
+    mem_walk
+marine

@@ -1,3 +1,0 @@
-sub main
-    "Hello, World!" 1 1 syscall3
-marine

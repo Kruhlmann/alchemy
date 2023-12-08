@@ -1,2 +1,2 @@
-export * from "./amd64";
 export * from "./alchemy";
+export * from "./amd64";

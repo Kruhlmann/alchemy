@@ -1,6 +1,6 @@
 import { CrossReferencer } from "../../../cross_referencer";
 import { Instruction } from "../../../instruction";
-import { Lexer, AlchemySource } from "../../../lexer";
+import { AlchemySource, Lexer } from "../../../lexer";
 import { CompilationResult } from "../../result";
 import { AlchemyCompiler } from "../alchemy";
 

@@ -1,7 +1,0 @@
-SubInstruction<main>
-LiteralInstruction<main>
-PushStringInstruction<"Hello, World!">
-PushIntInstruction<1>
-PushIntInstruction<1>
-Syscall3Instruction
-MarineInstruction

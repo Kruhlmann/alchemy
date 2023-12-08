@@ -1,9 +1,9 @@
 import { Instruction } from "../instruction";
+import { AlchemySource } from "./alchemy_source";
 import { Lexer } from "./lexer";
 import { LineBuffer } from "./line_buffer";
 import { NewlineEscapedString } from "./newline_escaped_string";
 import { Symbol } from "./symbol";
-import { AlchemySource } from "./alchemy_source";
 
 // eslint-disable-next-line quotes
 const DOUBLE_QUOTE = `"`;
@@ -77,7 +77,7 @@ export class AlchemyLexer implements Lexer<AlchemySource, Instruction[]> {
 
     public lex(source: AlchemySource): Instruction[] {
         return source.text
-            .replace(/\[.*?\]/g, '')
+            .replace(/\[.*?]/g, "")
             .split("\n")
             .flatMap((line, line_number) => this.lex_line(line, line_number, source.context));
     }

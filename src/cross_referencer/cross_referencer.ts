@@ -16,7 +16,6 @@ import {
     WhileInstruction,
 } from "../instruction";
 import { ArgumentInstruction } from "../instruction/argument_instruction";
-import { Logger } from "../logger";
 import { ReferenceStackEmptyError } from "./reference_stack_empty_error";
 import { ReferenceStackNotEmptyError } from "./reference_stack_not_empty_error";
 import { UnexpectedInstructionError } from "./unexpected_instruction_error";
@@ -56,7 +55,7 @@ export class CrossReferencer {
                     iclone[curidx] = new CallInstruction(curinst.read_argument());
                     // Logger.debug(`Converted LiteralInstruction<${curinst.read_argument()}> to ${iclone[curidx]}`);
                 } else if (iclone[previdx] instanceof UnreferencedSubInstruction) {
-                    iclone[previdx] = new SubInstruction(curinst.read_argument()); 
+                    iclone[previdx] = new SubInstruction(curinst.read_argument());
                     // Logger.debug(`Converted LiteralInstruction<${curinst.read_argument()}> to ${iclone[previdx]}`);
                 } else {
                     iclone[curidx] = new CallInstruction(curinst.read_argument());
@@ -81,11 +80,11 @@ export class CrossReferencer {
                 // Logger.debug(`Linked ${iclone[curidx]} to ${iclone[previdx]}`);
                 refstack.push(curidx);
             } else if (curinst instanceof UnreferencedNextInstruction) {
-                for (let i = curidx; i > 0; i--) {
-                    if (instructions[i] instanceof WhileInstruction) {
-                        iclone[curidx] = iclone[curidx].reference_to(i);
+                for (let index = curidx; index > 0; index--) {
+                    if (instructions[index] instanceof WhileInstruction) {
+                        iclone[curidx] = iclone[curidx].reference_to(index);
                         // Logger.debug(`Linked ${iclone[curidx]} to ${instructions[i]}`);
-                        break
+                        break;
                     }
                 }
                 if (iclone[curidx] instanceof UnreferencedNextInstruction) {

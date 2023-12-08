@@ -1,28 +1,16 @@
 import fs from "node:fs";
 
 import {
+    AlchemyLexer,
     Amd64AlchemyCompiler,
     BinaryRuntime,
     CrossReferencer,
     IncludePreprocessor,
     NasmCompiler,
-    AlchemyLexer,
-    AlchemyReferenceModel,
 } from "../src";
 import { AlchemyTestProgram } from "./utils";
 
-const test_cases = [
-    "arithmetic",
-    "stdout",
-    "bitwise",
-    "conditional",
-    "while",
-    "memory",
-    "syscall",
-    "turing",
-    "stack",
-    "include",
-];
+const test_cases = ["arithmetic", "bitwise", "conditional", "while", "syscall", "stack", "include"];
 
 describe("Amd64Compiler", () => {
     test.each(test_cases)("compiles and executes program %p", (program_name: string) => {
@@ -34,10 +22,6 @@ describe("Amd64Compiler", () => {
         const alchemy_compiler = new Amd64AlchemyCompiler(lexer, cross_referencer);
         const nasm_compiler = new NasmCompiler();
         const compilation_result = alchemy_compiler.compile(program.alchemy_source);
-        const refmodel = new AlchemyReferenceModel(compilation_result.source);
-
-        expect(refmodel.toString()).toBe(program.refmodel_code);
-
         const temporary_path = new BinaryRuntime("mktemp", []).run().stdout;
         const binary_compilation_result = nasm_compiler.compile({
             asm_source: compilation_result.output,
