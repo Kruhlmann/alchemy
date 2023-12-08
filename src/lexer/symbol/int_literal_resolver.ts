@@ -8,7 +8,6 @@ export class IntegerLiteralSymbolResolver implements SymbolResolver {
             const parsed = BigInt(symbol.toString());
             return new PushIntInstruction(parsed);
         } catch {
-            throw new Error(`Invalid integer ${symbol}`);
         }
     }
 }
