@@ -7,7 +7,7 @@ export class IntegerLiteralSymbolResolver implements SymbolResolver {
         try {
             const parsed = BigInt(symbol.toString());
             return new PushIntInstruction(parsed);
-        } catch {
-        }
+            // eslint-disable-next-line no-empty
+        } catch {}
     }
 }
