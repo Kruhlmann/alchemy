@@ -69,9 +69,7 @@ marine
 [arg:ptr pointer to memory block]
 [ret:void]
 sub free
-    swap
-    clone ? BLOCK_FREE -
-    swap !
+    swap clone ? BLOCK_USED - !
 marine
 
 sub mwalk
