@@ -1,17 +1,15 @@
-include std.sys.call
 include std.io
 include std.math
+include std.sys.call
 
 sub BLOCK_FREE 0 swap marine
 sub BLOCK_USED 1 swap marine
-sub PAGE_SIZE_BYTES 4096 swap marine
-sub BLOCK_HEADER_SIZE 8 swap marine
 
 [Modifies the end address of the heap]
 [arg:int New address in number of bytes]
 [ret:ptr End address of heap]
 sub brk
-    swap 12 syscall1 sysread swap
+    swap SYS_BRK syscall1 sysread swap
 marine
 
 [Read the current end of the heap]
@@ -20,106 +18,83 @@ sub heap_end
     0 brk swap
 marine
 
-[Increases the heap by a set amount of bytes.]
+[Increases the heap by a set amount of qwords]
 [arg:int number of bytes]
 [ret:void]
 sub incheap
-    swap heap_end + brk
-    0 < if
+    [16 bytes from the end is where the 0-sized memory block lives]
+    [This has to be changed to allow malloc to recognize the new heap memory]
+    swap heap_end 16 - over ! 
+    heap_end 8 - swap [Store the current end of the heap for later]
+    8 mul heap_end + brk 0 < if [sysread with value less than 0 means an error ocurred]
         "Unable to increase heap memory" println
         1 SYS_EXIT syscall1
     endif
+    ? heap_end 8 - swap !
 marine
 
-[Initializes the memory allocator]
-[ret:void]
-sub mem_init
-    "Initializing heap allocator @ " print 0 brk printx
-    [Allocate first block (empty)]
-    [Dont allocate 0 bytes or this will break :)]
-    BLOCK_HEADER_SIZE incheap
-    heap_end BLOCK_HEADER_SIZE + BLOCK_FREE write
-
-    10000 incheap [Starting memory]
-    heap_end BLOCK_HEADER_SIZE -
-    BLOCK_FREE 10000 + BLOCK_HEADER_SIZE - BLOCK_HEADER_SIZE - write
+sub heap_start
+    [The last byte in the heap points to the start of the heap]
+    heap_end 8 - ? swap
 marine
-
-[Coalesces adjacent free memory blocks]
-[ret:void]
-sub mem_coalesce
-marine
-
 
 [Allocates bytes on the heap]
 [arg:int number of bytes to allocate]
 [ret:ptr address of allocated block]
 sub malloc
     swap
-    heap_end BLOCK_HEADER_SIZE -
+    clone 2 mod 1 = if
+        "You can't allocate an odd number of bytes" println
+        1 SYS_EXIT syscall1
+    endif
+    heap_start
     while 1 do
-        clone load 1 & BLOCK_FREE = if
-            [This block is free]
-            2clone load < if
-                [This block is large enough]
-                clone load 18446744073709551614 & rev3 swap
-                2clone swap BLOCK_USED + write
-                [Address magic]
-                swap clone rev3 swap - rev3 swap clone rev3 swap - swap rev3 swap over swap write
-                clone rev3 swap
-                clone
-                "New allocation:" println
-                "  Header Address: " print printx
-                "  Size:           " print printx
-                + swap
-                return
+        clone ? 1 & BLOCK_FREE != if
+            clone ? 18446744073709551614 & over + swap drop [Add the node size to the current node address]
+        else
+            clone ? 18446744073709551614 &
+            swap rev3 2clone > if
+                swap drop swap
+                clone ? 18446744073709551614 & over + swap drop [Add the node size to the current node address]
             else
-                [This block is too small]
-                clone load 18446744073709551614 &
-                clone 0 = if
-                    "FATALERR Found last memory block. Not enough memory." println
-                    1 SYS_EXIT syscall1
-                endif
-                - 
+                swap drop over swap
+                BLOCK_USED + !
+                swap return
             endif
-        else
-            [This block is used]
-            clone load 18446744073709551614 &
-            clone 0 = if
-                "FATALERR Found last memory block. Not enough memory." println
-                1 SYS_EXIT syscall1
-            endif
-            - 
         endif
     wend
-    [Should return early or exit with not enough memory]
 marine
 
-[Deallocates a memory block on the heap]
-[arg:ptr address of block header]
+[Marks an allocated memory block as free]
+[arg:ptr pointer to memory block]
+[ret:void]
 sub free
-    swap clone clone load 18446744073709551614 & write drop
+    swap
+    clone ? BLOCK_FREE -
+    swap !
 marine
 
-sub mem_walk
-    "Starting memory walk at heap end: " print heap_end printx
-    heap_end BLOCK_HEADER_SIZE -
+sub mwalk
+    "===Memory Table==================" println
+    heap_start
     while 1 do
-        "Block: " print clone printx
-        clone load
-        "   Free:  " print
-        clone 1 & BLOCK_FREE = if
-            "Yes" println
-        else
-            "No" println
+        "  Visiting node @ " print clone printx
+        "    Value: " print clone ? printx
+        "    Size:  " print clone ? 18446744073709551614 & printx
+        "    Free:  " print clone ? 1 & BLOCK_FREE = if "Yes" println else "No" println endif
+        "    Next:  " print clone ? 18446744073709551614 & over + printx
+        clone ? 18446744073709551614 & 0 = if
+            "=================================" println
+            drop return
         endif
-        "   Size:  " print clone 18446744073709551614 & printx
-        clone 18446744073709551614 & 0 = if
-            drop
-            drop
-            return
-        endif
-        "   Next:  " print 18446744073709551614 & - clone printx
+        clone ? 18446744073709551614 & over + swap drop
     wend
-    "==========" println
+marine
+
+sub meminit
+    "Initializing heap allocator @ " print heap_end printx
+    heap_end 32 + brk drop [Allocate 32 bytes on the heap for metadata]
+    heap_end 8 - heap_end 32 - ! [Write heap_start to heap_end]
+    heap_start 16 BLOCK_USED + !
+    heap_start 16 + 0 BLOCK_FREE + !
 marine
