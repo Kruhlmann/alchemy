@@ -5,7 +5,11 @@ import { Logger } from "../logger";
 import { ModuleNotFoundError } from "./module_not_found_error";
 
 export class IncludePreprocessor {
-    public constructor(protected default_include_paths: string[]) {}
+    protected include_cache: Record<string, string>;
+
+    public constructor(protected default_include_paths: string[]) {
+        this.include_cache = {};
+    }
 
     // eslint-disable-next-line complexity
     public resolve_includes(source_code: string, included_files: string[] = []): string {
@@ -21,7 +25,6 @@ export class IncludePreprocessor {
                     const module_path = target_module.replace(/\./g, "/");
 
                     for (const base_path of this.default_include_paths) {
-                        Logger.debug(`Looking for module ${target_module} in ${base_path}`);
                         const module_path_candidate = path.join(base_path, module_path);
                         const is_directory =
                             fs.existsSync(module_path_candidate) && fs.lstatSync(module_path_candidate).isDirectory();
@@ -48,6 +51,7 @@ export class IncludePreprocessor {
             // ignoring file that has already been included
             return "";
         } else {
+            Logger.debug(`Including ${module_path_candidate}.alc`)
             included_files.push(`${module_path_candidate}.alc`);
             return this.resolve_includes(fs.readFileSync(`${module_path_candidate}.alc`).toString(), included_files);
         }

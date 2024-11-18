@@ -15,6 +15,7 @@ export class NasmCompiler implements Compiler<NasmCompilerParameters, string, st
     public compile(parameters: NasmCompilerParameters): CompilationResult<string, string> {
         const asm_file = `${parameters.output_file}.asm`;
         const object_file = `${parameters.output_file}.o`;
+        Logger.debug(`Writing NASM-style assembly to ${asm_file}`);
         fs.writeFileSync(asm_file, parameters.asm_source);
         const nasm_result = new BinaryRuntime("nasm", ["-felf64", asm_file]).run();
         if (nasm_result.exit_code !== "0") {
@@ -29,9 +30,9 @@ export class NasmCompiler implements Compiler<NasmCompilerParameters, string, st
             throw new Error(`${this.constructor.name}: ${chmod_result.stderr}`);
         }
 
-        Logger.debug(`Removing ${asm_file}`);
-        fs.unlinkSync(asm_file);
-        Logger.debug(`Removing ${object_file}`);
+        Logger.debug(`Unlink ${asm_file}`);
+        //fs.unlinkSync(asm_file);
+        Logger.debug(`Unlink ${object_file}`);
         fs.unlinkSync(object_file);
 
         return {

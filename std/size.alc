@@ -3,3 +3,27 @@ include std.math
 sub BYTES_IN_QWORD 8 swap marine
 
 sub size_q swap BYTES_IN_QWORD mul swap marine
+
+[Maximum u16 value]
+[ret:int Maximum value (2^16-1) 0xFFFF]
+sub u16_max 65535 swap marine
+
+[Maximum u32 value]
+[ret:int Maximum value (2^32-1) 0xFFFFFFFF]
+sub u32_max 4294967295 swap marine
+
+[Maximum u64 value]
+[ret:int Maximum value (2^64-1) 0xFFFFFFFFFFFFFFFF]
+sub u64_max 18446744073709551615 swap marine
+
+[Maximum i16 value]
+[ret:int Maximum value (2^16/2-1) 0x7FFF]
+sub i16_max 32767 swap marine
+
+[Maximum i32 value]
+[ret:int Maximum value (2^32/2-1) 0x7FFFFFFF]
+sub i32_max 2147483647 swap marine
+
+[Maximum i64 value]
+[ret:int Maximum value (2^64/2-1) 0x7FFFFFFFFFFFFFFF]
+sub i64_max 9223372036854775807 swap marine

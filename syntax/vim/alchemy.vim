@@ -15,7 +15,7 @@ syn match alchemyBin "\<[01]\+B\>"
 
 hi link alchemyKeyword Keyword
 hi link alchemyOperator Keyword
-hi link alchemyKeywordBlock Operator
+hi link alchemyKeywordBlock Keyword
 hi link alchemyDirective  Statement
 hi link alchemyLibrary    Include
 hi link alchemyDocstring Comment

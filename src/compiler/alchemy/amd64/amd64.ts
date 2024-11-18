@@ -1,6 +1,8 @@
 import { CrossReferencer } from "../../../cross_referencer";
+import { InstructionsPruner } from "../../../include_pruner";
 import { Instruction } from "../../../instruction";
 import { AlchemySource, Lexer } from "../../../lexer";
+import { Logger } from "../../../logger";
 import { CompilationResult } from "../../result";
 import { AlchemyCompiler } from "../alchemy";
 
@@ -45,12 +47,15 @@ ret`;
 
     public constructor(
         protected lexer: Lexer<AlchemySource, Instruction[]>,
+        protected pruner: InstructionsPruner,
         protected cross_referencer: CrossReferencer,
-    ) {}
+    ) { }
 
     public compile(source: AlchemySource): CompilationResult<Instruction[], string> {
+        Logger.debug(`Compiling AMD64 assembly from ${source.text.length} bytes`);
         const instructions = this.lexer.lex(source);
-        const cross_referenced_instructions = this.cross_referencer.cross_reference_instructions(instructions);
+        const pruned_instructions = this.pruner.prune(instructions);
+        const cross_referenced_instructions = this.cross_referencer.cross_reference_instructions(pruned_instructions);
         const instructions_source = cross_referenced_instructions
             .map((instruction, index) => instruction.to_asm(index))
             .join("\n");

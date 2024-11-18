@@ -1,5 +1,6 @@
 include std.io
 include std.math
+include std.size
 include std.sys.call
 
 sub BLOCK_FREE 0 swap marine
@@ -50,12 +51,12 @@ sub malloc
     heap_start
     while 1 do
         clone ? 1 & BLOCK_FREE != if
-            clone ? 18446744073709551614 & over + swap drop [Add the node size to the current node address]
+            clone ? u64_max & over + swap drop [Add the node size to the current node address]
         else
-            clone ? 18446744073709551614 &
+            clone ? u64_max &
             swap rev3 2clone > if
                 swap drop swap
-                clone ? 18446744073709551614 & over + swap drop [Add the node size to the current node address]
+                clone ? u64_max & over + swap drop [Add the node size to the current node address]
             else
                 swap drop over swap
                 BLOCK_USED + !
@@ -89,6 +90,9 @@ sub mwalk
     wend
 marine
 
+[Initializes the memory allocator]
+[arg:ptr pointer to memory block]
+[ret:void]
 sub meminit
     "Initializing heap allocator @ " print heap_end printx
     heap_end 32 + brk drop [Allocate 32 bytes on the heap for metadata]

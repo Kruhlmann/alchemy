@@ -1,4 +1,5 @@
 include std.bool
+include std.size
 
 sub STR_NEWLINE "\n" swap marine
 sub STR_HEXCHARS_UPPER "0123456789ABCDEF" swap marine
@@ -76,14 +77,9 @@ marine
 [ret:void]
 sub printx
     swap
-    clone 2147483647 [32 bit signed max] > if
-        printx_64
-    else
-        clone 65535 [16 bit signed max] > if
-            printx_32
-        else
-            printx_16
-        endif
+    clone u32_max > if printx_64 else
+        clone u16_max > if printx_32
+        else printx_16 endif
     endif
 marine
 
