@@ -1,0 +1,140 @@
+include std.io
+include std.sys.call
+include std.math
+include std.size
+include std.bool
+
+sub BLOCK_FREE 0 swap marine
+sub BLOCK_USED 1 swap marine
+sub BLOCK_STATUS_MASK 1 swap marine
+sub BLOCK_SIZE_MASK u64_max 1 - swap marine
+
+[Get block size]
+sub get_block_size
+    swap ? BLOCK_SIZE_MASK & swap
+marine
+
+[Get block status]
+sub get_block_status
+    swap ? BLOCK_STATUS_MASK & swap
+marine
+
+[Set block status]
+sub set_block_status
+    swap over ? BLOCK_SIZE_MASK & swap BLOCK_STATUS_MASK & + !
+marine
+
+[Modifies the end address of the heap]
+[arg:int New address in number of bytes]
+[ret:ptr End address of heap]
+sub brk
+    swap SYS_BRK syscall1 sysread swap
+marine
+
+[Read the current end of the heap]
+[ret:ptr End address of heap]
+sub heap_end
+    0 brk swap
+marine
+
+[Retrieves the starting address of the heap]
+[ret:ptr Start address of the heap]
+sub heap_start
+    heap_end ? swap
+marine
+
+[Initializes the memory allocator]
+[ret:void]
+sub meminit
+    "Initializing heap allocator @ " print heap_end printx
+    heap_end 8 + clone brk !
+marine
+
+sub incheap
+    swap
+    8 int_align
+    "Increasing heap memory by: " print clone put
+    heap_end ?
+    swap heap_end +
+    brk sysread 0 < if [sysread with value less than 0 means an error occurred]
+        "Unable to increase heap memory" println
+        1 SYS_EXIT syscall1
+    endif
+    swap !
+    "New heap end: " print heap_end printx
+    "With value: " print heap_end ? printx
+marine
+
+[Allocates bytes on the heap]
+[arg:int Number of bytes to allocate]
+[ret:ptr Address of allocated block]
+sub malloc
+    swap
+    8 int_align
+    "Allocating bytes: " print clone put
+
+
+    heap_end ?
+    while true do
+        clone heap_end > if
+            "FATAL: Memory allocator exceeded the heap end address:" println
+            "  Allocator @ " print clone printx
+            "  Heap end @ " print heap_end printx
+            1 SYS_EXIT syscall1
+        endif
+        clone ? heap_end = if
+            "! Reached end of heap @ " print heap_end printx
+            over incheap
+            2clone swap BLOCK_USED + !
+            "New layout: " println
+            "  Start @ " print heap_start printx
+            "  End @ " print heap_end printx
+            swap drop swap
+            return
+        endif
+
+        clone get_block_status BLOCK_USED = if
+            "Next block, this one's used @ " print clone printx
+        else
+            "Block free @ " print clone printx
+            "Block had a size @ address " print clone printx
+            "Block size " print clone ? printx
+            
+
+            over over ? < if
+                "Block was too small. Going to the next block" println
+                return
+            endif
+            over over ?  = if
+                "Block was just right. Allocating" println
+                clone rev3 BLOCK_USED + !
+                swap return
+            endif
+            over over ?  > if
+                "Block was just right" println
+                return
+            endif
+
+
+            over +
+            [clone get_block_size 0 = if ]
+                ["Reached end of heap @ " print clone printx]
+                ["Increasing heap by bytes: " print over put]
+                [over incheap]
+                ["Writing new end pointer: " println]
+                [return]
+            [else]
+            [endif]
+
+        endif
+    wend
+marine
+
+
+sub main
+    meminit
+    heap_start printx
+    heap_end printx
+    15 malloc printx
+    15 malloc printx
+marine

@@ -49,3 +49,11 @@ sub mod
     2clone div_i_f
     mul - swap
 marine
+
+[Aligns a value up to the next multiple of a given alignment]
+[arg:int Alignment value]
+[arg:int Value to align]
+[ret:int Aligned value]
+sub int_align
+    rev3 swap 2clone mod - + swap return
+marine

@@ -1,5 +1,6 @@
 include std.io
 include std.math
+include std.bool
 include std.size
 include std.sys.call
 
@@ -20,7 +21,7 @@ sub heap_end
 marine
 
 [Increases the heap by a set amount of qwords]
-[arg:int number of bytes]
+[arg:int number of qwords]
 [ret:void]
 sub incheap
     [16 bytes from the end is where the 0-sized memory block lives]
@@ -44,14 +45,18 @@ marine
 [ret:ptr address of allocated block]
 sub malloc
     swap
+    "Allocating bytes: " print
+    clone put
     clone 2 mod 1 = if
         "You can't allocate an odd number of bytes" println
         1 SYS_EXIT syscall1
     endif
+    "Allocating from: " print heap_start printx 
     heap_start
-    while 1 do
+    while true do
         clone ? 1 & BLOCK_FREE != if
             clone ? u64_max & over + swap drop [Add the node size to the current node address]
+            "Block was not free. Going to the next one." println
         else
             clone ? u64_max &
             swap rev3 2clone > if
@@ -59,6 +64,7 @@ sub malloc
                 clone ? u64_max & over + swap drop [Add the node size to the current node address]
             else
                 swap drop over swap
+                "Wrote new block" println
                 BLOCK_USED + !
                 swap return
             endif
