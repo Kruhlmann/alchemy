@@ -8,5 +8,6 @@ pkgs.mkShell {
     pkgs.rust-analyzer
     pkgs.rustup
     pkgs.nasm
+    pkgs.gdb
   ];
 }
