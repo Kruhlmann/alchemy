@@ -30,7 +30,7 @@ pub fn main() {
         std::env::current_dir()
             .inspect_err(|error| tracing::error!(?error, "no working directory"))
             .unwrap_or_else(|_| std::process::exit(1)),
-        Path::new("/usr/share/alchemy/lib").to_path_buf(),
+        Path::new(option_env!("ALCHEMY_LIB_DIR").unwrap_or("/usr/share/alchemy/lib")).to_path_buf(),
     ];
     let includes: Vec<_> = default_includes
         .into_iter()
