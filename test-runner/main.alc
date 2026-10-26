@@ -1,6 +1,7 @@
 include testing
 include cases.cli
 include cases.arena
+include cases.buffer
 
 sub main
     "Self-hosted compiler tests" println
@@ -9,5 +10,9 @@ sub main
     test_arena +
     test_arena_storage +
     test_arena_padding +
+    test_buffer_empty +
+    test_buffer_append +
+    test_buffer_errors +
+    test_buffer_arguments +
     test_finish
 marine

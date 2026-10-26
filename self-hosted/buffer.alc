@@ -1,0 +1,116 @@
+include arena
+include std.str
+
+sub buffer_data
+    swap 8 + readq swap
+marine
+
+sub buffer_length
+    swap 16 + readq swap
+marine
+
+sub buffer_capacity
+    swap 24 + readq swap
+marine
+
+sub buffer_set_length
+    rev3 16 + swap write
+marine
+
+sub buffer_tail
+    swap clone buffer_data swap buffer_length + swap
+marine
+
+sub buffer_remap
+    rev4 rev3 1 0 0 rev6 SYS_MREMAP syscall5 swap drop swap
+marine
+
+sub buffer_reallocate
+    rev3 clone buffer_capacity swap buffer_data
+    rev3 buffer_remap swap
+marine
+
+sub buffer_reserve
+    rev3 swap
+    clone 0 < if drop drop 0 SYS_EINVAL - swap return endif
+    clone2 drop buffer_capacity
+    clone2 <= if drop drop drop 0 swap return endif
+
+    clone 0 = if
+        drop clone
+    else
+        clone 4611686018427387903 > if drop clone else 1 << endif
+    endif
+    clone2 > if drop clone endif
+    swap drop
+
+    clone2 drop buffer_data
+    clone 0 = if
+        drop clone mem_alloc
+    else
+        drop clone2 buffer_reallocate
+    endif
+    clone 0 < if rev3 drop drop swap return endif
+
+    rev3 clone2 24 + swap write
+    swap drop 8 + swap write
+    0 swap
+marine
+
+sub buffer_free
+    swap clone buffer_data
+    clone 0 = if
+        drop
+    else
+        clone2 drop buffer_capacity mem_free
+        clone 0 < if swap drop swap return endif
+        drop
+    endif
+    clone 8 + 0 write
+    clone 16 + 0 write
+    clone 24 + 0 write
+    readq arena_free swap
+marine
+
+sub buffer_create
+    swap
+    clone 0 < if drop 0 SYS_EINVAL - swap return endif
+    32 arena_create
+    clone 0 < if swap drop swap return endif
+    clone 32 arena_alloc
+    clone 0 < if swap arena_free drop swap drop swap return endif
+    clone2 swap write
+    swap drop
+    swap clone2 drop swap buffer_reserve
+    clone 0 < if swap buffer_free drop swap return endif
+    drop swap
+marine
+
+sub buffer_append
+    rev4 rev3
+    clone 0 < if drop drop drop 0 SYS_EINVAL - swap return endif
+    clone 0 = if drop drop drop 0 swap return endif
+
+    swap rev3 clone rev4 rev3 buffer_length
+    swap clone rev3 +
+    clone 0 < if drop drop drop drop 0 SYS_EOVERFLOW - swap return endif
+
+    rev4 rev3 rev4 clone2 rev6 rev3 rev6 buffer_reserve
+    clone 0 < if
+        0 rev6 drop drop drop drop swap drop swap return
+    endif
+    drop
+
+    rev4 clone2 rev6 rev3 drop rev3 buffer_tail
+    swap rev4 swap mem_copy drop
+    buffer_set_length
+    0 swap
+marine
+
+sub buffer_append_string
+    rev3 swap clone strlen buffer_append swap
+marine
+
+sub buffer_clear
+    swap 16 + 0 write
+marine

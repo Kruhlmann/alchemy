@@ -1,0 +1,27 @@
+include std.env.args
+include buffer
+
+sub compiler_read_args
+    4096 buffer_create
+    clone 0 < if swap return endif
+
+    while 1 do
+        clone buffer_data
+        clone2 drop buffer_capacity env_args_read
+        clone 0 >= if
+            clone2 buffer_set_length drop swap return
+        endif
+        clone 0 SYS_E2BIG - = if
+            drop clone buffer_capacity
+            clone 4611686018427387903 > if
+                drop buffer_free drop 0 SYS_EOVERFLOW - swap return
+            endif
+            1 <<
+            clone2 buffer_reserve
+            clone 0 < if swap drop swap buffer_free drop swap return endif
+            drop drop
+        else
+            swap buffer_free drop swap return
+        endif
+    wend
+marine

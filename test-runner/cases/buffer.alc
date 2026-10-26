@@ -1,0 +1,114 @@
+include testing
+include buffer
+include args
+
+sub test_buffer_empty
+    0
+    -1 buffer_create -22 "buffer: rejects negative initial capacity" test_equal +
+    0 buffer_create
+    clone 0 < if
+        drop 0 "buffer: empty creation succeeds" test_true + swap return
+    endif
+    clone buffer_length 0 "buffer: starts empty" test_equal swap rev3 + swap
+    clone buffer_capacity 0 "buffer: zero capacity needs no payload mapping" test_equal swap rev3 + swap
+    clone buffer_data 0 "buffer: empty storage has null data pointer" test_equal swap rev3 + swap
+    clone 0 buffer_reserve 0 "buffer: zero reservation succeeds" test_equal swap rev3 + swap
+    clone 0 0 buffer_append 0 "buffer: empty append accepts null source" test_equal swap rev3 + swap
+    clone buffer_capacity 0 "buffer: empty append does not allocate" test_equal swap rev3 + swap
+    clone buffer_clear
+    clone buffer_length 0 "buffer: clearing empty buffer succeeds" test_equal swap rev3 + swap
+    clone "z" 1 buffer_append 0 "buffer: first append allocates empty storage" test_equal swap rev3 + swap
+    clone buffer_length 1 "buffer: first append sets length" test_equal swap rev3 + swap
+    clone buffer_capacity 1 "buffer: first append reserves required capacity" test_equal swap rev3 + swap
+    clone buffer_data readb 122 "buffer: first append stores contents" test_equal swap rev3 + swap
+    buffer_free 0 "buffer: frees empty buffer and its arena" test_equal +
+    swap
+marine
+
+sub test_buffer_append
+    0
+    5 buffer_create
+    clone 0 < if
+        drop 0 "buffer: creation succeeds" test_true + swap return
+    endif
+    clone buffer_capacity 5 "buffer: initial capacity retained" test_equal swap rev3 + swap
+    clone "a\x00bc" 4 buffer_append 0 "buffer: binary append succeeds" test_equal swap rev3 + swap
+    clone buffer_length 4 "buffer: append updates length" test_equal swap rev3 + swap
+    clone buffer_data "a\x00bc" 4 mem_compare 0
+    "buffer: append preserves embedded NUL" test_equal swap rev3 + swap
+    clone "" buffer_append_string 0 "buffer: empty string append succeeds" test_equal swap rev3 + swap
+    clone buffer_length 4 "buffer: empty append preserves length" test_equal swap rev3 + swap
+    clone "!" buffer_append_string 0 "buffer: exact-fit append succeeds" test_equal swap rev3 + swap
+    clone buffer_capacity 5 "buffer: exact-fit append does not grow" test_equal swap rev3 + swap
+    clone "?" buffer_append_string 0 "buffer: append grows storage" test_equal swap rev3 + swap
+    clone buffer_length 6 "buffer: growth preserves logical length" test_equal swap rev3 + swap
+    clone buffer_capacity 10 "buffer: growth doubles capacity" test_equal swap rev3 + swap
+    clone buffer_data "a\x00bc!?" 6 mem_compare 0
+    "buffer: growth preserves old and new bytes" test_equal swap rev3 + swap
+    clone "\xff" 1 buffer_append 0 "buffer: appends non-ASCII byte" test_equal swap rev3 + swap
+    clone buffer_data 6 + readb 255 "buffer: preserves all byte bits" test_equal swap rev3 + swap
+
+    clone 64 buffer_reserve 0 "buffer: explicit reservation succeeds" test_equal swap rev3 + swap
+    clone buffer_capacity 64 "buffer: large reservation fits requested capacity" test_equal swap rev3 + swap
+    clone buffer_length 7 "buffer: reservation does not change length" test_equal swap rev3 + swap
+    clone buffer_data "a\x00bc!?\xff" 7 mem_compare 0
+    "buffer: reservation preserves contents" test_equal swap rev3 + swap
+    clone 2 buffer_reserve 0 "buffer: smaller reservation succeeds" test_equal swap rev3 + swap
+    clone buffer_capacity 64 "buffer: smaller reservation does not shrink" test_equal swap rev3 + swap
+
+    clone buffer_clear
+    clone buffer_length 0 "buffer: clear resets length" test_equal swap rev3 + swap
+    clone buffer_capacity 64 "buffer: clear retains capacity" test_equal swap rev3 + swap
+    clone "new" buffer_append_string 0 "buffer: cleared storage can be reused" test_equal swap rev3 + swap
+    clone buffer_length 3 "buffer: reuse tracks new length" test_equal swap rev3 + swap
+    clone buffer_data "new" 3 mem_compare 0 "buffer: reuse replaces logical contents" test_equal swap rev3 + swap
+    clone 10000 buffer_reserve 0 "buffer: grows across page boundaries" test_equal swap rev3 + swap
+    clone buffer_capacity 10000 "buffer: multi-page reservation updates capacity" test_equal swap rev3 + swap
+    clone buffer_data "new" 3 mem_compare 0
+    "buffer: multi-page growth preserves contents" test_equal swap rev3 + swap
+    buffer_free 0 "buffer: frees payload and metadata arena" test_equal +
+    swap
+marine
+
+sub test_buffer_errors
+    0
+    8 buffer_create
+    clone 0 < if
+        drop 0 "buffer: error-test creation succeeds" test_true + swap return
+    endif
+    clone "abc" buffer_append_string drop
+    clone -1 buffer_reserve -22 "buffer: rejects negative reservation" test_equal swap rev3 + swap
+    clone 0 -1 buffer_append -22 "buffer: rejects negative append length" test_equal swap rev3 + swap
+    clone 0 9223372036854775807 buffer_append -75
+    "buffer: rejects length addition overflow before copying" test_equal swap rev3 + swap
+    clone buffer_length 3 "buffer: invalid requests preserve length" test_equal swap rev3 + swap
+    clone buffer_capacity 8 "buffer: invalid requests preserve capacity" test_equal swap rev3 + swap
+
+    clone 9223372036854775807 buffer_reserve 0 <
+    "buffer: failed growth returns an allocation error" test_true swap rev3 + swap
+    clone buffer_capacity 8 "buffer: failed growth preserves capacity" test_equal swap rev3 + swap
+    clone buffer_length 3 "buffer: failed growth preserves length" test_equal swap rev3 + swap
+    clone buffer_data "abc" 3 mem_compare 0
+    "buffer: failed growth preserves readable contents" test_equal swap rev3 + swap
+    clone "d" buffer_append_string 0 "buffer: remains usable after failure" test_equal swap rev3 + swap
+    clone buffer_data "abcd" 4 mem_compare 0 "buffer: appends after rejected growth" test_equal swap rev3 + swap
+    buffer_free 0 "buffer: failed requests do not prevent cleanup" test_equal +
+    swap
+marine
+
+sub test_buffer_arguments
+    0
+    compiler_read_args
+    clone 0 < if
+        drop 0 "buffer: compiler argument read succeeds" test_true + swap return
+    endif
+    clone buffer_length 0 > "buffer: argument reader records byte length" test_true swap rev3 + swap
+    clone buffer_length
+    clone2 drop buffer_capacity
+    < "buffer: argument storage includes spare capacity" test_true swap rev3 + swap
+    clone buffer_data
+    clone2 drop buffer_length -- + readb
+    0 "buffer: argument data retains final NUL" test_equal swap rev3 + swap
+    buffer_free 0 "buffer: compiler argument storage freed" test_equal +
+    swap
+marine
