@@ -1,6 +1,3 @@
 /target
 .direnv
-./*.asm
-./*.alc
-./program
 /result
