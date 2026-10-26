@@ -1,0 +1,4 @@
+sub main
+    1 if 1 put else 11 put endif
+    0 if 22 put else 2 put endif
+marine

@@ -1,0 +1,3 @@
+sub push_one 1 swap marine
+sub push_two 2 swap marine
+sub push_three 3 swap marine

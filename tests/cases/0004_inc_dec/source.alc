@@ -1,0 +1,4 @@
+sub main
+    1 ++ put
+    1 -- put
+marine

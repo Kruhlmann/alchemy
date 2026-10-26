@@ -1,0 +1,7 @@
+include foo
+
+sub main
+    push_one put
+    push_two put
+    push_three put
+marine

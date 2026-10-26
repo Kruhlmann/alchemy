@@ -1,0 +1,6 @@
+sub main
+    144 put
+    0x90 put
+    0o220 put
+    0b10010000 put
+marine

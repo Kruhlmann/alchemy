@@ -1,0 +1,66 @@
+include std.bool
+include std.size
+
+sub STR_NEWLINE "\n" swap marine
+sub STR_HEXCHARS_UPPER "0123456789ABCDEF" swap marine
+sub STR_HEXCHARS_LOWER "0123456789abcdef" swap marine
+
+sub strlen
+    swap 0 swap
+    while clone readb 0 > do
+        ++ swap ++ swap
+    wend
+    drop swap
+marine
+
+sub strcmp
+    rev3 2clone strlen swap strlen = if else
+        drop drop
+        false swap return
+    endif
+
+    while
+        2clone readb swap readb & 0 >
+    do
+        2clone readb swap readb
+        = if else
+            drop drop
+            false swap return
+        endif
+        ++ swap ++
+    wend
+    drop drop
+    true swap return
+marine
+
+sub strupper
+    swap
+    while true do
+        clone readb 0 = if drop return endif
+        clone readb 96 > if clone readb 123 < if 
+            clone readb 32 -
+            2clone writeb drop
+        endif endif
+        ++
+    wend
+    drop
+marine
+
+sub strlower
+    swap
+    while true do
+        clone readb 0 = if drop return endif
+        clone readb 64 > if clone readb 90 < if 
+            clone readb 32 +
+            2clone writeb drop
+        endif endif
+        ++
+    wend
+    drop
+marine
+
+sub stritoc
+    swap clone 10 < if 48 +
+    else 55 + endif swap
+marine
+

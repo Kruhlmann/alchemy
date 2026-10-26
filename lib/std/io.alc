@@ -1,0 +1,23 @@
+include std.str
+include std.sys.fd
+include std.sys.call
+
+sub print
+    swap clone strlen swap FD_STDOUT SYS_WRITE syscall3
+marine
+
+sub printe
+    swap clone strlen swap FD_STDERR SYS_WRITE syscall3
+marine
+
+sub println
+    swap print STR_NEWLINE print
+marine
+
+sub printeln
+    swap printe STR_NEWLINE printe
+marine
+
+sub exit
+    60 syscall1
+marine

@@ -1,0 +1,9 @@
+sub doreturn
+    1 put
+    return
+    2 put
+marine
+
+sub main
+    doreturn
+marine
