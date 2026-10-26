@@ -1,0 +1,42 @@
+include std.net.ipv4
+include std.io
+
+sub assert
+    swap 0 = if 1 exit endif
+marine
+
+sub main
+    12345
+    "127.0.0.1" ipv4_parse 0x7f000001 = assert
+    "0.0.0.0" ipv4_parse 0 = assert
+    "255.255.255.255" ipv4_parse 0xffffffff = assert
+    "1.2.3.4" ipv4_parse 0x01020304 = assert
+    "192.168.10.254" ipv4_parse 0xc0a80afe = assert
+
+    "" ipv4_parse -22 = assert
+    "1" ipv4_parse -22 = assert
+    "1.2.3" ipv4_parse -22 = assert
+    "1.2.3.4.5" ipv4_parse -22 = assert
+    ".1.2.3" ipv4_parse -22 = assert
+    "1..2.3" ipv4_parse -22 = assert
+    "1.2.3." ipv4_parse -22 = assert
+    "256.0.0.1" ipv4_parse -22 = assert
+    "1.256.0.1" ipv4_parse -22 = assert
+    "1.2.256.1" ipv4_parse -22 = assert
+    "1.2.3.256" ipv4_parse -22 = assert
+    "999999999999999999999.0.0.1" ipv4_parse -22 = assert
+    "01.2.3.4" ipv4_parse -22 = assert
+    "1.02.3.4" ipv4_parse -22 = assert
+    "1.2.03.4" ipv4_parse -22 = assert
+    "1.2.3.04" ipv4_parse -22 = assert
+    "00.0.0.0" ipv4_parse -22 = assert
+    " 1.2.3.4" ipv4_parse -22 = assert
+    "1.2.3.4 " ipv4_parse -22 = assert
+    "+1.2.3.4" ipv4_parse -22 = assert
+    "-1.2.3.4" ipv4_parse -22 = assert
+    "1.2.a.4" ipv4_parse -22 = assert
+    "1.2.3.4x" ipv4_parse -22 = assert
+    "1.2.3.4\n" ipv4_parse -22 = assert
+    12345 = assert
+    "127.0.0.1" ipv4_parse printxln
+marine

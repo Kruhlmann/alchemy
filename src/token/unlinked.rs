@@ -48,6 +48,8 @@ impl UnlinkedToken {
             "over" => return Ok(UnlinkedToken::Atomic(AtomicToken::Over, c)),
             "return" => return Ok(UnlinkedToken::Atomic(AtomicToken::Return, c)),
             "rev3" => return Ok(UnlinkedToken::Atomic(AtomicToken::Reverse3, c)),
+            "rev4" => return Ok(UnlinkedToken::Atomic(AtomicToken::Reverse4, c)),
+            "rev6" => return Ok(UnlinkedToken::Atomic(AtomicToken::Reverse6, c)),
             "swap" => return Ok(UnlinkedToken::Atomic(AtomicToken::Swap, c)),
             "syscall0" => return Ok(UnlinkedToken::Atomic(AtomicToken::Syscall0, c)),
             "syscall1" => return Ok(UnlinkedToken::Atomic(AtomicToken::Syscall1, c)),

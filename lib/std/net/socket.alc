@@ -1,0 +1,50 @@
+include std.mem
+
+sub socket_tcp
+    0 1 2 SYS_SOCKET syscall3 swap
+marine
+
+sub socket_store_be16
+    rev3
+    clone2 swap 8 >> writeb
+    ++ swap 255 & writeb
+marine
+
+sub socket_store_be32
+    rev3 swap
+    clone2 16 >> socket_store_be16
+    swap 2 + swap socket_store_be16
+marine
+
+sub socket_connect_ipv4
+    rev4 rev3
+    clone 0 < if drop drop drop -22 swap return endif
+    clone 65535 > if drop drop drop -22 swap return endif
+    swap clone 32 >> 0 != if drop drop drop -22 swap return endif
+    swap
+
+    16 mem_alloc
+    clone 0 < if rev4 drop drop drop swap return endif
+    clone 2 writeb
+    swap clone2 swap 2 + swap socket_store_be16 drop
+    clone2 4 + swap socket_store_be32
+    swap drop
+
+    clone2 16 rev3 SYS_CONNECT syscall3
+    rev3 drop
+    16 mem_free drop
+    swap
+marine
+
+sub socket_read
+    rev4 SYS_READ syscall3 swap
+marine
+
+sub socket_write
+    rev4 rev3
+    16384 0 0 rev6 SYS_SENDTO syscall6 swap
+marine
+
+sub socket_close
+    swap SYS_CLOSE syscall1 swap
+marine

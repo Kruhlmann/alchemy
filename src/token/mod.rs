@@ -133,6 +133,8 @@ impl Token {
             Token::Atomic(AtomicToken::PushInteger(s), _) => asm![format!("mov rax, {s}"), "push rax"],
             Token::Atomic(AtomicToken::Return, _) => asm!["ret"],
             Token::Atomic(AtomicToken::Reverse3, _) => asm!["pop rax", "pop rbx", "pop rcx", "push rax", "push rbx", "push rcx"],
+            Token::Atomic(AtomicToken::Reverse4, _) => asm!["pop rax", "pop rbx", "pop rcx", "pop rdx", "push rax", "push rbx", "push rcx", "push rdx"],
+            Token::Atomic(AtomicToken::Reverse6, _) => asm!["pop rax", "pop rbx", "pop rcx", "pop rdx", "pop r8", "pop r9", "push rax", "push rbx", "push rcx", "push rdx", "push r8", "push r9"],
             Token::Atomic(AtomicToken::Sub, _) => asm![],
             Token::Atomic(AtomicToken::SubDefinition(s), _) => asm![format!("usr_{s}:")],
             Token::Atomic(AtomicToken::Subtract, _) => asm!["pop rbx", "pop rax", "sub rax, rbx", "push rax"],

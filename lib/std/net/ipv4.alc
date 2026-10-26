@@ -1,0 +1,41 @@
+sub ipv4_parse_octet
+    swap
+    clone * 48 < if drop 0 -22 swap rev3 return endif
+    clone * 57 > if drop 0 -22 swap rev3 return endif
+    clone * 48 = if ++ 0 swap rev3 return endif
+
+    0
+    while
+        clone2 drop * clone 48 >= swap 57 <= &
+    do
+        clone2 drop * 48 -
+        swap clone 3 << swap 1 << + +
+        clone 255 > if drop drop 0 -22 swap rev3 return endif
+        swap ++ swap
+    wend
+    swap rev3
+marine
+
+sub ipv4_parse
+    swap ipv4_parse_octet
+    clone 0 < if swap drop swap return endif
+    swap
+
+    clone * 46 != if drop drop -22 swap return endif
+    ++ swap 8 << swap ipv4_parse_octet
+    clone 0 < if drop drop drop -22 swap return endif
+    swap rev3 | swap
+
+    clone * 46 != if drop drop -22 swap return endif
+    ++ swap 8 << swap ipv4_parse_octet
+    clone 0 < if drop drop drop -22 swap return endif
+    swap rev3 | swap
+
+    clone * 46 != if drop drop -22 swap return endif
+    ++ swap 8 << swap ipv4_parse_octet
+    clone 0 < if drop drop drop -22 swap return endif
+    swap rev3 | swap
+
+    * 0 != if drop -22 swap return endif
+    swap
+marine

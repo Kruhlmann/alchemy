@@ -34,5 +34,4 @@ sub main
     clone 0 mem_free -22 = assert
     8193 mem_free 0 = assert
     12345 = assert
-    "memory ok" println
 marine

@@ -1,0 +1,31 @@
+include std.net.socket
+include std.io
+
+sub assert
+    swap 0 = if 1 exit endif
+marine
+
+sub main
+    12345
+    1 2 3 4 rev4
+    1 = assert 2 = assert 3 = assert 4 = assert
+    1 2 3 4 5 6 rev6
+    1 = assert 2 = assert 3 = assert
+    4 = assert 5 = assert 6 = assert
+
+    -1 0 1 socket_read -9 = assert
+    -1 "x" 1 socket_write -9 = assert
+    -1 socket_close -9 = assert
+    -1 0x7f000001 8080 socket_connect_ipv4 -9 = assert
+    -1 0x7f000001 -1 socket_connect_ipv4 -22 = assert
+    -1 0x7f000001 65536 socket_connect_ipv4 -22 = assert
+    -1 -1 8080 socket_connect_ipv4 -22 = assert
+    -1 0x100000000 8080 socket_connect_ipv4 -22 = assert
+
+    socket_tcp
+    clone 0 >= assert
+    clone "x" 1 socket_write -32 = assert
+    clone 0x7f000001 0 socket_connect_ipv4 -111 = assert
+    socket_close 0 = assert
+    12345 = assert
+marine

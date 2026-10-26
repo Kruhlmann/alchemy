@@ -24,6 +24,8 @@ pub enum AtomicToken {
     Put,
     Return,
     Reverse3,
+    Reverse4,
+    Reverse6,
     Sub,
     Subtract,
     Swap,
