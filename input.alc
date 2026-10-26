@@ -1,7 +1,0 @@
-include std.bool
-include std.io
-
-sub main
-    0xf0000123 printxln
-    0x123 printxln
-marine
