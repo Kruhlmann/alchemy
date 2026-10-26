@@ -1,0 +1,77 @@
+include std.io
+
+include log
+
+sub cli_equal
+    rev3
+    while 1 do
+        clone2 * swap * != if drop drop 0 swap return endif
+        clone * 0 = if drop drop 1 swap return endif
+        ++ swap ++
+    wend
+marine
+
+sub cli_next
+    swap clone strlen ++ + swap
+marine
+
+sub cli_option
+    swap
+    clone "-i" cli_equal if drop 1 swap return endif
+    clone "-o" cli_equal if drop 2 swap return endif
+    clone "-I" cli_equal if drop 4 swap return endif
+    clone "--include" cli_equal if drop 4 swap return endif
+    clone "--run" cli_equal if drop 8 swap return endif
+    clone "--keep-asm" cli_equal if drop 16 swap return endif
+    drop -1 swap
+marine
+
+sub cli_missing_value
+    swap
+    clone 1 = if drop "-i requires an input path" log_err 1 exit endif
+    2 = if "-o requires an output path" log_err 1 exit endif
+    "-I/--include requires a directory path" log_err
+    1 exit
+marine
+
+sub cli_parse
+    rev3
+    clone2 + rev3 drop
+    cli_next
+    0 rev3 swap
+
+    while clone2 > do
+        clone cli_option
+        clone 0 < if "unknown command-line option" log_err 1 exit endif
+        clone 8 >= if
+            drop cli_next
+        else
+            swap cli_next
+            swap rev3 swap
+            clone2 > 0 = if drop drop cli_missing_value endif
+            clone * 0 = if drop drop cli_missing_value endif
+            clone * 45 = if drop drop cli_missing_value endif
+            cli_next
+            rev4 swap | rev3
+        endif
+    wend
+
+    drop drop swap
+marine
+
+sub cli_validate_required
+    swap
+
+    clone 1 & 0 = if
+        drop
+        "missing required argument: -i <input>" log_err
+        1 exit
+    endif
+
+    2 & 0 = if
+        "missing required argument: -o <output>" log_err
+        1 exit
+    endif
+
+    "required compiler arguments are present" log_info
+marine

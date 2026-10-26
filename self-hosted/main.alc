@@ -1,0 +1,20 @@
+include std.env.args
+include std.mem
+include std.io
+
+include log
+include cli
+include arena
+
+sub main
+    4096 arena_create
+    clone 0 < if drop "compiler arena allocation failed" log_err 1 exit endif
+    clone 4096 arena_alloc
+    clone 0 < if drop arena_free drop "argument buffer allocation failed" log_err 1 exit endif
+    clone 4096 env_args_read
+    clone 0 < if drop drop arena_free drop "failed to read command line arguments" log_err 1 exit endif
+
+    cli_parse
+    swap arena_free drop
+    cli_validate_required
+marine

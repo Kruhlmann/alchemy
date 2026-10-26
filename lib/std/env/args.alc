@@ -1,0 +1,35 @@
+include std.sys.call
+include std.sys.errno
+
+sub env_args_read
+    rev3 swap
+    clone 0 <= if drop drop 0 SYS_EINVAL - swap return endif
+    clone2 + swap drop
+    clone2 drop
+    0 0 "/proc/self/cmdline" SYS_OPEN syscall3
+    clone 0 < if rev4 drop drop drop swap return endif
+
+    while 1 do
+        rev3
+        clone2 = if
+            drop drop SYS_CLOSE syscall1 drop
+            drop 0 SYS_E2BIG - swap return
+        endif
+        rev3
+
+        clone2 1 rev3 swap SYS_READ syscall3
+        clone 0 SYS_EINTR - = if
+            drop
+        else
+            clone 0 < if
+                swap SYS_CLOSE syscall1 drop
+                rev4 drop drop drop swap return
+            endif
+            0 = if
+                SYS_CLOSE syscall1 drop
+                swap drop swap - swap return
+            endif
+            swap ++ swap
+        endif
+    wend
+marine

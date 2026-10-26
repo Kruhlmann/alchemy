@@ -1,0 +1,39 @@
+include std.mem
+
+sub arena_create
+    swap
+    clone 0 <= if drop 0 SYS_EINVAL - swap return endif
+    clone 9223372036854775791 > if drop 0 SYS_EOVERFLOW - swap return endif
+    clone 16 + mem_alloc
+    clone 0 < if swap drop swap return endif
+    clone2 swap write
+    swap drop swap
+marine
+
+sub arena_available
+    swap clone readq swap 8 + readq - swap
+marine
+
+sub arena_alloc
+    rev3 swap
+    clone 0 <= if drop drop 0 SYS_EINVAL - swap return endif
+    clone 9223372036854775800 > if drop drop 0 SYS_EOVERFLOW - swap return endif
+    7 + 3 >> 3 <<
+    clone2 drop arena_available
+    clone2 > if drop drop drop 0 SYS_ENOMEM - swap return endif
+    drop
+
+    swap clone 8 + readq
+    clone2 + 16 +
+    rev4 swap rev3 +
+    swap 8 + swap write
+    swap
+marine
+
+sub arena_reset
+    swap 8 + 0 write
+marine
+
+sub arena_free
+    swap clone readq 16 + mem_free swap
+marine

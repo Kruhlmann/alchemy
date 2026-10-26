@@ -1,0 +1,48 @@
+include std.io
+
+sub log_divmod10
+    swap
+    clone 10 < if 0 swap swap rev3 return endif
+    clone 1 & swap 1 >> log_divmod10
+    swap 1 << swap 1 <<
+    swap rev3 +
+    clone 10 >= if 10 - swap ++ swap endif
+    swap rev3
+marine
+
+sub log_decimal
+    swap
+    clone 10 >= if log_divmod10 swap log_decimal endif
+    "0123456789" + 1 swap FD_STDERR SYS_WRITE syscall3 drop
+marine
+
+sub log_timestamp
+    "[" printe
+    0 SYS_TIME syscall1
+    clone 0 < if drop "unknown" printe else log_decimal endif
+    "] " printe
+marine
+
+sub log_emit
+    rev3 swap
+    log_timestamp
+    printe
+    "\x1b[0m " printe
+    printeln
+marine
+
+sub log_debug
+    swap "\x1b[36m[DEBUG]" log_emit
+marine
+
+sub log_info
+    swap "\x1b[32m[INFO]" log_emit
+marine
+
+sub log_warn
+    swap "\x1b[33m[WARN]" log_emit
+marine
+
+sub log_err
+    swap "\x1b[31m[ERROR]" log_emit
+marine

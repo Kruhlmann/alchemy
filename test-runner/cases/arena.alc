@@ -1,0 +1,74 @@
+include testing
+include arena
+
+sub test_arena
+    0
+    0 arena_create -22 "arena: rejects zero capacity" test_equal +
+    -1 arena_create -22 "arena: rejects negative capacity" test_equal +
+    9223372036854775807 arena_create -75 "arena: rejects mapping-size overflow" test_equal +
+
+    24 arena_create
+    clone 0 < if
+        drop 0 "arena: creation succeeds" test_true + swap return
+    endif
+    clone arena_available 24 "arena: initially has full capacity" test_equal swap rev3 + swap
+    clone 0 arena_alloc -22 "arena: rejects zero allocation size" test_equal swap rev3 + swap
+    clone -1 arena_alloc -22 "arena: rejects negative allocation size" test_equal swap rev3 + swap
+    clone 9223372036854775807 arena_alloc -75
+    "arena: rejects alignment overflow" test_equal swap rev3 + swap
+    clone arena_available 24 "arena: invalid requests preserve capacity" test_equal swap rev3 + swap
+
+    clone 1 arena_alloc 0 > "arena: allocates first block" test_true swap rev3 + swap
+    clone arena_available 16 "arena: allocation rounds up to eight bytes" test_equal swap rev3 + swap
+    clone 1 arena_alloc 7 & 0 "arena: allocation pointers are eight-byte aligned" test_equal swap rev3 + swap
+    clone arena_available 8 "arena: tracks successive allocations" test_equal swap rev3 + swap
+    clone 8 arena_alloc 0 > "arena: exact-fit allocation succeeds" test_true swap rev3 + swap
+    clone arena_available 0 "arena: exact-fit allocation exhausts capacity" test_equal swap rev3 + swap
+    clone 1 arena_alloc -12 "arena: exhaustion returns ENOMEM" test_equal swap rev3 + swap
+    clone arena_available 0 "arena: exhaustion preserves state" test_equal swap rev3 + swap
+
+    clone arena_reset
+    clone arena_available 24 "arena: reset restores full capacity" test_equal swap rev3 + swap
+    clone 24 arena_alloc 0 > "arena: whole capacity can be reused" test_true swap rev3 + swap
+    arena_free 0 "arena: frees its mapping" test_equal +
+    swap
+marine
+
+sub test_arena_storage
+    0
+    24 arena_create
+    clone 0 < if
+        drop 0 "arena: storage creation succeeds" test_true + swap return
+    endif
+
+    clone 8 arena_alloc readq 0 "arena: fresh storage is zero-filled" test_equal swap rev3 + swap
+    clone 8 arena_alloc 0x1122334455667788 write
+    clone arena_reset
+    clone 16 arena_alloc 8 + readq 0x1122334455667788
+    "arena: reset reuses storage without clearing it" test_equal swap rev3 + swap
+
+    clone arena_reset
+    clone 8 arena_alloc
+    swap clone 8 arena_alloc
+    swap rev3 -
+    8 "arena: successive blocks do not alias" test_equal swap rev3 + swap
+    clone arena_available 8 "arena: payload writes leave metadata intact" test_equal swap rev3 + swap
+    arena_free 0 "arena: storage mapping freed" test_equal +
+    swap
+marine
+
+sub test_arena_padding
+    0
+    10 arena_create
+    clone 0 < if
+        drop 0 "arena: unaligned capacity creation succeeds" test_true + swap return
+    endif
+    clone 8 arena_alloc 0 > "arena: allocation fits unaligned capacity" test_true swap rev3 + swap
+    clone arena_available 2 "arena: reports remaining tail bytes" test_equal swap rev3 + swap
+    clone 1 arena_alloc -12 "arena: alignment cannot exceed capacity" test_equal swap rev3 + swap
+    clone arena_available 2 "arena: alignment failure preserves capacity" test_equal swap rev3 + swap
+    clone arena_reset
+    clone arena_available 10 "arena: reset preserves requested capacity" test_equal swap rev3 + swap
+    arena_free 0 "arena: unaligned-capacity mapping freed" test_equal +
+    swap
+marine

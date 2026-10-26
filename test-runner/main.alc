@@ -1,0 +1,13 @@
+include testing
+include cases.cli
+include cases.arena
+
+sub main
+    "Self-hosted compiler tests" println
+    0
+    test_cli +
+    test_arena +
+    test_arena_storage +
+    test_arena_padding +
+    test_finish
+marine

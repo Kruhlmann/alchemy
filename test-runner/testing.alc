@@ -1,0 +1,44 @@
+include std.io
+
+sub test_true
+    rev3
+    if
+        "[PASS] " print println
+        0 swap
+    else
+        "[FAIL] " print println
+        1 swap
+    endif
+marine
+
+sub test_false
+    rev3 0 = swap test_true swap
+marine
+
+sub test_equal
+    rev4 = swap test_true swap
+marine
+
+sub test_strings_equal
+    rev3
+    while 1 do
+        clone2 * swap * != if drop drop 0 swap return endif
+        clone * 0 = if drop drop 1 swap return endif
+        ++ swap ++
+    wend
+marine
+
+sub test_string_equal
+    rev4 test_strings_equal swap test_true swap
+marine
+
+sub test_finish
+    swap
+    clone 0 = if
+        drop "all tests passed" println
+        0 exit
+    else
+        "failed assertions: " print printxln
+        1 exit
+    endif
+marine

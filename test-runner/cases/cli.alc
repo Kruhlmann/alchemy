@@ -1,0 +1,19 @@
+include testing
+include cli
+
+sub test_cli
+    0
+    "-i" cli_option 1 "cli: recognizes input option" test_equal +
+    "-o" cli_option 2 "cli: recognizes output option" test_equal +
+    "--include" cli_option 4 "cli: recognizes include option" test_equal +
+    "--run" cli_option 8 "cli: recognizes run switch" test_equal +
+    "--keep-asm" cli_option 16 "cli: recognizes keep-asm switch" test_equal +
+    "--unknown" cli_option -1 "cli: classifies unknown option" test_equal +
+    "-input" cli_option -1 "cli: rejects option prefix match" test_equal +
+    "A" "0" cli_equal "cli: unequal nonzero bytes" test_false +
+    "a\x00-i\x00b\x00-o\x00c" 12 cli_parse 3 "cli: parses required options" test_equal +
+    "a\x00-o\x00c\x00-i\x00b" 12 cli_parse 3 "cli: parses reversed option order" test_equal +
+    "a\x00--run\x00--keep-asm\x00-i\x00b\x00-o\x00c" 29 cli_parse 3
+    "cli: accepts optional switches" test_equal +
+    swap
+marine

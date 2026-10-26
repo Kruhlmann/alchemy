@@ -43,6 +43,33 @@ mod tests {
             assert_eq!(Token::Atomic(atomic, context).to_asm(), expected);
         }
     }
+
+    #[test]
+    fn memory_load_widths_and_zero_extension() {
+        let context = TokenContext {
+            line: 0,
+            column: 0,
+            file: FileId(0),
+        };
+        for (source, instruction) in [
+            ("*", "movzx ebx, byte [rax]"),
+            ("readb", "movzx ebx, byte [rax]"),
+            ("readw", "movzx ebx, word [rax]"),
+            ("readd", "mov ebx, dword [rax]"),
+            ("readq", "mov rbx, qword [rax]"),
+        ] {
+            let UnlinkedToken::Atomic(atomic, _) =
+                UnlinkedToken::try_from_source(source, context).unwrap()
+            else {
+                panic!("memory load must be atomic");
+            };
+            assert_eq!(
+                Token::Atomic(atomic, context).to_asm(),
+                vec!["pop rax", instruction, "push rbx"],
+                "{source}"
+            );
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -122,6 +149,9 @@ impl Token {
             Token::Atomic(AtomicToken::Clone2, _) => asm!["pop rbx", "pop rax", "push rax", "push rbx", "push rax", "push rbx"],
             Token::Atomic(AtomicToken::Decrement, _) => asm!["push 1", "pop rbx", "pop rax", "sub rax, rbx", "push rax"],
             Token::Atomic(AtomicToken::DereferenceBytePtr, _) => asm!["pop rax", "movzx ebx, byte [rax]", "push rbx"],
+            Token::Atomic(AtomicToken::DereferenceWordPtr, _) => asm!["pop rax", "movzx ebx, word [rax]", "push rbx"],
+            Token::Atomic(AtomicToken::DereferenceDwordPtr, _) => asm!["pop rax", "mov ebx, dword [rax]", "push rbx"],
+            Token::Atomic(AtomicToken::DereferenceQwordPtr, _) => asm!["pop rax", "mov rbx, qword [rax]", "push rbx"],
             Token::Atomic(AtomicToken::Equal, _) => asm!["mov rcx, 0", "mov rdx, 1", "pop rax", "pop rbx", "cmp rax, rbx", "cmove rcx, rdx", "push rcx"],
             Token::Atomic(AtomicToken::GreaterThan, _) => asm!["mov rcx, 0", "mov rdx, 1", "pop rbx", "pop rax", "cmp rax, rbx", "cmovg rcx, rdx", "push rcx"],
             Token::Atomic(AtomicToken::GreaterThanOrEqual, _) => asm!["mov rcx, 0", "mov rdx, 1", "pop rbx", "pop rax", "cmp rax, rbx", "cmovge rcx, rdx", "push rcx"],

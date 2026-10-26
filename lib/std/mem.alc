@@ -1,4 +1,5 @@
 include std.sys.call
+include std.sys.errno
 
 sub mem_alloc
     swap
@@ -8,4 +9,34 @@ marine
 
 sub mem_free
     rev3 SYS_MUNMAP syscall2 swap
+marine
+
+sub mem_copy
+    rev4 rev3
+    clone 0 < if drop drop drop 0 SYS_EINVAL - swap return endif
+    while clone 0 > do
+        rev3
+        clone2 swap readb writeb
+        ++ swap ++ swap rev3 --
+    wend
+    drop drop drop 0 swap
+marine
+
+sub mem_compare
+    rev4 rev3
+    clone 0 < if drop drop drop 0 SYS_EINVAL - swap return endif
+    while clone 0 > do
+        rev3
+        clone2 readb swap readb
+        clone2 != if
+            < if
+                drop drop drop -1 swap return
+            else
+                drop drop drop 1 swap return
+            endif
+        endif
+        drop drop
+        ++ swap ++ swap rev3 --
+    wend
+    drop drop drop 0 swap
 marine
