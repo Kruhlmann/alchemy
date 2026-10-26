@@ -16,6 +16,35 @@ macro_rules! asm {
     };
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::resolver::FileId;
+
+    #[test]
+    fn syscall_registers_and_results() {
+        let context = TokenContext {
+            line: 0,
+            column: 0,
+            file: FileId(0),
+        };
+        let registers = ["rdi", "rsi", "rdx", "r10", "r8", "r9"];
+        for arity in 0..=6 {
+            let source = format!("syscall{arity}");
+            let UnlinkedToken::Atomic(atomic, _) =
+                UnlinkedToken::try_from_source(&source, context).unwrap()
+            else {
+                panic!("syscall must be atomic");
+            };
+            assert!(!matches!(atomic, AtomicToken::CallSub(_)));
+            let mut expected = vec!["pop rax".to_owned()];
+            expected.extend(registers[..arity].iter().map(|r| format!("pop {r}")));
+            expected.extend(["syscall".to_owned(), "push rax".to_owned()]);
+            assert_eq!(Token::Atomic(atomic, context).to_asm(), expected);
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum Token {
     Atomic(AtomicToken, TokenContext),
@@ -109,11 +138,15 @@ impl Token {
             Token::Atomic(AtomicToken::Subtract, _) => asm!["pop rbx", "pop rax", "sub rax, rbx", "push rax"],
             Token::Atomic(AtomicToken::Swap, _) => asm!["pop rax", "pop rbx", "push rax", "push rbx"],
             Token::Atomic(AtomicToken::Over, _) => asm!["pop rax", "pop rbx", "push rbx", "push rax"],
-            Token::Atomic(AtomicToken::Syscall0, _) => asm!["pop rax", "syscall"],
-            Token::Atomic(AtomicToken::Syscall1, _) => asm!["pop rax", "pop rdi", "syscall"],
-            Token::Atomic(AtomicToken::Syscall2, _) => panic!("syscall2 unsupported"),
-            Token::Atomic(AtomicToken::Syscall3, _) => asm!["pop rax", "pop rdi", "pop rsi", "pop rdx", "syscall"],
+            Token::Atomic(AtomicToken::Syscall0, _) => asm!["pop rax", "syscall", "push rax"],
+            Token::Atomic(AtomicToken::Syscall1, _) => asm!["pop rax", "pop rdi", "syscall", "push rax"],
+            Token::Atomic(AtomicToken::Syscall2, _) => asm!["pop rax", "pop rdi", "pop rsi", "syscall", "push rax"],
+            Token::Atomic(AtomicToken::Syscall3, _) => asm!["pop rax", "pop rdi", "pop rsi", "pop rdx", "syscall", "push rax"],
+            Token::Atomic(AtomicToken::Syscall4, _) => asm!["pop rax", "pop rdi", "pop rsi", "pop rdx", "pop r10", "syscall", "push rax"],
+            Token::Atomic(AtomicToken::Syscall5, _) => asm!["pop rax", "pop rdi", "pop rsi", "pop rdx", "pop r10", "pop r8", "syscall", "push rax"],
+            Token::Atomic(AtomicToken::Syscall6, _) => asm!["pop rax", "pop rdi", "pop rsi", "pop rdx", "pop r10", "pop r8", "pop r9", "syscall", "push rax"],
             Token::Atomic(AtomicToken::Write, _) => asm!["pop rbx", "pop rax", "mov [rax], rbx"],
+            Token::Atomic(AtomicToken::WriteByte, _) => asm!["pop rbx", "pop rax", "mov byte [rax], bl"],
             Token::Linked { token: LinkableTokenType::EndIf, link, .. } => asm![format!("addr_{link}: ; endif")],
             Token::Linked { token: LinkableTokenType::While, link, .. } => asm![format!("addr_{link}: ; while")],
             Token::Linked { token: LinkableTokenType::If, link, .. } => asm!["pop rax", "test rax, rax", format!("jz addr_{}; if", link)],

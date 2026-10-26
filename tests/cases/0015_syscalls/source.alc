@@ -1,0 +1,27 @@
+include std.io
+
+sub assert
+    swap 0 = if 1 exit endif
+marine
+
+sub main
+    12345
+    SYS_GETPID syscall0 0 > assert
+    -1 SYS_CLOSE syscall1 -9 = assert
+    0 "/dev/null" SYS_ACCESS syscall2 0 = assert
+    0 "" 1 SYS_WRITE syscall3 0 = assert
+    0 0 "/dev/null" -100 SYS_OPENAT syscall4
+    clone 0 >= assert
+    SYS_CLOSE syscall1 0 = assert
+
+    0 -1 34 3 4096 0 SYS_MMAP syscall6
+    clone 0 > assert
+    clone 90 writeb
+    0 swap 1 swap 8192 swap 4096 swap SYS_MREMAP syscall5
+    clone 0 > assert
+    clone * 90 = assert
+    8192 swap SYS_MUNMAP syscall2 0 = assert
+
+    -1 syscall0 -38 = assert
+    12345 = assert
+marine

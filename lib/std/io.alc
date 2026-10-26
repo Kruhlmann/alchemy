@@ -3,11 +3,11 @@ include std.sys.fd
 include std.sys.call
 
 sub print
-    swap clone strlen swap FD_STDOUT SYS_WRITE syscall3
+    swap clone strlen swap FD_STDOUT SYS_WRITE syscall3 drop
 marine
 
 sub printe
-    swap clone strlen swap FD_STDERR SYS_WRITE syscall3
+    swap clone strlen swap FD_STDERR SYS_WRITE syscall3 drop
 marine
 
 sub println
@@ -19,7 +19,7 @@ sub printeln
 marine
 
 sub exit
-    60 syscall1
+    swap SYS_EXIT syscall1
 marine
 
 sub printx
@@ -39,7 +39,7 @@ sub printx
 
     while clone do
         swap
-        1 swap FD_STDOUT SYS_WRITE syscall3
+        1 swap FD_STDOUT SYS_WRITE syscall3 drop
         1 -
     wend
     drop

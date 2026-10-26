@@ -1,0 +1,11 @@
+include std.sys.call
+
+sub mem_alloc
+    swap
+    0 swap -1 swap 34 swap 3 swap 0 SYS_MMAP syscall6
+    swap
+marine
+
+sub mem_free
+    rev3 SYS_MUNMAP syscall2 swap
+marine

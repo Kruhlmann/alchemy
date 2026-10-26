@@ -1,0 +1,38 @@
+include std.mem
+include std.io
+
+sub assert
+    swap 0 = if 1 exit endif
+marine
+
+sub main
+    12345
+    0 mem_alloc -22 = assert
+    -1 mem_alloc 0 < assert
+
+    8193 mem_alloc
+    clone 0 > assert
+    clone 4095 & 0 = assert
+    clone * 0 = assert
+    clone 8192 + * 0 = assert
+    clone 0x1122334455667788 write
+    clone * 0x88 = assert
+    clone 7 + * 0x11 = assert
+    clone 0x1ff writeb
+    clone * 255 = assert
+    clone ++ * 0x77 = assert
+    clone 8192 + 65 writeb
+
+    1 mem_alloc
+    clone 0 > assert
+    clone * 0 = assert
+    clone 66 writeb
+    clone * 66 = assert
+    1 mem_free 0 = assert
+
+    clone 8192 + * 65 = assert
+    clone 0 mem_free -22 = assert
+    8193 mem_free 0 = assert
+    12345 = assert
+    "memory ok" println
+marine
