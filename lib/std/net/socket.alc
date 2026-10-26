@@ -1,4 +1,5 @@
 include std.mem
+include std.sys.errno
 
 sub socket_tcp
     0 1 2 SYS_SOCKET syscall3 swap
@@ -28,9 +29,9 @@ marine
 
 sub socket_address_ipv4
     rev3 swap
-    clone 0 < if drop drop -22 swap return endif
-    clone 65535 > if drop drop -22 swap return endif
-    swap clone 32 >> 0 != if drop drop -22 swap return endif
+    clone 0 < if drop drop 0 SYS_EINVAL - swap return endif
+    clone 65535 > if drop drop 0 SYS_EINVAL - swap return endif
+    swap clone 32 >> 0 != if drop drop 0 SYS_EINVAL - swap return endif
     swap
 
     16 mem_alloc
