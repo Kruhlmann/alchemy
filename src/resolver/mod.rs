@@ -17,47 +17,70 @@ impl<'a> Resolver<'a> {
         Self(paths)
     }
 
-    pub fn resolve_includes(&self, source_code: &str) -> Result<ResolvedSourceCode, ResolverError> {
-        let resolved = ResolvedSourceCode(self.resolve_includes_str(source_code)?);
-        Ok(resolved)
-    }
-
-    fn resolve_includes_str(&self, source_code: &str) -> Result<String, ResolverError> {
+    pub fn resolve_includes(
+        &self,
+        source_code: &str,
+        source_file: &Path,
+    ) -> Result<ResolvedSourceCode, ResolverError> {
         fn expand(
             source: &str,
+            source_file: &Path,
             modules: &BTreeMap<String, PathBuf>,
             included: &mut HashSet<PathBuf>,
-        ) -> Result<String, ResolverError> {
-            let mut output = String::new();
+            files: &mut FileTable,
+        ) -> Result<Vec<ResolvedSourceCodeLine>, ResolverError> {
+            let file = files.intern(source_file.to_path_buf());
+            let mut output = Vec::new();
 
-            for line in source.split_inclusive('\n') {
+            for (line_index, line) in source.split_inclusive('\n').enumerate() {
                 let mut words = line.split_whitespace();
 
                 match (words.next(), words.next(), words.next()) {
                     (Some("include"), Some(name), None) => {
-                        let path = modules.get(name).ok_or(ResolverError::ModuleNotFound(
-                            name.to_string(),
-                            modules.clone(),
-                        ))?;
+                        let path = modules.get(name).ok_or_else(|| {
+                            ResolverError::ModuleNotFound(name.to_string(), modules.clone())
+                        })?;
+
                         let path = std::fs::canonicalize(path)?;
+
                         if included.insert(path.clone()) {
                             let source = std::fs::read_to_string(&path)?;
-                            let expanded = expand(&source, modules, included)?;
-                            output.push_str(&expanded);
-                            if !expanded.is_empty() && !expanded.ends_with('\n') {
-                                output.push('\n');
-                            }
+
+                            let expanded = expand(&source, &path, modules, included, files)?;
+
+                            output.extend(expanded);
                         }
                     }
-                    _ => output.push_str(line),
+
+                    _ => {
+                        output.push(ResolvedSourceCodeLine {
+                            file,
+                            line: line_index + 1,
+                            text: line.to_owned(),
+                        });
+                    }
                 }
             }
 
             Ok(output)
         }
 
+        let source_file = std::fs::canonicalize(source_file)?;
         let modules = self.discover_modules()?;
-        expand(source_code, &modules, &mut HashSet::new())
+        let mut files = FileTable::default();
+
+        let mut included = HashSet::new();
+        included.insert(source_file.clone());
+
+        let lines = expand(
+            source_code,
+            &source_file,
+            &modules,
+            &mut included,
+            &mut files,
+        )?;
+
+        Ok(ResolvedSourceCode { files, lines })
     }
 
     fn discover_modules(&self) -> Result<BTreeMap<String, PathBuf>, ResolverError> {

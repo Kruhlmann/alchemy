@@ -23,6 +23,7 @@ pub enum AtomicToken {
     PopDrop,
     Put,
     Return,
+    Reverse3,
     Sub,
     Subtract,
     Swap,

@@ -203,11 +203,15 @@ impl Linker {
 
 #[cfg(test)]
 mod test {
-    use crate::token::TokenContext;
+    use crate::{resolver::FileId, token::TokenContext};
 
     use super::*;
 
-    static CTX: TokenContext = TokenContext { line: 0, column: 0 };
+    static CTX: TokenContext = TokenContext {
+        line: 0,
+        column: 0,
+        file: FileId(0),
+    };
 
     #[test]
     fn fails_to_link_without_main_sub() {

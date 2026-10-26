@@ -48,6 +48,7 @@ impl UnlinkedToken {
             "over" => return Ok(UnlinkedToken::Atomic(AtomicToken::Over, c)),
             "put" => return Ok(UnlinkedToken::Atomic(AtomicToken::Put, c)),
             "return" => return Ok(UnlinkedToken::Atomic(AtomicToken::Return, c)),
+            "rev3" => return Ok(UnlinkedToken::Atomic(AtomicToken::Reverse3, c)),
             "swap" => return Ok(UnlinkedToken::Atomic(AtomicToken::Swap, c)),
             "syscall0" => return Ok(UnlinkedToken::Atomic(AtomicToken::Syscall0, c)),
             "syscall1" => return Ok(UnlinkedToken::Atomic(AtomicToken::Syscall1, c)),
@@ -100,9 +101,15 @@ impl UnlinkedToken {
 
 #[cfg(test)]
 mod tests {
+    use crate::resolver::FileId;
+
     use super::*;
 
-    static CTX: TokenContext = TokenContext { line: 0, column: 0 };
+    static CTX: TokenContext = TokenContext {
+        line: 0,
+        column: 0,
+        file: FileId(0),
+    };
 
     #[test]
     fn fails_on_unknown_token() {

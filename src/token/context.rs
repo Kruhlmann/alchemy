@@ -1,6 +1,8 @@
+use crate::resolver::FileId;
+
 #[derive(Debug, Clone, Copy)]
-pub struct TokenContext<'a> {
+pub struct TokenContext {
     pub line: usize,
     pub column: usize,
-    pub file: &'a str,
+    pub file: FileId,
 }

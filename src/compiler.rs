@@ -29,11 +29,11 @@ impl Compiler {
             "compiling"
         );
         let unresolved_source_code = std::fs::read_to_string(source_file)?;
-        let resolved_source_code = Resolver::new(self.include_paths.as_slice())
-            .resolve_includes(&unresolved_source_code)?;
-        let unlinked_tokens = Lexer::lex_source_code_stdin(&resolved_source_code)?;
+        let resolved = Resolver::new(self.include_paths.as_slice())
+            .resolve_includes(&unresolved_source_code, source_file)?;
+        let unlinked_tokens = Lexer::lex(&resolved)?;
         let linked_tokens = Linker::link_tokens(unlinked_tokens)?;
-        let raw_asm = AssemblyGenerator::generate(&linked_tokens);
+        let raw_asm = AssemblyGenerator::generate(&linked_tokens, &resolved.files);
         let asm = AssemblyOptimizer::optimize(&raw_asm);
         Assembler::assemble(&asm, output_file, keep_asm)?;
         Ok(())

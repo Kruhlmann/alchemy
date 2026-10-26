@@ -1,5 +1,4 @@
 include std.bool
-include std.size
 
 sub STR_NEWLINE "\n" swap marine
 sub STR_HEXCHARS_UPPER "0123456789ABCDEF" swap marine

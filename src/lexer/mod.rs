@@ -1,8 +1,6 @@
 pub mod error;
-pub mod origin;
 
 pub use error::*;
-pub use origin::*;
 
 use crate::{
     resolver::ResolvedSourceCode,
@@ -12,26 +10,11 @@ use crate::{
 pub struct Lexer;
 
 impl Lexer {
-    pub fn lex_source_code_stdin(
-        source_code: &ResolvedSourceCode,
-    ) -> Result<Vec<UnlinkedToken>, LexerError> {
-        Self::lex(source_code, LexerOrigin::StdIn)
-    }
-
-    pub fn lex_source_code_file(
-        source_code: &ResolvedSourceCode,
-        file: &str,
-    ) -> Result<Vec<UnlinkedToken>, LexerError> {
-        Self::lex(source_code, LexerOrigin::File(file.to_string()))
-    }
-
-    fn lex(
-        source_code: &ResolvedSourceCode,
-        source_origin: LexerOrigin,
-    ) -> Result<Vec<UnlinkedToken>, LexerError> {
+    pub fn lex(source_code: &ResolvedSourceCode) -> Result<Vec<UnlinkedToken>, LexerError> {
         let mut tokens = Vec::new();
+        for source_line in &source_code.lines {
+            let line = source_line.text.trim_end_matches('\n');
 
-        for (line_index, line) in source_code.0.split('\n').enumerate() {
             let mut in_quotes = false;
             let mut escaped = false;
 
@@ -55,17 +38,17 @@ impl Lexer {
 
             for word in words {
                 let context = TokenContext {
-                    line: line_index + 1,
+                    file: source_line.file,
+                    line: source_line.line,
                     column: word.as_ptr() as usize - line.as_ptr() as usize,
                 };
-
                 let token = match UnlinkedToken::try_from_source(word, context) {
                     Ok(token) => token,
                     Err(error) => {
                         return Err(LexerError {
                             error,
                             context,
-                            origin: source_origin,
+                            file: source_code.files.path(context.file).to_path_buf(),
                             source_line: line.to_owned(),
                         });
                     }

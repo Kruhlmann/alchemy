@@ -48,6 +48,14 @@ impl std::fmt::Display for Token {
 }
 
 impl Token {
+    pub fn context(&self) -> TokenContext {
+        match self {
+            Token::Atomic(_, token_context) => *token_context,
+            Token::Linked { context, .. } => *context,
+            Token::DualLinked { context, .. } => *context,
+        }
+    }
+
     pub fn linked(token: LinkableTokenType, link: usize, context: TokenContext) -> Self {
         let ret = Self::Linked {
             token,
@@ -96,6 +104,7 @@ impl Token {
             Token::Atomic(AtomicToken::PushInteger(s), _) => asm![format!("push {s}")],
             Token::Atomic(AtomicToken::Put, _) => asm!["call put"],
             Token::Atomic(AtomicToken::Return, _) => asm!["ret"],
+            Token::Atomic(AtomicToken::Reverse3, _) => asm!["pop rax", "pop rbx", "pop rcx", "push rax", "push rbx", "push rcx"],
             Token::Atomic(AtomicToken::Sub, _) => asm![],
             Token::Atomic(AtomicToken::SubDefinition(s), _) => asm![format!("usr_{s}:")],
             Token::Atomic(AtomicToken::Subtract, _) => asm!["pop rbx", "pop rax", "sub rax, rbx", "push rax"],
@@ -128,13 +137,7 @@ impl Token {
                 link,
                 ..
             } => {
-                let byte_hex = value
-                    .as_bytes()
-                    .iter()
-                    .map(|byte| format!("0x{byte:02x}"))
-                    .collect::<Vec<_>>()
-                    .join(", ");
-                asm![format!("lit_{link}: db {byte_hex}, 0x00")]
+                asm![format!("lit_{link}: db `{value}`, 0x00")]
             }
             _ => asm![],
         }

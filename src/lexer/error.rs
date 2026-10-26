@@ -1,12 +1,11 @@
-use crate::{
-    lexer::LexerOrigin,
-    token::{TokenContext, TokenParseError},
-};
+use std::path::PathBuf;
+
+use crate::token::{TokenContext, TokenParseError};
 
 #[derive(Debug)]
 pub struct LexerError {
     pub error: TokenParseError,
-    pub origin: LexerOrigin,
+    pub file: PathBuf,
     pub context: TokenContext,
     pub source_line: String,
 }
@@ -33,7 +32,10 @@ impl std::fmt::Display for LexerError {
         writeln!(
             f,
             "{:width$}{blue}-->{reset} {}:{}:{}",
-            "", self.origin, self.context.line, column,
+            "",
+            self.file.display(),
+            self.context.line,
+            column,
         )?;
         writeln!(f, "{:width$} {blue}|{reset}", "")?;
         writeln!(f, "{blue}{:>width$} |{reset} {}", self.context.line, source,)?;

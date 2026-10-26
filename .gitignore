@@ -1,2 +1,5 @@
 /target
 .direnv
+./*.asm
+./*.alc
+./program

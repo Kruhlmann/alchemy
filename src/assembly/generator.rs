@@ -1,16 +1,23 @@
 use std::borrow::Cow;
 
-use crate::{assembly::Assembly, token::Token};
+use crate::{assembly::Assembly, resolver::FileTable, token::Token};
 
 pub struct AssemblyGenerator;
 
 impl AssemblyGenerator {
-    pub fn generate(tokens: &[Token]) -> Assembly {
-        let token_src = tokens
-            .iter()
-            .flat_map(Token::to_asm)
-            .collect::<Vec<Cow<'static, str>>>()
-            .join("\n");
+    pub fn generate(tokens: &[Token], files: &FileTable) -> Assembly {
+        let mut tokens_assembled: Vec<String> = Vec::new();
+        for token in tokens {
+            let asm = token.to_asm();
+            let context = token.context();
+            let file = files.path(context.file);
+            tokens_assembled.push(format!("%line {}+0 {}", context.line, file.display()));
+            // TODO unnecessary clone here
+            for instr in asm {
+                tokens_assembled.push(instr.to_string());
+            }
+        }
+        let tokens_src = tokens_assembled.join("\n");
         let literals_src = tokens
             .iter()
             .flat_map(Token::to_lit)
@@ -47,7 +54,7 @@ syscall
 add rsp, 24
 ret
 
-{token_src}
+{tokens_src}
 
 _start:
 call usr_main

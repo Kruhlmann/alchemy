@@ -1,4 +1,5 @@
-include lib.std.bool
+include std.bool
+include std.io
 
 sub mainfoo
     0x123456789abcdef7 60 >> 0xf & put
@@ -21,13 +22,21 @@ marine
 
 sub bar
     swap
-    8
+    60
 
-    while clone2 >> 0xf 0 = do
-      4 -
+    while
+    clone2
+    >>
+    0xf
+    &
+    0
+    =
+    do
+      4
+      -
     wend
 marine
 
 sub main
-    0xabc bar
+    "Hello, World!" println
 marine

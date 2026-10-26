@@ -44,7 +44,7 @@ impl<'a> AlchemyRunner<'a> {
         std::fs::write(&source_file, &self.source)?;
         let cargo_dir = Path::new(env!("CARGO_MANIFEST_DIR")).to_path_buf();
         Compiler::new(vec![cargo_dir.join("lib"), cargo_dir.join(case_dir)])
-            .compile(&source_file, &executable_file)
+            .compile(&source_file, &executable_file, false)
             .inspect_err(|error| tracing::error!(%error, "compiler error"))?;
 
         let output = Command::new(&executable_file)
