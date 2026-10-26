@@ -1,4 +1,4 @@
-use alchemy::compiler::Compiler;
+use alchemyc::compiler::Compiler;
 use clap::Parser;
 use std::{
     path::{Path, PathBuf},

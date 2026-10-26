@@ -1,6 +1,6 @@
 use std::{path::Path, process::Command, sync::Once};
 
-use alchemy::compiler::Compiler;
+use alchemyc::compiler::Compiler;
 use tracing_subscriber::EnvFilter;
 
 pub struct AlchemyRunner<'a> {

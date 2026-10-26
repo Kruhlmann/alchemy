@@ -10,7 +10,7 @@
     in
     {
       packages.${system}.default = pkgs.rustPlatform.buildRustPackage {
-        pname = "alchemy";
+        pname = "alchemyc";
         version = cargo.package.version;
         src = pkgs.lib.cleanSource ./.;
         cargoLock.lockFile = ./Cargo.lock;

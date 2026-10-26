@@ -3,4 +3,4 @@
 ./*.asm
 ./*.alc
 ./program
-./result
+/result
