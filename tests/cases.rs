@@ -19,16 +19,15 @@ impl<'a> AlchemyRunner<'a> {
 
         let source = std::fs::read_to_string(source_file)?;
         let mut runner = AlchemyRunner::new(&source);
-        if let Some(exit_code) = std::fs::read_to_string(exit_code_file)
-            .map(|c| c.trim().parse::<i32>().unwrap())
-            .ok()
+        if let Ok(exit_code) =
+            std::fs::read_to_string(exit_code_file).map(|c| c.trim().parse::<i32>().unwrap())
         {
             runner = runner.expect_exit_code(exit_code);
         }
-        if let Some(stdout) = std::fs::read_to_string(stdout_file).ok() {
+        if let Ok(stdout) = std::fs::read_to_string(stdout_file) {
             runner = runner.expect_stdout(stdout);
         }
-        if let Some(stderr) = std::fs::read_to_string(stderr_file).ok() {
+        if let Ok(stderr) = std::fs::read_to_string(stderr_file) {
             runner = runner.expect_stderr(stderr);
         }
 
@@ -41,7 +40,7 @@ impl<'a> AlchemyRunner<'a> {
         let source_file = workdir.path().join("program.asm");
         let executable_file = workdir.path().join("program");
 
-        std::fs::write(&source_file, &self.source)?;
+        std::fs::write(&source_file, self.source)?;
         let cargo_dir = Path::new(env!("CARGO_MANIFEST_DIR")).to_path_buf();
         Compiler::new(vec![cargo_dir.join("lib"), cargo_dir.join(case_dir)])
             .compile(&source_file, &executable_file, false)
