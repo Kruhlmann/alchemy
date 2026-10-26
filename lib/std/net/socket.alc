@@ -4,6 +4,16 @@ sub socket_tcp
     0 1 2 SYS_SOCKET syscall3 swap
 marine
 
+sub socket_reuse_address
+    swap 8 mem_alloc
+    clone 0 < if swap drop swap return endif
+    clone 1 write
+    clone2 4 rev3 2 swap 1 swap SYS_SETSOCKOPT syscall5
+    rev3 drop
+    8 mem_free drop
+    swap
+marine
+
 sub socket_store_be16
     rev3
     clone2 swap 8 >> writeb
@@ -16,24 +26,46 @@ sub socket_store_be32
     swap 2 + swap socket_store_be16
 marine
 
-sub socket_connect_ipv4
-    rev4 rev3
-    clone 0 < if drop drop drop -22 swap return endif
-    clone 65535 > if drop drop drop -22 swap return endif
-    swap clone 32 >> 0 != if drop drop drop -22 swap return endif
+sub socket_address_ipv4
+    rev3 swap
+    clone 0 < if drop drop -22 swap return endif
+    clone 65535 > if drop drop -22 swap return endif
+    swap clone 32 >> 0 != if drop drop -22 swap return endif
     swap
 
     16 mem_alloc
-    clone 0 < if rev4 drop drop drop swap return endif
+    clone 0 < if rev3 drop drop swap return endif
     clone 2 writeb
     swap clone2 swap 2 + swap socket_store_be16 drop
     clone2 4 + swap socket_store_be32
     swap drop
+    swap
+marine
 
+sub socket_connect_ipv4
+    rev4 rev3 socket_address_ipv4
+    clone 0 < if swap drop swap return endif
     clone2 16 rev3 SYS_CONNECT syscall3
     rev3 drop
     16 mem_free drop
     swap
+marine
+
+sub socket_bind_ipv4
+    rev4 rev3 socket_address_ipv4
+    clone 0 < if swap drop swap return endif
+    clone2 16 rev3 SYS_BIND syscall3
+    rev3 drop
+    16 mem_free drop
+    swap
+marine
+
+sub socket_listen
+    rev3 SYS_LISTEN syscall2 swap
+marine
+
+sub socket_accept
+    swap 0 0 rev3 SYS_ACCEPT syscall3 swap
 marine
 
 sub socket_read

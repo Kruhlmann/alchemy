@@ -16,6 +16,11 @@ sub main
     -1 0 1 socket_read -9 = assert
     -1 "x" 1 socket_write -9 = assert
     -1 socket_close -9 = assert
+    -1 socket_reuse_address -9 = assert
+    -1 1 socket_listen -9 = assert
+    -1 socket_accept -9 = assert
+    -1 0x7f000001 8080 socket_bind_ipv4 -9 = assert
+    -1 0x7f000001 65536 socket_bind_ipv4 -22 = assert
     -1 0x7f000001 8080 socket_connect_ipv4 -9 = assert
     -1 0x7f000001 -1 socket_connect_ipv4 -22 = assert
     -1 0x7f000001 65536 socket_connect_ipv4 -22 = assert

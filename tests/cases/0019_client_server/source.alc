@@ -1,0 +1,137 @@
+include std.net.socket
+include std.net.ipv4
+include std.mem
+include std.io
+
+sub demo_client
+    10 SYS_ALARM syscall1 drop
+    socket_tcp
+    clone 0 < if
+        drop
+        "socket creation failed" printeln
+        1 exit
+    endif
+
+    clone "127.0.0.1" ipv4_parse 8080 socket_connect_ipv4
+    0 < if
+        socket_close drop
+        "connection failed" printeln
+        1 exit
+    endif
+
+    clone "ping" 4 socket_write
+    4 != if
+        socket_close drop
+        "send failed or was incomplete" printeln
+        1 exit
+    endif
+
+    4 mem_alloc
+    clone 0 < if
+        drop
+        socket_close drop
+        "allocation failed" printeln
+        1 exit
+    endif
+
+    clone2 4 socket_read
+    4 = if
+        clone * 112 =
+        swap clone 1 + * 111 =
+        swap rev3 &
+        swap clone 2 + * 110 =
+        swap rev3 &
+        swap clone 3 + * 103 =
+        swap rev3 &
+    else
+        0
+    endif
+
+    swap 4 mem_free drop
+    swap socket_close drop
+
+    if
+        "received pong" println
+    else
+        "receive failed, was incomplete, or was not pong" printeln
+        1 exit
+    endif
+marine
+
+sub demo_server
+    swap
+    clone 0 < if drop 0 swap return endif
+    4 mem_alloc
+    clone 0 < if drop socket_close drop 0 swap return endif
+    clone2 4 socket_read
+    4 = if
+        clone * 112 =
+        swap clone 1 + * 105 =
+        swap rev3 &
+        swap clone 2 + * 110 =
+        swap rev3 &
+        swap clone 3 + * 103 =
+        swap rev3 &
+    else
+        0
+    endif
+    swap 4 mem_free drop
+    if
+        clone "pong" 4 socket_write 4 =
+    else
+        0
+    endif
+    swap socket_close drop
+    swap
+marine
+
+sub demo_wait
+    rev3
+    clone2 0 0 rev4 swap SYS_WAIT4 syscall4
+    =
+    swap clone * 0 =
+    swap clone ++ * 0 =
+    swap rev3 &
+    swap 8 mem_free drop
+    & swap
+marine
+
+sub main
+    10 SYS_ALARM syscall1 drop
+    socket_tcp
+    clone 0 < if drop "listener creation failed" printeln 1 exit endif
+    clone socket_reuse_address
+    0 < if socket_close drop "socket option failed" printeln 1 exit endif
+    clone "127.0.0.1" ipv4_parse 8080 socket_bind_ipv4
+    0 < if socket_close drop "bind failed" printeln 1 exit endif
+    clone 1 socket_listen
+    0 < if socket_close drop "listen failed" printeln 1 exit endif
+
+    8 mem_alloc
+    clone 0 < if
+        drop socket_close drop "allocation failed" printeln 1 exit
+    endif
+
+    SYS_FORK syscall0
+    clone 0 < if
+        drop 8 mem_free drop socket_close drop
+        "fork failed" printeln 1 exit
+    endif
+    clone 0 = if
+        drop swap socket_close drop 8 mem_free drop
+        demo_client
+        0 exit
+    endif
+
+    rev3
+    clone socket_accept
+    swap socket_close drop
+    demo_server
+    rev3 swap demo_wait &
+    if
+        "server and client finished" println
+    else
+        "server or client failed" printeln
+        1 exit
+    endif
+marine
