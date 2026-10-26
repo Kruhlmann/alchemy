@@ -1,0 +1,191 @@
+include buffer
+
+sub integer_digit
+    swap
+    clone 48 >= if clone 57 <= if 48 - swap return endif endif
+    clone 65 >= if clone 70 <= if 55 - swap return endif endif
+    clone 97 >= if clone 102 <= if 87 - swap return endif endif
+    drop -1 swap
+marine
+
+sub integer_base
+    swap
+    clone readb 48 != if drop 10 swap return endif
+    ++ readb
+    clone 120 = if drop 16 swap return endif
+    clone 111 = if drop 8 swap return endif
+    98 = if 2 else 10 endif swap
+marine
+
+sub integer_limit
+    swap
+    clone 10 = if drop -922337203685477580 swap return endif
+    clone 16 = if drop -576460752303423488 swap return endif
+    8 = if -1152921504606846976 else -4611686018427387904 endif swap
+marine
+
+sub integer_last_digit
+    swap 10 = if 8 else 0 endif swap
+marine
+
+sub integer_multiply
+    rev3 swap
+    clone 10 = if drop clone 3 << swap 1 << + swap return endif
+    clone 16 = if drop 4 << swap return endif
+    8 = if 3 << else 1 << endif swap
+marine
+
+sub integer_step
+    rev4 rev3
+    clone 0 < if drop drop 0 0 SYS_EINVAL - rev3 rev4 return endif
+    swap rev3 clone rev4 rev3
+    clone2 >= if drop drop drop 0 0 SYS_EINVAL - rev3 rev4 return endif
+    drop
+
+    swap rev3 clone rev4 rev3 integer_limit
+    swap rev3
+    clone2 > if drop drop drop 0 0 SYS_EOVERFLOW - rev3 rev4 return endif
+    swap drop swap
+
+    swap rev3 clone rev4 rev3 integer_last_digit
+    clone2 > if
+        drop
+        swap rev3 clone rev4 rev3 integer_limit
+        swap rev3
+        clone2 = if drop drop drop 0 0 SYS_EOVERFLOW - rev3 rev4 return endif
+        swap drop swap
+    else
+        drop
+    endif
+
+    swap
+    swap rev3 clone rev4 rev3 integer_multiply
+    swap - 0 rev3 rev4
+marine
+
+sub integer_accumulate
+    rev4 rev3
+    swap clone 0 <= if drop drop drop 0 0 SYS_EINVAL - swap rev3 return endif
+    swap
+    rev3 clone2 + rev3 drop swap rev3 0
+
+    while 1 do
+        rev4
+        clone2 >= if drop drop drop 0 swap rev3 return endif
+        rev4
+
+        swap rev3 clone rev4 rev3 readb integer_digit integer_step
+        clone 0 < if 0 rev6 drop drop drop drop swap rev3 return endif
+        drop
+        rev4 swap ++ swap rev4
+    wend
+marine
+
+sub integer_parse
+    rev3 swap
+    clone 0 <= if drop drop 0 0 SYS_EINVAL - swap rev3 return endif
+    clone 2 >= if clone2 drop integer_base else 10 endif
+    clone 10 != if rev3 2 + swap 2 - swap rev3 endif
+    swap clone 0 <= if drop drop drop 0 0 SYS_EINVAL - swap rev3 return endif
+    swap
+
+    swap rev3 clone rev4 rev3 readb
+    clone 45 = if
+        drop rev3 ++ swap -- swap rev3
+        integer_accumulate swap rev3 return
+    endif
+    43 = if rev3 ++ swap -- swap rev3 endif
+    integer_accumulate
+    clone 0 < if swap rev3 return endif
+    drop
+    clone -9223372036854775808 = if
+        drop 0 0 SYS_EOVERFLOW - swap rev3 return
+    endif
+    0 swap - 0 swap rev3
+marine
+
+sub integer_divmod10
+    swap
+    clone 0 >= if clone 10 < if 0 swap swap rev3 return endif endif
+    clone 1 & swap 1 >> integer_divmod10
+    swap 1 << swap 1 <<
+    swap rev3 +
+    clone 10 >= if 10 - swap ++ swap endif
+    swap rev3
+marine
+
+sub integer_prepare_format
+    rev3
+    clone buffer_length
+    clone 9223372036854775787 > if
+        drop drop drop 0 0 0 SYS_EOVERFLOW - rev3 rev4 return
+    endif
+    20 + clone2 buffer_reserve
+    swap drop rev3 rev4
+marine
+
+sub integer_signed_magnitude
+    rev4
+    clone 0 < if
+        0 swap - rev3
+        clone 45 writeb
+        swap clone buffer_length ++ clone2 buffer_set_length drop swap ++
+    else
+        rev3
+    endif
+    rev3 rev4
+marine
+
+sub integer_write_decimal
+    rev3 swap clone rev3
+    while 1 do
+        integer_divmod10
+        swap rev3 -- clone2 swap 48 + writeb swap drop swap
+        clone 0 = if drop clone2 - rev3 drop rev3 return endif
+    wend
+marine
+
+sub integer_write_hex
+    rev3 swap clone rev3
+    while 1 do
+        clone 15 & swap 4 >> swap
+        swap rev3 -- clone2 swap "0123456789abcdef" + readb writeb swap drop swap
+        clone 0 = if drop clone2 - rev3 drop rev3 return endif
+    wend
+marine
+
+sub integer_copy_forward
+    rev4 rev3
+    while clone 0 > do
+        rev3 clone2 swap readb writeb
+        ++ swap ++ swap rev3 --
+    wend
+    drop drop swap
+marine
+
+sub integer_finish_format
+    rev4 rev3
+    swap rev3 clone rev4 rev3 buffer_tail
+    rev3 swap integer_copy_forward
+    clone2 drop buffer_data - buffer_set_length
+    0 swap
+marine
+
+sub integer_format_decimal
+    rev3 swap integer_prepare_format
+    clone 0 < if rev3 drop drop swap return endif
+    drop clone buffer_tail integer_signed_magnitude
+    19 + swap rev3 swap integer_write_decimal
+    integer_finish_format swap
+marine
+
+sub integer_format_hex
+    rev3 swap integer_prepare_format
+    clone 0 < if rev3 drop drop swap return endif
+    drop clone buffer_tail
+    clone 48 writeb clone ++ 120 writeb
+    swap clone buffer_length 2 + clone2 buffer_set_length drop swap 2 +
+    integer_signed_magnitude
+    16 + swap rev3 swap integer_write_hex
+    integer_finish_format swap
+marine

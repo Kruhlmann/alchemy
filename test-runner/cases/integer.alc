@@ -1,0 +1,186 @@
+include testing
+include integer
+
+sub test_integer_parse
+    0
+    "0" clone strlen integer_parse 0 = swap 0 = & "integer: decimal zero" test_true +
+    "42" clone strlen integer_parse 0 = swap 42 = & "integer: decimal positive" test_true +
+    "-42" clone strlen integer_parse 0 = swap -42 = & "integer: decimal negative" test_true +
+    "-22" clone strlen integer_parse 0 = swap -22 = & "integer: negative value is not confused with EINVAL" test_true +
+    "-75" clone strlen integer_parse 0 = swap -75 = & "integer: negative value is not confused with EOVERFLOW" test_true +
+    "+42" clone strlen integer_parse 0 = swap 42 = & "integer: explicit decimal plus" test_true +
+    "000123" clone strlen integer_parse 0 = swap 123 = & "integer: decimal leading zeros" test_true +
+    "-0" clone strlen integer_parse 0 = swap 0 = & "integer: negative zero" test_true +
+    "0xff" clone strlen integer_parse 0 = swap 255 = & "integer: hexadecimal prefix" test_true +
+    "0xAbCdEf" clone strlen integer_parse 0 = swap 0xabcdef = & "integer: mixed-case hex digits" test_true +
+    "0x-ff" clone strlen integer_parse 0 = swap -255 = & "integer: negative prefixed literal matches host" test_true +
+    "0x+ff" clone strlen integer_parse 0 = swap 255 = & "integer: plus after radix prefix" test_true +
+    "0o755" clone strlen integer_parse 0 = swap 493 = & "integer: octal prefix" test_true +
+    "0o-10" clone strlen integer_parse 0 = swap -8 = & "integer: negative octal" test_true +
+    "0b101010" clone strlen integer_parse 0 = swap 42 = & "integer: binary prefix" test_true +
+    "0b-10" clone strlen integer_parse 0 = swap -2 = & "integer: negative binary" test_true +
+    "12ignored" 2 integer_parse 0 = swap 12 = & "integer: obeys explicit span length" test_true +
+    "000000000000000000000000000000000000000000000000000000000000000000123"
+    clone strlen integer_parse 0 = swap 123 = & "integer: leading zeros do not overflow" test_true +
+
+    0 0 integer_parse -22 = swap 0 = & "integer: empty span rejected without dereference" test_true +
+    0 -1 integer_parse -22 = swap 0 = & "integer: negative length rejected" test_true +
+    "+" clone strlen integer_parse -22 = swap 0 = & "integer: lone plus rejected" test_true +
+    "-" clone strlen integer_parse -22 = swap 0 = & "integer: lone minus rejected" test_true +
+    "0x" clone strlen integer_parse -22 = swap 0 = & "integer: empty prefixed value rejected" test_true +
+    "0x-" clone strlen integer_parse -22 = swap 0 = & "integer: prefix and sign require digits" test_true +
+    "-0xff" clone strlen integer_parse -22 = swap 0 = & "integer: rejects sign before radix prefix like host" test_true +
+    "0Xff" clone strlen integer_parse -22 = swap 0 = & "integer: uppercase prefix rejected like host" test_true +
+    "0xg" clone strlen integer_parse -22 = swap 0 = & "integer: non-hex digit rejected" test_true +
+    "0o8" clone strlen integer_parse -22 = swap 0 = & "integer: out-of-base octal digit rejected" test_true +
+    "0b2" clone strlen integer_parse -22 = swap 0 = & "integer: out-of-base binary digit rejected" test_true +
+    "1_0" clone strlen integer_parse -22 = swap 0 = & "integer: underscore rejected" test_true +
+    " 1" clone strlen integer_parse -22 = swap 0 = & "integer: leading whitespace rejected" test_true +
+    "1 " clone strlen integer_parse -22 = swap 0 = & "integer: trailing whitespace rejected" test_true +
+    "12\x003" 4 integer_parse -22 = swap 0 = & "integer: embedded NUL is not an end marker" test_true +
+    "\xff" 1 integer_parse -22 = swap 0 = & "integer: non-ASCII digit rejected" test_true +
+    swap
+marine
+
+sub test_integer_limits
+    0
+    "9223372036854775807" clone strlen integer_parse 0 = swap 9223372036854775807 = &
+    "integer: decimal signed maximum" test_true +
+    "-9223372036854775808" clone strlen integer_parse 0 = swap -9223372036854775808 = &
+    "integer: decimal signed minimum" test_true +
+    "9223372036854775808" clone strlen integer_parse -75 = swap 0 = &
+    "integer: decimal positive overflow" test_true +
+    "-9223372036854775809" clone strlen integer_parse -75 = swap 0 = &
+    "integer: decimal negative overflow" test_true +
+    "999999999999999999999999999999999999999999" clone strlen integer_parse -75 = swap 0 = &
+    "integer: long decimal overflow" test_true +
+    "0x7fffffffffffffff" clone strlen integer_parse 0 = swap 9223372036854775807 = &
+    "integer: hexadecimal signed maximum" test_true +
+    "0x-8000000000000000" clone strlen integer_parse 0 = swap -9223372036854775808 = &
+    "integer: hexadecimal signed minimum" test_true +
+    "0x8000000000000000" clone strlen integer_parse -75 = swap 0 = &
+    "integer: hexadecimal positive overflow" test_true +
+    "0x-8000000000000001" clone strlen integer_parse -75 = swap 0 = &
+    "integer: hexadecimal negative overflow" test_true +
+    "0o777777777777777777777" clone strlen integer_parse 0 = swap 9223372036854775807 = &
+    "integer: octal signed maximum" test_true +
+    "0o-1000000000000000000000" clone strlen integer_parse 0 = swap -9223372036854775808 = &
+    "integer: octal signed minimum" test_true +
+    "0o1000000000000000000000" clone strlen integer_parse -75 = swap 0 = &
+    "integer: octal positive overflow" test_true +
+    "0o-1000000000000000000001" clone strlen integer_parse -75 = swap 0 = &
+    "integer: octal negative overflow" test_true +
+    "0b111111111111111111111111111111111111111111111111111111111111111"
+    clone strlen integer_parse 0 = swap 9223372036854775807 = & "integer: binary signed maximum" test_true +
+    "0b-1000000000000000000000000000000000000000000000000000000000000000"
+    clone strlen integer_parse 0 = swap -9223372036854775808 = & "integer: binary signed minimum" test_true +
+    "0b1000000000000000000000000000000000000000000000000000000000000000"
+    clone strlen integer_parse -75 = swap 0 = & "integer: binary positive overflow" test_true +
+    "0b-1000000000000000000000000000000000000000000000000000000000000001"
+    clone strlen integer_parse -75 = swap 0 = & "integer: binary negative overflow" test_true +
+    swap
+marine
+
+sub test_integer_decimal_format
+    0
+    0 buffer_create
+    clone 0 < if drop 0 "integer: decimal buffer created" test_true + swap return endif
+    clone 0 integer_format_decimal 0 "integer: formats decimal zero" test_equal swap rev3 + swap
+    clone buffer_length 1 "integer: zero has one digit" test_equal swap rev3 + swap
+    clone buffer_data "0" 1 mem_compare 0 "integer: decimal zero contents" test_equal swap rev3 + swap
+    clone buffer_clear
+    clone -42 integer_format_decimal 0 "integer: formats signed decimal" test_equal swap rev3 + swap
+    clone buffer_data "-42" 3 mem_compare 0 "integer: decimal minus precedes digits" test_equal swap rev3 + swap
+    clone buffer_clear
+    clone 1234567890123 integer_format_decimal 0 "integer: formats multi-digit decimal" test_equal swap rev3 + swap
+    clone buffer_data "1234567890123" 13 mem_compare 0
+    "integer: in-place digit compaction handles overlap" test_equal swap rev3 + swap
+    clone buffer_clear
+    clone 9223372036854775807 integer_format_decimal 0 "integer: formats decimal maximum" test_equal swap rev3 + swap
+    clone buffer_length 19 "integer: decimal maximum length" test_equal swap rev3 + swap
+    clone buffer_data "9223372036854775807" 19 mem_compare 0
+    "integer: decimal maximum contents" test_equal swap rev3 + swap
+    clone buffer_data clone2 drop buffer_length integer_parse 0 = swap 9223372036854775807 = &
+    "integer: decimal maximum round trip" test_true swap rev3 + swap
+    clone buffer_clear
+    clone -9223372036854775808 integer_format_decimal 0 "integer: formats decimal minimum" test_equal swap rev3 + swap
+    clone buffer_length 20 "integer: decimal minimum length" test_equal swap rev3 + swap
+    clone buffer_data "-9223372036854775808" 20 mem_compare 0
+    "integer: decimal minimum contents" test_equal swap rev3 + swap
+    clone buffer_data clone2 drop buffer_length integer_parse 0 = swap -9223372036854775808 = &
+    "integer: decimal minimum round trip" test_true swap rev3 + swap
+    buffer_free 0 "integer: decimal buffer freed" test_equal +
+    swap
+marine
+
+sub test_integer_hex_format
+    0
+    0 buffer_create
+    clone 0 < if drop 0 "integer: hex buffer created" test_true + swap return endif
+    clone 0 integer_format_hex 0 "integer: formats hexadecimal zero" test_equal swap rev3 + swap
+    clone buffer_length 3 "integer: hex zero includes prefix" test_equal swap rev3 + swap
+    clone buffer_data "0x0" 3 mem_compare 0 "integer: hex zero contents" test_equal swap rev3 + swap
+    clone buffer_clear
+    clone 0xabcdef integer_format_hex 0 "integer: formats hexadecimal letters" test_equal swap rev3 + swap
+    clone buffer_data "0xabcdef" 8 mem_compare 0 "integer: hex formatting uses lowercase" test_equal swap rev3 + swap
+    clone buffer_clear
+    clone -1 integer_format_hex 0 "integer: formats negative hexadecimal" test_equal swap rev3 + swap
+    clone buffer_data "0x-1" 4 mem_compare 0 "integer: hex sign position matches host" test_equal swap rev3 + swap
+    clone buffer_clear
+    clone 9223372036854775807 integer_format_hex 0 "integer: formats hexadecimal maximum" test_equal swap rev3 + swap
+    clone buffer_data "0x7fffffffffffffff" 18 mem_compare 0
+    "integer: hexadecimal maximum contents" test_equal swap rev3 + swap
+    clone buffer_clear
+    clone -9223372036854775808 integer_format_hex 0 "integer: formats hexadecimal minimum" test_equal swap rev3 + swap
+    clone buffer_length 19 "integer: hexadecimal minimum length" test_equal swap rev3 + swap
+    clone buffer_data "0x-8000000000000000" 19 mem_compare 0
+    "integer: hexadecimal minimum contents" test_equal swap rev3 + swap
+    clone buffer_data clone2 drop buffer_length integer_parse 0 = swap -9223372036854775808 = &
+    "integer: hexadecimal minimum round trip" test_true swap rev3 + swap
+    buffer_free 0 "integer: hex buffer freed" test_equal +
+    swap
+marine
+
+sub test_integer_format_append
+    0
+    1 buffer_create
+    clone 0 < if drop 0 "integer: append buffer created" test_true + swap return endif
+    clone "value=" buffer_append_string drop
+    clone 42 integer_format_decimal 0 "integer: formatter appends without clearing buffer" test_equal swap rev3 + swap
+    clone 255 integer_format_hex 0 "integer: decimal and hex can be appended together" test_equal swap rev3 + swap
+    clone buffer_length 12 "integer: formatting excludes NUL terminator" test_equal swap rev3 + swap
+    clone buffer_data "value=420xff" 12 mem_compare 0
+    "integer: formatting preserves earlier bytes" test_equal swap rev3 + swap
+    buffer_free 0 "integer: append buffer freed" test_equal +
+    swap
+marine
+
+sub test_integer_roundtrip_case
+    rev4
+    clone buffer_clear
+    rev3
+    if clone2 integer_format_hex else clone2 integer_format_decimal endif
+    0 < if drop drop 0 swap return endif
+    swap clone buffer_data
+    clone2 drop buffer_length integer_parse
+    0 = rev4 swap drop = & swap
+marine
+
+sub test_integer_roundtrips
+    1
+    0 buffer_create
+    clone 0 < if
+        drop drop 0 "integer: round-trip buffer created" test_true swap return
+    endif
+    -128
+    while clone 128 <= do
+        clone2 0 test_integer_roundtrip_case
+        rev4 rev3 rev4 & rev3
+        clone2 1 test_integer_roundtrip_case
+        rev4 rev3 rev4 & rev3
+        ++
+    wend
+    drop buffer_free 0 = &
+    "integer: decimal and hex round trips from -128 through 128" test_true
+    swap
+marine

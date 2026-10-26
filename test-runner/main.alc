@@ -2,6 +2,7 @@ include testing
 include cases.cli
 include cases.arena
 include cases.buffer
+include cases.integer
 
 sub main
     "Self-hosted compiler tests" println
@@ -14,5 +15,11 @@ sub main
     test_buffer_append +
     test_buffer_errors +
     test_buffer_arguments +
+    test_integer_parse +
+    test_integer_limits +
+    test_integer_decimal_format +
+    test_integer_hex_format +
+    test_integer_format_append +
+    test_integer_roundtrips +
     test_finish
 marine
