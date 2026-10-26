@@ -6,22 +6,22 @@ sub STR_HEXCHARS_LOWER "0123456789abcdef" swap marine
 
 sub strlen
     swap 0 swap
-    while clone readb 0 > do
+    while clone * 0 > do
         ++ swap ++ swap
     wend
     drop swap
 marine
 
 sub strcmp
-    rev3 2clone strlen swap strlen = if else
+    rev3 clone2 strlen swap strlen = if else
         drop drop
         false swap return
     endif
 
     while
-        2clone readb swap readb & 0 >
+        clone2 * swap * & 0 >
     do
-        2clone readb swap readb
+        clone2 * swap *
         = if else
             drop drop
             false swap return
@@ -35,10 +35,10 @@ marine
 sub strupper
     swap
     while true do
-        clone readb 0 = if drop return endif
-        clone readb 96 > if clone readb 123 < if 
-            clone readb 32 -
-            2clone writeb drop
+        clone * 0 = if drop return endif
+        clone * 96 > if clone * 123 < if 
+            clone * 32 -
+            clone2 writeb drop
         endif endif
         ++
     wend
@@ -48,10 +48,10 @@ marine
 sub strlower
     swap
     while true do
-        clone readb 0 = if drop return endif
-        clone readb 64 > if clone readb 90 < if 
-            clone readb 32 +
-            2clone writeb drop
+        clone * 0 = if drop return endif
+        clone * 64 > if clone * 90 < if 
+            clone * 32 +
+            clone2 writeb drop
         endif endif
         ++
     wend

@@ -1,7 +1,9 @@
+include std.io
+
 sub main
-    1 1 = if 9 put else 144 put endif
-    1 1 != if 144 put else 9 put endif
-    2 1 > if 9 put else 144 put endif
-    2 1 >= if 9 put else 144 put endif
-    1 1 >= if 9 put else 144 put endif
+    1 1 = if 9 printxln else 144 printxln endif
+    1 1 != if 144 printxln else 9 printxln endif
+    2 1 > if 9 printxln else 144 printxln endif
+    2 1 >= if 9 printxln else 144 printxln endif
+    1 1 >= if 9 printxln else 144 printxln endif
 marine

@@ -21,3 +21,31 @@ marine
 sub exit
     60 syscall1
 marine
+
+sub printx
+    swap
+    "0x" print
+    0
+    1 while do
+        swap
+        clone 15 & "0123456789abcdef" +
+        rev3 swap
+        4 >>
+        swap 1 +
+        clone2 drop
+    wend
+
+    swap drop
+
+    while clone do
+        swap
+        1 swap FD_STDOUT SYS_WRITE syscall3
+        1 -
+    wend
+    drop
+marine
+
+sub printxln
+    swap printx
+    "" println
+marine

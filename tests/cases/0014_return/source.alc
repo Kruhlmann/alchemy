@@ -1,7 +1,9 @@
+include std.io
+
 sub doreturn
-    1 put
+    1 printxln
     return
-    2 put
+    2 printxln
 marine
 
 sub main

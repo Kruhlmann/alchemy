@@ -29,31 +29,6 @@ global _start
 
 segment .text
 
-put:
-pop r11
-pop rax
-push r11
-sub rsp, 24
-mov byte [rsp + 16], 10
-mov ecx, 16
-lea r8, [rel hex_digits]
-
-.convert:
-mov rdx, rax
-and edx, 0xf
-mov dl, [r8 + rdx]
-mov [rsp + rcx - 1], dl
-shr rax, 4
-dec ecx
-jnz .convert
-mov eax, 1 
-mov edi, 1
-mov rsi, rsp
-mov edx, 17
-syscall
-add rsp, 24
-ret
-
 {tokens_src}
 
 _start:

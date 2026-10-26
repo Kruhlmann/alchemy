@@ -1,7 +1,9 @@
+include std.io
+
 sub main
   10 while clone 0 > do
-    clone put
+    clone printxln
     --
   wend drop
-  11 put
+  11 printxln
 marine

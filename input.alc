@@ -1,42 +1,7 @@
 include std.bool
 include std.io
 
-sub mainfoo
-    0x123456789abcdef7 60 >> 0xf & put
-    0x123456789abcdef7 56 >> 0xf & put
-    0x123456789abcdef7 52 >> 0xf & put
-    0x123456789abcdef7 48 >> 0xf & put
-    0x123456789abcdef7 44 >> 0xf & put
-    0x123456789abcdef7 40 >> 0xf & put
-    0x123456789abcdef7 36 >> 0xf & put
-    0x123456789abcdef7 32 >> 0xf & put
-    0x123456789abcdef7 28 >> 0xf & put
-    0x123456789abcdef7 24 >> 0xf & put
-    0x123456789abcdef7 20 >> 0xf & put
-    0x123456789abcdef7 16 >> 0xf & put
-    0x123456789abcdef7 12 >> 0xf & put
-    0x123456789abcdef7 8 >> 0xf & put
-    0x123456789abcdef7 4 >> 0xf & put
-    0x123456789abcdef7 0 >> 0xf & put
-marine
-
-sub bar
-    swap
-    60
-
-    while
-    clone2
-    >>
-    0xf
-    &
-    0
-    =
-    do
-      4
-      -
-    wend
-marine
-
 sub main
-    "Hello, World!" println
+    0xf0000123 printxln
+    0x123 printxln
 marine

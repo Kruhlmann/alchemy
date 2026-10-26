@@ -1,3 +1,5 @@
+include std.io
+
 sub main
-    11 22 + put
+    11 22 + printxln
 marine

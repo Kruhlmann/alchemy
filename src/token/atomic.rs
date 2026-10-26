@@ -33,6 +33,7 @@ pub enum AtomicToken {
     Syscall3,
     Wend,
     While,
+    Write,
     CallSub(String),
     PushInteger(i64),
     SubDefinition(String),

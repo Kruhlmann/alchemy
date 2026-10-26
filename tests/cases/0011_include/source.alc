@@ -1,7 +1,8 @@
+include std.io
 include foo
 
 sub main
-    push_one put
-    push_two put
-    push_three put
+    push_one printxln
+    push_two printxln
+    push_three printxln
 marine

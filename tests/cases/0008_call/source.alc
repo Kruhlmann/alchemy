@@ -1,7 +1,9 @@
+include std.io
+
 sub main
     doputs
 marine
 
 sub doputs
-    1 put
+    1 printxln
 marine

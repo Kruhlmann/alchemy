@@ -1,4 +1,6 @@
+include std.io
+
 sub main
-    1 clone put put
-    2 3 clone2 put put put put
+    1 clone printxln printxln
+    2 3 clone2 printxln printxln printxln printxln
 marine

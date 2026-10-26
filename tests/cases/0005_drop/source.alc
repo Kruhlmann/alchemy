@@ -1,3 +1,5 @@
+include std.io
+
 sub main
-    1 2 drop put
+    1 2 drop printxln
 marine
