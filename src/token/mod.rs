@@ -169,7 +169,7 @@ impl Token {
             Token::Atomic(AtomicToken::SubDefinition(s), _) => asm![format!("usr_{s}:")],
             Token::Atomic(AtomicToken::Subtract, _) => asm!["pop rbx", "pop rax", "sub rax, rbx", "push rax"],
             Token::Atomic(AtomicToken::Swap, _) => asm!["pop rax", "pop rbx", "push rax", "push rbx"],
-            Token::Atomic(AtomicToken::Over, _) => asm!["pop rax", "pop rbx", "push rbx", "push rax"],
+            Token::Atomic(AtomicToken::Over, _) => asm!["pop rax", "pop rbx", "push rbx", "push rax", "push rbx"],
             Token::Atomic(AtomicToken::Syscall0, _) => asm!["pop rax", "syscall", "push rax"],
             Token::Atomic(AtomicToken::Syscall1, _) => asm!["pop rax", "pop rdi", "syscall", "push rax"],
             Token::Atomic(AtomicToken::Syscall2, _) => asm!["pop rax", "pop rdi", "pop rsi", "syscall", "push rax"],

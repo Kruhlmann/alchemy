@@ -1,0 +1,6 @@
+include std.io
+
+sub main
+    5 7 over printxln printxln printxln
+    1 2 over over printxln printxln printxln printxln
+marine
