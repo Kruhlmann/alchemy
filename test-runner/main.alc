@@ -28,5 +28,6 @@ sub main
     test_integer_roundtrips +
     test_log_stack_effects +
     test_log_decimal_digits +
+
     test_finish
 marine

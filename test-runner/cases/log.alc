@@ -34,6 +34,7 @@ sub test_log_stack_effects
     log_err_preserves_stack 1 "log: error leaves values below intact" test_equal +
     log_decimal_preserves_stack 1 "log: decimal leaves values below intact" test_equal +
     log_timestamp_preserves_stack 1 "log: timestamp leaves values below intact" test_equal +
+    swap
 marine
 
 sub log_decimal_zero_stack
@@ -53,4 +54,5 @@ sub test_log_decimal_digits
     log_decimal_zero_stack 1 "log: decimal writes zero without exiting" test_equal +
     log_decimal_two_digits_stack 1 "log: decimal recurses on two digits" test_equal +
     log_decimal_many_digits_stack 1 "log: decimal recurses on many digits" test_equal +
+    swap
 marine
