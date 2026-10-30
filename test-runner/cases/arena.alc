@@ -57,6 +57,65 @@ sub test_arena_storage
     swap
 marine
 
+sub arena_available_preserves_below
+    777 swap clone
+    arena_available
+    drop
+    swap 777 = swap drop
+marine
+
+sub arena_alloc_preserves_below
+    777 swap clone 8
+    arena_alloc
+    drop
+    swap 777 = swap drop
+marine
+
+sub arena_reset_preserves_below
+    777 swap clone
+    arena_reset
+    swap 777 = swap drop
+marine
+
+sub test_arena_boundaries
+    0
+    8 arena_create
+    clone 0 < if
+        drop 0 "arena: minimum-capacity creation succeeds" test_true + swap return
+    endif
+    clone 8 arena_alloc 0 > "arena: capacity fits exactly one aligned block" test_true swap rev3 + swap
+    clone arena_available 0 "arena: single-block capacity exhausts" test_equal swap rev3 + swap
+    clone 1 arena_alloc -12 "arena: no room after single-block capacity" test_equal swap rev3 + swap
+    clone arena_reset
+    clone 8 arena_alloc 0 > "arena: capacity reusable after reset" test_true swap rev3 + swap
+    arena_free 0 "arena: minimum-capacity mapping freed" test_equal +
+
+    15 arena_create
+    clone 0 < if
+        drop 0 "arena: rounding-boundary creation succeeds" test_true + swap return
+    endif
+    clone 8 arena_alloc 0 > "arena: first block fits rounding boundary" test_true swap rev3 + swap
+    clone arena_available 7 "arena: rounding boundary leaves unaligned tail" test_equal swap rev3 + swap
+    clone 8 arena_alloc -12 "arena: second block exceeds rounding boundary" test_equal swap rev3 + swap
+    clone 7 arena_alloc -12 "arena: tail bytes cannot satisfy aligned request" test_equal swap rev3 + swap
+    arena_free 0 "arena: rounding-boundary mapping freed" test_equal +
+    swap
+marine
+
+sub test_arena_stack_effects
+    0
+    24 arena_create
+    clone 0 < if
+        drop 0 "arena: stack-effect creation succeeds" test_true + swap return
+    endif
+    clone arena_available_preserves_below 1 "arena: available preserves values below handle" test_equal swap rev3 + swap
+    clone arena_alloc_preserves_below 1 "arena: alloc preserves values below handle" test_equal swap rev3 + swap
+    clone arena_reset_preserves_below 1 "arena: reset preserves values below handle" test_equal swap rev3 + swap
+    clone arena_available 8 "arena: stack-effect helpers mutate state correctly" test_equal swap rev3 + swap
+    arena_free 0 "arena: stack-effect mapping freed" test_equal +
+    swap
+marine
+
 sub test_arena_padding
     0
     10 arena_create

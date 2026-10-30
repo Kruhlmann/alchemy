@@ -11,10 +11,14 @@ sub main
     test_arena +
     test_arena_storage +
     test_arena_padding +
+    test_arena_boundaries +
+    test_arena_stack_effects +
     test_buffer_empty +
     test_buffer_append +
     test_buffer_errors +
     test_buffer_arguments +
+    test_buffer_boundaries +
+    test_buffer_stack_effects +
     test_integer_parse +
     test_integer_limits +
     test_integer_decimal_format +
