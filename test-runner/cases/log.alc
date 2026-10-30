@@ -3,27 +3,27 @@ include log
 include testing
 
 sub log_debug_preserves_stack
-    777 "debug message" log_debug clone 777 = swap
+    "debug message" log_debug 1 swap
 marine
 
 sub log_info_preserves_stack
-    777 "info message" log_info clone 777 = swap
+    "info message" log_info 1 swap
 marine
 
 sub log_warn_preserves_stack
-    777 "warn message" log_warn clone 777 = swap
+    "warn message" log_warn 1 swap
 marine
 
 sub log_err_preserves_stack
-    777 "error message" log_err clone 777 = swap
+    "error message" log_err 1 swap
 marine
 
 sub log_decimal_preserves_stack
-    777 9876543210 log_decimal clone 777 = swap
+    9876543210 log_decimal 1 swap
 marine
 
 sub log_timestamp_preserves_stack
-    777 log_timestamp clone 777 = swap
+    log_timestamp 1 swap
 marine
 
 sub test_log_stack_effects
@@ -37,15 +37,15 @@ sub test_log_stack_effects
 marine
 
 sub log_decimal_zero_stack
-    777 0 log_decimal clone 777 = swap
+    0 log_decimal 1 swap
 marine
 
 sub log_decimal_two_digits_stack
-    777 10 log_decimal clone 777 = swap
+    10 log_decimal 1 swap
 marine
 
 sub log_decimal_many_digits_stack
-    777 1000000 log_decimal clone 777 = swap
+    1000000 log_decimal 1 swap
 marine
 
 sub test_log_decimal_digits
