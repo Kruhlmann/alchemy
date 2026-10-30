@@ -114,27 +114,27 @@ sub test_buffer_arguments
 marine
 
 sub buffer_reserve_preserves_below
-    777 swap clone 8
+    rev3 777 swap clone 8
     buffer_reserve
-    drop swap 777 = swap drop
+    drop swap 777 = rev3
 marine
 
 sub buffer_append_preserves_below
-    777 swap clone "z" 1
+    rev3 777 swap clone "z" 1
     buffer_append
-    drop swap 777 = swap drop
+    drop swap 777 = rev3
 marine
 
 sub buffer_append_string_preserves_below
-    777 swap clone "y"
+    rev3 777 swap clone "y"
     buffer_append_string
-    drop swap 777 = swap drop
+    drop swap 777 = rev3
 marine
 
 sub buffer_clear_preserves_below
-    777 swap clone
+    rev3 777 swap clone
     buffer_clear
-    swap 777 = swap drop
+    swap 777 = rev3
 marine
 
 sub test_buffer_boundaries

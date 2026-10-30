@@ -58,23 +58,21 @@ sub test_arena_storage
 marine
 
 sub arena_available_preserves_below
-    777 swap clone
+    rev3 777 swap clone
     arena_available
-    drop
-    swap 777 = swap drop
+    drop swap 777 = rev3
 marine
 
 sub arena_alloc_preserves_below
-    777 swap clone 8
+    rev3 777 swap clone 8
     arena_alloc
-    drop
-    swap 777 = swap drop
+    drop swap 777 = rev3
 marine
 
 sub arena_reset_preserves_below
-    777 swap clone
+    rev3 777 swap clone
     arena_reset
-    swap 777 = swap drop
+    swap 777 = rev3
 marine
 
 sub test_arena_boundaries
