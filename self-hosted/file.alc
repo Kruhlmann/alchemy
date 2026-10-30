@@ -1,0 +1,51 @@
+include std.sys.call
+include std.sys.errno
+
+sub O_RDONLY 0 swap marine
+sub O_WRONLY 1 swap marine
+sub O_RDWR 2 swap marine
+sub O_CREAT 0x40 swap marine
+sub O_TRUNC 0x200 swap marine
+sub O_APPEND 0x400 swap marine
+sub MODE_0644 0x1a4 swap marine
+
+sub file_open_read
+    swap
+    0
+    0
+    rev3
+    SYS_OPEN
+    syscall3
+    swap
+marine
+
+sub file_open_write
+    swap
+    O_WRONLY O_CREAT O_TRUNC + +
+    MODE_0644
+    rev3
+    SYS_OPEN
+    syscall3
+    swap
+marine
+
+sub file_read
+    rev4
+    SYS_READ
+    syscall3
+    swap
+marine
+
+sub file_write
+    rev4
+    SYS_WRITE
+    syscall3
+    swap
+marine
+
+sub file_close
+    swap
+    SYS_CLOSE
+    syscall1
+    swap
+marine
