@@ -114,27 +114,27 @@ sub test_buffer_arguments
 marine
 
 sub buffer_reserve_preserves_below
-    rev3 777 swap clone 8
+    swap 777 swap clone 8
     buffer_reserve
-    drop swap 777 = rev3
+    drop swap 777 = swap drop swap
 marine
 
 sub buffer_append_preserves_below
-    rev3 777 swap clone "z" 1
+    swap 777 swap clone "z" 1
     buffer_append
-    drop swap 777 = rev3
+    drop swap 777 = swap drop swap
 marine
 
 sub buffer_append_string_preserves_below
-    rev3 777 swap clone "y"
+    swap 777 swap clone "y"
     buffer_append_string
-    drop swap 777 = rev3
+    drop swap 777 = swap drop swap
 marine
 
 sub buffer_clear_preserves_below
-    rev3 777 swap clone
+    swap 777 swap clone
     buffer_clear
-    swap 777 = rev3
+    swap 777 = swap drop swap
 marine
 
 sub test_buffer_boundaries
@@ -173,9 +173,10 @@ sub test_buffer_stack_effects
     clone buffer_reserve_preserves_below 1 "buffer: reserve preserves values below handle" test_equal swap rev3 + swap
     clone buffer_append_preserves_below 1 "buffer: append preserves values below handle" test_equal swap rev3 + swap
     clone buffer_append_string_preserves_below 1 "buffer: string append preserves values below handle" test_equal swap rev3 + swap
+    clone buffer_length 2 "buffer: stack-effect appends recorded length" test_equal swap rev3 + swap
+    clone buffer_data readb 122 "buffer: stack-effect append stored contents" test_equal swap rev3 + swap
     clone buffer_clear_preserves_below 1 "buffer: clear preserves values below handle" test_equal swap rev3 + swap
     clone buffer_length 0 "buffer: cleared after stack-effect append" test_equal swap rev3 + swap
-    clone buffer_data readb 121 "buffer: stack-effect append stored contents" test_equal swap rev3 + swap
     buffer_free 0 "buffer: stack-effect fixture freed" test_equal +
     swap
 marine

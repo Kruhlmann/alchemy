@@ -58,21 +58,21 @@ sub test_arena_storage
 marine
 
 sub arena_available_preserves_below
-    rev3 777 swap clone
+    swap 777 swap clone
     arena_available
-    drop swap 777 = rev3
+    drop swap 777 = swap drop swap
 marine
 
 sub arena_alloc_preserves_below
-    rev3 777 swap clone 8
+    swap 777 swap clone 8
     arena_alloc
-    drop swap 777 = rev3
+    drop swap 777 = swap drop swap
 marine
 
 sub arena_reset_preserves_below
-    rev3 777 swap clone
+    swap 777 swap clone
     arena_reset
-    swap 777 = rev3
+    swap 777 = swap drop swap
 marine
 
 sub test_arena_boundaries
@@ -108,8 +108,9 @@ sub test_arena_stack_effects
     endif
     clone arena_available_preserves_below 1 "arena: available preserves values below handle" test_equal swap rev3 + swap
     clone arena_alloc_preserves_below 1 "arena: alloc preserves values below handle" test_equal swap rev3 + swap
+    clone arena_available 16 "arena: alloc consumed capacity" test_equal swap rev3 + swap
     clone arena_reset_preserves_below 1 "arena: reset preserves values below handle" test_equal swap rev3 + swap
-    clone arena_available 8 "arena: stack-effect helpers mutate state correctly" test_equal swap rev3 + swap
+    clone arena_available 24 "arena: reset restored capacity" test_equal swap rev3 + swap
     arena_free 0 "arena: stack-effect mapping freed" test_equal +
     swap
 marine
