@@ -1,0 +1,26 @@
+include testing
+include file
+include std.mem
+include std.sys.errno
+
+sub test_file_open_close
+    0
+    "test-runner/fixtures/hello.txt" file_open_read 0 < 0 "open existing: fd is not negative" test_equal +
+    "test-runner/fixtures/hello.txt" file_open_read file_close 0 "close: returns 0" test_equal +
+    "/nonexistent/alchemy_missing_file" file_open_read 0 SYS_ENOENT - "open missing: returns -ENOENT" test_equal +
+    "test-runner/fixtures/hello.txt" file_open_read clone file_close drop file_close 0 SYS_EBADF - "double close: returns -EBADF" test_equal +
+    swap
+marine
+
+sub test_file_read
+    0
+    "test-runner/fixtures/hello.txt" file_open_read 64 mem_alloc 16 file_read 16 "read: returns full byte count" test_equal +
+    "test-runner/fixtures/hello.txt" file_open_read 64 mem_alloc 0 file_read 0 "read: zero count reads nothing" test_equal +
+    swap
+marine
+
+sub test_file_write
+    0
+    "/tmp/alchemy_file_test.txt" file_open_write "hi" 2 file_write 2 "write: returns byte count" test_equal +
+    swap
+marine

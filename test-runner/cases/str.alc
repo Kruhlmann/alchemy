@@ -1,0 +1,39 @@
+include testing
+include std.str
+
+sub test_strcmp_lexicographic
+    0
+    "abc" "abc" strcmp 0 "strcmp: identical strings" test_equal +
+    "abc" "abd" strcmp -1 "strcmp: differing byte orders before" test_equal +
+    "abd" "abc" strcmp 1 "strcmp: differing byte orders after" test_equal +
+    "abc" "abcd" strcmp -1 "strcmp: prefix orders before" test_equal +
+    "abcd" "abc" strcmp 1 "strcmp: longer orders after" test_equal +
+    "" "" strcmp 0 "strcmp: both empty" test_equal +
+    "abc" "" strcmp 1 "strcmp: non-empty after empty" test_equal +
+    "" "abc" strcmp -1 "strcmp: empty before non-empty" test_equal +
+    "a" "b" strcmp -1 "strcmp: single byte less" test_equal +
+    "b" "a" strcmp 1 "strcmp: single byte greater" test_equal +
+    "\xff" "\x7f" strcmp 1 "strcmp: non-ASCII byte compares unsigned" test_equal +
+    "a\x00b" "a\x00c" strcmp 0 "strcmp: embedded NUL terminates comparison" test_equal +
+    swap
+marine
+
+sub test_strupper_copy
+    0
+    "aBc" strupper * 0x41 "strupper: first byte uppercased" test_equal +
+    "aBc" strupper 1 + * 0x42 "strupper: middle byte preserved" test_equal +
+    "aBc" strupper 2 + * 0x43 "strupper: last byte uppercased" test_equal +
+    "a1!" strupper 1 + * 0x31 "strupper: digit left untouched" test_equal +
+    "aBc" clone strupper drop * 0x61 "strupper: input left untouched" test_equal +
+    swap
+marine
+
+sub test_strlower_copy
+    0
+    "aBc" strlower * 0x61 "strlower: first byte preserved" test_equal +
+    "aBc" strlower 1 + * 0x62 "strlower: middle byte lowercased" test_equal +
+    "ABC" strlower * 0x61 "strlower: uppercase lowercased" test_equal +
+    "A1!" strlower 1 + * 0x31 "strlower: digit left untouched" test_equal +
+    "aBc" clone strlower drop * 0x61 "strlower: input left untouched" test_equal +
+    swap
+marine

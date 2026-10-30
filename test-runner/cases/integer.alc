@@ -184,3 +184,20 @@ sub test_integer_roundtrips
     "integer: decimal and hex round trips from -128 through 128" test_true
     swap
 marine
+
+sub integer_parse_preserves_below
+    777 "42" clone strlen integer_parse drop drop
+    clone 777 = swap drop swap
+marine
+
+sub integer_digit_preserves_below
+    777 53 integer_digit drop
+    clone 777 = swap drop swap
+marine
+
+sub test_integer_stack_effects
+    0
+    integer_parse_preserves_below 1 "integer: parse preserves values below" test_equal +
+    integer_digit_preserves_below 1 "integer: digit preserves values below" test_equal +
+    swap
+marine

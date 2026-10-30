@@ -1,4 +1,5 @@
 include std.bool
+include std.mem
 
 sub STR_NEWLINE "\n" swap marine
 sub STR_HEXCHARS_UPPER "0123456789ABCDEF" swap marine
@@ -13,50 +14,66 @@ sub strlen
 marine
 
 sub strcmp
-    rev3 clone2 strlen swap strlen = if else
-        drop drop
-        false swap return
-    endif
-
-    while
-        clone2 * swap * & 0 >
-    do
-        clone2 * swap *
-        = if else
-            drop drop
-            false swap return
+    rev3 swap
+    clone2 * swap *
+    clone2 = if
+        clone 0 = if
+            drop drop drop drop 0 swap return
+        else
+            drop drop swap ++ swap ++ strcmp swap return
         endif
-        ++ swap ++
+    else
+        clone2 < if
+            drop drop drop drop 1 swap return
+        else
+            drop drop drop drop -1 swap return
+        endif
+    endif
+marine
+
+sub str_upper_inplace
+    swap clone
+    while clone * 0 > do
+        clone clone *
+        clone 0x60 > if
+            clone 0x7b < if
+                32 -
+            endif
+        endif
+        writeb
+        ++
     wend
-    drop drop
-    true swap return
+    drop swap
+marine
+
+sub str_lower_inplace
+    swap clone
+    while clone * 0 > do
+        clone clone *
+        clone 0x40 > if
+            clone 0x5b < if
+                32 +
+            endif
+        endif
+        writeb
+        ++
+    wend
+    drop swap
 marine
 
 sub strupper
-    swap
-    while true do
-        clone * 0 = if drop return endif
-        clone * 96 > if clone * 123 < if 
-            clone * 32 -
-            clone2 writeb drop
-        endif endif
-        ++
-    wend
-    drop
-marine
+    swap clone strlen clone 1 + mem_alloc
+    clone rev4 swap swap swap
+    mem_copy drop
+    str_upper_inplace
+    swap marine
 
 sub strlower
-    swap
-    while true do
-        clone * 0 = if drop return endif
-        clone * 64 > if clone * 90 < if 
-            clone * 32 +
-            clone2 writeb drop
-        endif endif
-        ++
-    wend
-    drop
-marine
+    swap clone strlen clone 1 + mem_alloc
+    clone rev4 swap swap swap
+    mem_copy drop
+    str_lower_inplace
+    swap marine
 
 sub stritoc
     swap clone 10 < if 48 +

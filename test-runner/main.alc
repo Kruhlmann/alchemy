@@ -4,6 +4,8 @@ include cases.arena
 include cases.buffer
 include cases.integer
 include cases.log
+include cases.str
+include cases.file
 
 sub main
     "Self-hosted compiler tests" println
@@ -26,8 +28,15 @@ sub main
     test_integer_hex_format +
     test_integer_format_append +
     test_integer_roundtrips +
+    test_integer_stack_effects +
     test_log_stack_effects +
     test_log_decimal_digits +
+    test_strcmp_lexicographic +
+    test_strupper_copy +
+    test_strlower_copy +
+    test_file_open_close +
+    test_file_read +
+    test_file_write +
 
     test_finish
 marine

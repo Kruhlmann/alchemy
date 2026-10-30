@@ -1,5 +1,7 @@
+sub SYS_ENOENT 2 swap marine
 sub SYS_EINTR 4 swap marine
 sub SYS_E2BIG 7 swap marine
+sub SYS_EBADF 9 swap marine
 sub SYS_ENOMEM 12 swap marine
 sub SYS_EINVAL 22 swap marine
 sub SYS_EOVERFLOW 75 swap marine
