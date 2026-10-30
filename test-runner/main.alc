@@ -3,6 +3,7 @@ include cases.cli
 include cases.arena
 include cases.buffer
 include cases.integer
+include cases.log
 
 sub main
     "Self-hosted compiler tests" println
@@ -25,5 +26,7 @@ sub main
     test_integer_hex_format +
     test_integer_format_append +
     test_integer_roundtrips +
+    test_log_stack_effects +
+    test_log_decimal_digits +
     test_finish
 marine

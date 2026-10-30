@@ -1,0 +1,56 @@
+include std.io
+include log
+include testing
+
+sub log_debug_preserves_stack
+    777 swap "debug message" log_debug 777 = swap
+marine
+
+sub log_info_preserves_stack
+    777 swap "info message" log_info 777 = swap
+marine
+
+sub log_warn_preserves_stack
+    777 swap "warn message" log_warn 777 = swap
+marine
+
+sub log_err_preserves_stack
+    777 swap "error message" log_err 777 = swap
+marine
+
+sub log_decimal_preserves_stack
+    777 swap 9876543210 log_decimal 777 = swap
+marine
+
+sub log_timestamp_preserves_stack
+    777 swap log_timestamp 777 = swap
+marine
+
+sub test_log_stack_effects
+    0
+    log_debug_preserves_stack 1 "log: debug leaves values below intact" test_equal +
+    log_info_preserves_stack 1 "log: info leaves values below intact" test_equal +
+    log_warn_preserves_stack 1 "log: warn leaves values below intact" test_equal +
+    log_err_preserves_stack 1 "log: error leaves values below intact" test_equal +
+    log_decimal_preserves_stack 1 "log: decimal leaves values below intact" test_equal +
+    log_timestamp_preserves_stack 1 "log: timestamp leaves values below intact" test_equal +
+marine
+
+sub log_decimal_zero_stack
+    777 swap 0 log_decimal 777 = swap
+marine
+
+sub log_decimal_two_digits_stack
+    777 swap 10 log_decimal 777 = swap
+marine
+
+sub log_decimal_many_digits_stack
+    777 swap 1000000 log_decimal 777 = swap
+marine
+
+sub test_log_decimal_digits
+    0
+    log_decimal_zero_stack 1 "log: decimal writes zero without exiting" test_equal +
+    log_decimal_two_digits_stack 1 "log: decimal recurses on two digits" test_equal +
+    log_decimal_many_digits_stack 1 "log: decimal recurses on many digits" test_equal +
+marine
