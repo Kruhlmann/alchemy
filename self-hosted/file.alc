@@ -1,5 +1,6 @@
 include std.sys.call
 include std.sys.errno
+include std.mem
 
 sub O_RDONLY 0 swap marine
 sub O_WRONLY 1 swap marine
@@ -48,4 +49,43 @@ sub file_close
     SYS_CLOSE
     syscall1
     swap
+marine
+
+sub file_write_all
+    swap
+    32 mem_alloc
+    clone rev3 swap 16 + swap write
+    clone rev3 swap 8 + swap write
+    clone rev3 swap 0 + swap write
+    clone 24 + 0 write
+    file_write_all_loop
+marine
+
+sub file_write_all_loop
+    swap
+    clone 24 + readq
+    over 16 + readq
+    <
+    if
+        clone 0 + readq swap
+        clone 8 + readq swap
+        clone 16 + readq swap
+        clone 24 + readq swap
+        rev3 swap rev6 rev3 rev4 swap rev6
+        clone rev3 swap - swap rev3 swap rev3 + swap
+        file_write
+        clone 0 <
+        if
+            swap mem_free
+            swap return
+        else
+            over 24 + readq +
+            swap clone 24 + swap rev3 write
+            file_write_all_loop
+            swap return
+        endif
+    endif
+    mem_free
+    0
+    swap return
 marine
